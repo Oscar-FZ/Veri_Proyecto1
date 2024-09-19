@@ -108,10 +108,10 @@ module DUT_TB();
         tipo = aleatorio;
         test_agent_mbx.put(tipo); 
 
-
-        #10000;
         $dumpfile("prueba.vcd");
         $dumpvars(0, DUT_TB);
+
+        #10000;
 		$finish;
 	end
 
