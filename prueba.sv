@@ -69,6 +69,7 @@ module DUT_TB();
         //
         agent_inst = new();
         agent_inst.test_agent_mbx = test_agent_mbx;
+        
         //
 
 
@@ -78,6 +79,9 @@ module DUT_TB();
             driver_monitor_inst.strt_dm[i].agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
             driver_monitor_inst.strt_dm[i].drvr_chkr_mbx = drvr_chkr_mbx;
             driver_monitor_inst.strt_dm[i].mntr_chkr_mbx = mntr_chkr_mbx;
+            //
+            agent_inst.agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
+            //
             #1;
         end
 
