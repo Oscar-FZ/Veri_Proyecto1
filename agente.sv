@@ -31,7 +31,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                             transaccion.print("[PRUEBA]");
                             agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
                         end
-                        $finish; //Por si acaso
+                        //$finish; //Por si acaso
                     end
 
                     broadcast: begin
@@ -49,7 +49,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
             end
             
             else begin
-                $display("[%g]  No hay instrucciones",$time);
+                //$display("[%g]  No hay instrucciones",$time);
             end
         end
     endtask
