@@ -117,4 +117,4 @@ endinterface
 //Define 3 tipos diferentes de mailboxes
 typedef mailbox #(bus_pckg #(.drvrs(4), .pckg_sz(16))) bus_pckg_mbx;
 typedef mailbox #(sb_pckg #(.drvrs(4), .pckg_sz(16))) sb_pckg_mbx;
-typedef mailbox #(instruccion) instr_pckg_mbx;
+typedef mailbox #(instruccion) instr_pckg_mbx; //Este lo voy a usar para conectar el test con el agente
