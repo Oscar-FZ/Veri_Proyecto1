@@ -12,7 +12,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
         for (int i = 0; i < drvrs; i++) begin
             agnt_drvr_mbx[i] = new();
         end
-        test_agent_mbx = new();
+        //test_agent_mbx = new();
     endfunction
 
     task run_agent;
