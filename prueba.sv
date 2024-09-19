@@ -98,6 +98,7 @@ module DUT_TB();
             //test_agent_mbx.put(instr_agente_sim); //////////////////////////////////////////
         //end
         /////////////////////////////////////////////////
+        #10;
         $display("[%g]  Enviando instruccion al agente",$time);
         tipo = aleatorio;
         test_agent_mbx.put(tipo); 
