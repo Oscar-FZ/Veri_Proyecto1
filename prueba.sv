@@ -20,7 +20,7 @@ module DUT_TB();
     strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
 
     //
-    strt_agent #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) agent_inst;
+    agent #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) agent_inst; //Primero va el nombre de la clase
     //
     
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs];
