@@ -85,11 +85,12 @@ module DUT_TB();
         _if.reset = 0;
 
         fork
-            driver_monitor_inst.start_driver();
-            driver_monitor_inst.start_monitor();
             //
             agent_inst.run_agent();
             //
+            driver_monitor_inst.start_driver();
+            driver_monitor_inst.start_monitor();
+            
         join_none
 
         /////////////////////////////////////////////////
@@ -97,7 +98,7 @@ module DUT_TB();
             //test_agent_mbx.put(instr_agente_sim); //////////////////////////////////////////
         //end
         /////////////////////////////////////////////////
-
+        $display("[%g]  Enviando instruccion al agente",$time);
         tipo = aleatorio;
         test_agent_mbx.put(tipo); 
 
