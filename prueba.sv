@@ -63,7 +63,7 @@ module DUT_TB();
 
         drvr_chkr_mbx = new();
         mntr_chkr_mbx = new();
-        //test_agent_mbx = new();
+        test_agent_mbx = new();
 
         $display("INICIO");
         driver_monitor_inst = new();
