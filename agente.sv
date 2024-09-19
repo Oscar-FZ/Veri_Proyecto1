@@ -47,6 +47,10 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                     end
                 endcase
             end
+            
+            else begin
+                $display("[%g]  No hay instrucciones",$time);
+            end
         end
     endtask
 endclass
