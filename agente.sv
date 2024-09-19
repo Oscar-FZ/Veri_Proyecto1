@@ -6,9 +6,13 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     int max_retardo; //Retardo maximo entre transacciones
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
 
-    function new;
+    function new();
         cant_trans = 10;
         max_retardo = 20;
+        for (int i = 0; i < drvrs; i++) begin
+            agnt_drvr_mbx[i] = new();
+        end
+        test_agent_mbx = new();
     endfunction
 
     task run_agent;
