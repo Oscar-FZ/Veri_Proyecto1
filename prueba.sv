@@ -6,9 +6,6 @@
 `include "agente.sv"
 //
 
-function new();
- test_agent_mbx = new();
-endfunction
 
 module DUT_TB();
 	parameter WIDTH = 16;
