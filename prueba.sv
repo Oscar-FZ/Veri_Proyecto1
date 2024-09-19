@@ -94,6 +94,13 @@ module DUT_TB();
     initial begin
         $dumpfile("prueba.vcd");
         $dumpvars(0, DUT_TB);
+        #100;
+        $dumpoff;
+        #700;
+        $dumpon;
+        #9000;
+        $dumpoff;
+        //$vpdpluson();
     end
 
 
