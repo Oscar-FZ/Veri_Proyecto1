@@ -6,7 +6,6 @@
 `include "agente.sv"
 //
 
-
 module DUT_TB();
 	parameter WIDTH = 16;
 	parameter PERIOD = 2;
@@ -68,8 +67,7 @@ module DUT_TB();
         driver_monitor_inst = new();
         //
         agent_inst = new();
-        agent_inst.test_agent_mbx = test_agent_mbx;
-        
+        agent_inst.test_agent_mbx = test_agent_mbx; 
         //
 
 
@@ -98,28 +96,18 @@ module DUT_TB();
             
         join_none
 
-        /////////////////////////////////////////////////
-        //for (int i = 0; i<2; i++) begin
-            //test_agent_mbx.put(instr_agente_sim); //////////////////////////////////////////
-        //end
-        /////////////////////////////////////////////////
         #10;
         $display("[%g]  Enviando instruccion al agente",$time);
         tipo = aleatorio;
         test_agent_mbx.put(tipo); 
 
-        $dumpfile("prueba.vcd");
-        $dumpvars(0, DUT_TB);
-
         #10000;
 		$finish;
 	end
 
-    //initial begin
-        //$dumpfile("prueba.vcd");
-        //$dumpvars(0, DUT_TB);
-    //end
-
-
-
+    initial begin
+        $dumpfile("prueba.vcd");
+        $dumpvars(0, DUT_TB);
+    end
+    
 endmodule
