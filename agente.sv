@@ -9,6 +9,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     function new;
         cant_trans = 10;
         max_retardo = 20;
+        test_agent_mbx = new();
     endfunction
 
     task run_agent;
