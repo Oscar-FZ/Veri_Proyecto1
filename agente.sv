@@ -27,6 +27,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                             transaccion.print("[PRUEBA]");
                             agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
                         end
+                        $finish; //Por si acaso
                     end
 
                     broadcast: begin
