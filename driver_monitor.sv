@@ -1,14 +1,14 @@
 class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16);
 
-    bit pop;
-    bit push;
-    bit pndng_bus;
-    bit pndng_mntr;
-    bit [pckg_sz-1:0] data_bus_in;
-    bit [pckg_sz-1:0] data_bus_out;
-    bit [pckg_sz-1:0] queue_in [$];
-    bit [pckg_sz-1:0] queue_out [$];
-    int id;
+    bit pop;                            //Señal de pop de la FIFO
+    bit push;                           //Señal de push de la FIFO
+    bit pndng_bus;                      //Señal de pending del bus
+    bit pndng_mntr;                     //Señal de pending del monitor
+    bit [pckg_sz-1:0] data_bus_in;      //
+    bit [pckg_sz-1:0] data_bus_out;     //
+    bit [pckg_sz-1:0] queue_in [$];     //
+    bit [pckg_sz-1:0] queue_out [$];    //
+    int id;                             //
   
     virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) vif;
   
@@ -24,7 +24,11 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
         this.id = identificador;
     endfunction
   
-    task update_drvr();
+    //Este task revisa constantemente la señal de pop del bus para ver si el
+    //bus esta listo para recibir un paquete.
+    //Tambien conecta la señal de pending de la FIFO del driver con la señal
+    //de pendign del bus.
+    task update_drvr(); 
 	    forever begin
 	        @(negedge vif.clk);
 	        pop = vif.pop[0][id];
@@ -32,6 +36,8 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
         end
     endtask
 
+    //Este task esta revisando constantemente la señal de push del bus para
+    //que el monitor sepa cuando va a recibir un dato.
     task update_mntr();
 	    forever begin
 	        @(negedge vif.clk);
@@ -39,7 +45,10 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
         end
     endtask
  
-  
+    //Este task se encarga de guardar el paquete que se va a enviar en D_pop
+    //para que este sea enviado en el momento que el bus mande la señal de
+    //pop.
+    //Tambien actualiza la señal de peding del Driver.
     task send_data_bus();
 	    forever begin
 	        @(posedge vif.clk);
@@ -55,6 +64,9 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
 	    end
     endtask
 
+    //Este task recibe el dato del bus que viene en D_push y lo guarda en la
+    //FIFO del monitor.
+    //Tambien actualiza el valor de pending de la FIFO del monitor.
     task receive_data_bus();
 	    forever begin
 	        @(posedge vif.clk);
@@ -70,10 +82,9 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
 	    end
     endtask     
 
-
-
     
-
+    //Esta funcion imprimer las FIFO del Driver y del Monitor junto con sus
+    //señales de control para debuguear.
     function void print(input string tag);
         $display("---------------------------");
         $display("[TIME %g]", $time);
@@ -148,7 +159,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
                 $display("[ESCRITURA]");
 		        transaccion.tiempo = $time;
                 dm_hijo.queue_in.push_front(transaccion.dato);
-		        transaccion.print("[DEBUG] Dato enviado");
+		        transaccion.print("[DRIVER] Dato enviado");
 		        drvr_chkr_mbx.put(transaccion);
             end
         end
@@ -171,7 +182,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 		        transaccion_mntr.tiempo = $time;
 		        transaccion_mntr.dato = dm_hijo.queue_out.pop_back();
 		        mntr_chkr_mbx.put(transaccion_mntr);
-		        transaccion.print("[DEBUG] Dato recivido");
+		        transaccion.print("[DRVER] Dato recibido");
 	        end
         end
     endtask
