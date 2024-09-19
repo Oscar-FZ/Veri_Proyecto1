@@ -16,6 +16,7 @@ module DUT_TB();
 
 
 	bit CLK_100MHZ;
+    instruccion instr_agente_sim;
 
     strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
 
@@ -26,11 +27,14 @@ module DUT_TB();
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs];
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;
+    //
+    instr_pckg_mbx test_agent_mbx;
+    //
 
     instruccion tipo;
 
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) trans[8];
-    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
+    //bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
 
     int max_retardo = 20;
 
@@ -58,6 +62,7 @@ module DUT_TB();
 
         drvr_chkr_mbx = new();
         mntr_chkr_mbx = new();
+        test_agent_mbx = new();
 
         $display("INICIO");
         driver_monitor_inst = new();
@@ -88,16 +93,13 @@ module DUT_TB();
         join_none
 
         /////////////////////////////////////////////////
-        for (int i = 0; i<10; i++) begin
-            transaccion = new();
-            transaccion.max_retardo = max_retardo;
-            transaccion.randomize();
-            transaccion.dato = {transaccion.direccion, transaccion.info};
-            transaccion.print("[PRUEBA]");
-            agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
-        end
+        //for (int i = 0; i<2; i++) begin
+            //test_agent_mbx.put(instr_agente_sim); //////////////////////////////////////////
+        //end
         /////////////////////////////////////////////////
 
+        instr_agente_sim = aleatorio;
+        test_agent_mbx.put(instr_agente_sim); 
 
 
         #10000;
