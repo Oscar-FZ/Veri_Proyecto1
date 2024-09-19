@@ -18,6 +18,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     task run_agent;
         $display("[%g]  El Agente fue inicializado",$time);
         forever begin
+            #1
             if (test_agent_mbx.num() > 0) begin //Si hay un mensaje en el mailbox
                 $display("[%g]  Agente: se recibe instruccion del test",$time);
                 test_agent_mbx.get(instruccion); //Se saca la instruccion del mailbox
