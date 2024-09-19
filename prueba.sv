@@ -103,7 +103,7 @@ module DUT_TB();
         test_agent_mbx.put(tipo); 
 
 
-        #10000;
+        #100;
 		$finish;
 	end
 
