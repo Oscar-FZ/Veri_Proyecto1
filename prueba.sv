@@ -110,13 +110,15 @@ module DUT_TB();
 
 
         #10000;
+        $dumpfile("prueba.vcd");
+        $dumpvars(0, DUT_TB);
 		$finish;
 	end
 
-    initial begin
-        $dumpfile("prueba.vcd");
-        $dumpvars(0, DUT_TB);
-    end
+    //initial begin
+        //$dumpfile("prueba.vcd");
+        //$dumpvars(0, DUT_TB);
+    //end
 
 
 
