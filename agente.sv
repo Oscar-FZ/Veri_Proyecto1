@@ -9,9 +9,9 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     function new();
         cant_trans = 10;
         max_retardo = 20;
-        for (int i = 0; i < drvrs; i++) begin
-            agnt_drvr_mbx[i] = new();
-        end //Me parece que esto se puede quitar
+        //for (int i = 0; i < drvrs; i++) begin
+          //  agnt_drvr_mbx[i] = new();
+        //end //Me parece que esto se puede quitar
     endfunction
 
     task run_agent;
