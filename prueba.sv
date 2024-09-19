@@ -17,12 +17,11 @@ module DUT_TB();
 
 
 	bit CLK_100MHZ;
-    instruccion instr_agente_sim;
 
     strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
 
     //
-    agent #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) agent_inst; //Primero va el nombre de la clase
+    agent #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) agent_inst; //Primero va el nombre de la clase
     //
     
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs];
@@ -99,8 +98,8 @@ module DUT_TB();
         //end
         /////////////////////////////////////////////////
 
-        instr_agente_sim = aleatorio;
-        test_agent_mbx.put(instr_agente_sim); 
+        tipo = aleatorio;
+        test_agent_mbx.put(tipo); 
 
 
         #10000;
