@@ -3,7 +3,8 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     instr_pckg_mbx test_agent_mbx; //Mailbox del test al agente
     instruccion instruccion;
     int cant_trans; //Cantidad de transacciones a realizar
-    int max_retardo;
+    int max_retardo; //Retardo maximo entre transacciones
+    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
 
     function new;
         cant_trans = 10;
