@@ -2,6 +2,9 @@
 `include "Library.sv"
 `include "transactions.sv"
 `include "driver_monitor.sv"
+//
+`include "agente.sv"
+//
 
 module DUT_TB();
 	parameter WIDTH = 16;
@@ -15,6 +18,10 @@ module DUT_TB();
 	bit CLK_100MHZ;
 
     strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
+
+    //
+    strt_agent #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) agent_inst;
+    //
     
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs];
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
@@ -54,6 +61,9 @@ module DUT_TB();
 
         $display("INICIO");
         driver_monitor_inst = new();
+        //
+        agent_inst = new();
+        //
 
 
         for (int i = 0; i<drvrs; i++) begin
@@ -72,6 +82,9 @@ module DUT_TB();
         fork
             driver_monitor_inst.start_driver();
             driver_monitor_inst.start_monitor();
+            //
+            agent_inst.run_agent();
+            //
         join_none
 
         /////////////////////////////////////////////////
