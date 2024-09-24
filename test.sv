@@ -16,5 +16,20 @@ function new();
     ambiente_inst = new();
     ambiente_inst._if = _if;
     ambiente_inst.test_agent_mbx = test_agent_mbx;
+    ambiente_inst.agent_inst.test_agent_mbx = test_agent_mbx;
+
+    //Valores que usa el agente
+    ambiente_inst.agent_inst.ret_spec = //TODO
+    ambiente_inst.agent_inst.info_spec = //TODO
+    ambiente_inst.agent_inst.tpo_spec = //TODO
+    ambiente_inst.agent_inst.dsp_spec = //TODO
+    ambiente_inst.agent_inst.dir_spec = //TODO
 endfunction
+
+task run;
+//TODO
+//Envio de paquetes aleatorios, envio de paquetes broadcast, envio de reset, 
+//paquetes aleatorios desde diferentes disp. al mismo tiempo,
+//maxima alternancia, hacia dispositivo inexistente, desde y hacia el mismo disp.
+endtask
 endclass
