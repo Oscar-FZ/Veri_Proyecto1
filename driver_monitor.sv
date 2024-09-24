@@ -171,7 +171,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 		        transaccion_mntr.tiempo = $time;
 		        transaccion_mntr.dato = dm_hijo.queue_out.pop_back();
 		        mntr_chkr_mbx.put(transaccion_mntr);
-		        transaccion.print("[DEBUG] Dato recivido");
+		        transaccion.print("[DEBUG] Dato recibido");
 	        end
         end
     endtask
