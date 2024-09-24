@@ -98,7 +98,7 @@ module DUT_TB();
 
         #10;
         $display("[%g]  Enviando instruccion al agente",$time);
-        tipo = aleatorio;
+        tipo = broadcast;
         test_agent_mbx.put(tipo); 
 
         #10000;
