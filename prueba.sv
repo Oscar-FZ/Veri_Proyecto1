@@ -87,14 +87,13 @@ module DUT_TB();
         #1;
         _if.reset = 0;
 
-        fork
+        //fork
             //
-            agent_inst.run_agent();
+        //    agent_inst.run_agent();
             //
-            driver_monitor_inst.start_driver();
-            driver_monitor_inst.start_monitor();
-            
-        join_none
+        //    driver_monitor_inst.start_driver();
+        //    driver_monitor_inst.start_monitor();  
+        //join_none
 
         #10;
         $display("[%g]  Enviando instruccion al agente",$time);
