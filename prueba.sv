@@ -17,17 +17,17 @@ module DUT_TB();
 
 	bit CLK_100MHZ;
 
-    strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
+    //strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
 
     //
-    agent #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) agent_inst; //Primero va el nombre de la clase
+    //agent #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) agent_inst; //Primero va el nombre de la clase
     //
     
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs];
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;
+    //bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs];
+    //bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
+    //bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;
     //
-    instr_pckg_mbx test_agent_mbx;
+    //instr_pckg_mbx test_agent_mbx;
     //
 
     instruccion tipo;
@@ -55,33 +55,33 @@ module DUT_TB();
 	initial begin 
 		CLK_100MHZ = 0;
         
-        for (int i = 0; i<drvrs; i++) begin
-            agnt_drvr_mbx[i] = new();
-        end
+        //for (int i = 0; i<drvrs; i++) begin
+            //agnt_drvr_mbx[i] = new();
+        //end
 
-        drvr_chkr_mbx = new();
-        mntr_chkr_mbx = new();
-        test_agent_mbx = new();
+        //drvr_chkr_mbx = new();
+        //mntr_chkr_mbx = new();
+        //test_agent_mbx = new();
 
-        $display("INICIO");
-        driver_monitor_inst = new();
+        //$display("INICIO");
+        //driver_monitor_inst = new();
         //
-        agent_inst = new();
-        agent_inst.test_agent_mbx = test_agent_mbx; 
+        //agent_inst = new();
+        //agent_inst.test_agent_mbx = test_agent_mbx; 
         //
 
 
-        for (int i = 0; i<drvrs; i++) begin
-            $display("[%d]",i);
-            driver_monitor_inst.strt_dm[i].dm_hijo.vif = _if;
-            driver_monitor_inst.strt_dm[i].agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
-            driver_monitor_inst.strt_dm[i].drvr_chkr_mbx = drvr_chkr_mbx;
-            driver_monitor_inst.strt_dm[i].mntr_chkr_mbx = mntr_chkr_mbx;
+        //for (int i = 0; i<drvrs; i++) begin
+        //    $display("[%d]",i);
+        //    driver_monitor_inst.strt_dm[i].dm_hijo.vif = _if;
+        //    driver_monitor_inst.strt_dm[i].agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
+        //    driver_monitor_inst.strt_dm[i].drvr_chkr_mbx = drvr_chkr_mbx;
+        //    driver_monitor_inst.strt_dm[i].mntr_chkr_mbx = mntr_chkr_mbx;
             //
-            agent_inst.agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
+        //    agent_inst.agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
             //
-            #1;
-        end
+        //    #1;
+        //end
 
         _if.reset = 1;
         #1;
