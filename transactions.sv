@@ -25,8 +25,8 @@ class bus_pckg #(parameter drvrs = 4, parameter pckg_sz = 16);
     int tiempo;                         //El tiempo en el que se creó el paquete
     transaction tipo;                   //El tipo de paquete
     int max_retardo;                    //El retardo máximo del paquete
-    rand bit [drvrs-1:0] dispositivo;   //El dispositivo al que está destinado el paquete
-    rand bit [7:0] direccion;           //La dirección de la ubicación de memoria que se leerá o escribirá
+    rand bit [drvrs-1:0] dispositivo;   //El dispositivo al que está destinado el paquete //WTF does this mean?
+    rand bit [7:0] direccion;           //La dirección de la ubicación de memoria que se leerá o escribirá //WTF does this mean?
     rand bit [pckg_sz-9:0] info;        //Información adicional sobre el paquete
 
     constraint const_retardo {retardo < max_retardo; retardo>0;}

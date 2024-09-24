@@ -172,7 +172,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 		        transaccion_mntr.dato = dm_hijo.queue_out.pop_back();
 		        mntr_chkr_mbx.put(transaccion_mntr);
                 $display("Dato leido del fifo:");
-                $display(transaccion_mntr.dato);
+                $display("%h", transaccion_mntr.dato);
 		        //transaccion.print("[DEBUG] Dato recibido"); //Cambiar esto para imprimir los datos del mailbox
 	        end
         end
