@@ -5,6 +5,11 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     int cant_trans; //Cantidad de transacciones a realizar
     int max_retardo; //Retardo maximo entre transacciones
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
+    int ret_spec; //Retardo específico para las transacciones
+    int info_spec;
+    transaction tpo_spec;
+    int dsp_spec;
+    int dir_spec;
 
     function new();
         cant_trans = 10;
@@ -43,6 +48,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         transaccion.print("[PRUEBA]");
                         agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
                         //$finish; //Quitar el finish antes de probar las cosas
+                        //Ver como aleatorizar todo menos transaccion.direccion :)
                     end
 
                     retardos: begin
@@ -50,7 +56,19 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                     end
 
                     especifico: begin
-                        $finish;
+                        $display("[%g]  Agente: se recibe instruccion especifica del test",$time);
+                        transaccion = new;
+                        transaccion.retardo = ret_spec;
+                        //transaccion.dato = dto_spec;
+                        transaccion.tipo = tpo_spec;
+                        transaccion.max_retardo = max_retardo;
+                        transaccion.dispositivo = dsp_spec;
+                        transaccion.direccion = dir_spec;
+                        transaccion.info = info_spec;
+                        transaccion.dato = {dir_spec, info_spec};
+                        transaccion.print("[PRUEBA]");
+                        agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
+                        //$finish;
                     end
                 endcase
             end
