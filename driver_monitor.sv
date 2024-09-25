@@ -54,7 +54,7 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
 	        @(posedge vif.clk);
 	        vif.D_pop[0][id] = queue_in[$]; //Probably check this as well
 	        if (pop) begin
-    	        queue_in.pop_back();
+    	        queue_in.pop_front();
 	        end
 
 	        if (queue_in.size() != 0) 
@@ -71,7 +71,7 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
 	    forever begin
 	        @(posedge vif.clk);
 	        if (push) begin
-	            queue_out.push_front(vif.D_push[0][id]);
+	            queue_out.push_back(vif.D_push[0][id]);
 	        end
       
 	        if (queue_out.size() != 0) begin 
@@ -145,6 +145,9 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 	    join_none
 
         @(posedge dm_hijo.vif.clk);
+        @(posedge dm_hijo.vif.pop[0][id]) begin
+            drvr_chkr_mbx.put(dm_hijo.queue_in[$]);
+        end        
         forever begin
             dm_hijo.vif.reset = 0;
 	        espera = 0;
@@ -158,9 +161,9 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
             if (transaccion.tipo == escritura) begin
                 $display("[ESCRITURA]");
 		        transaccion.tiempo = $time;
-                dm_hijo.queue_in.push_front(transaccion.dato); //Esto no debería ser transaccion.info? Se está guardando todo en la fifo
+                dm_hijo.queue_in.push_back(transaccion.dato); //Esto no debería ser transaccion.info? Se está guardando todo en la fifo
 		        //transaccion.print("[DEBUG] Dato enviado");
-		        drvr_chkr_mbx.put(transaccion);
+		        //drvr_chkr_mbx.put(transaccion);
             end
         end
     endtask
@@ -180,7 +183,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 	        if (dm_hijo.pndng_mntr) begin
 	    	    $display("[LECTURA]");
 		        transaccion_mntr.tiempo = $time;
-		        transaccion_mntr.dato = dm_hijo.queue_out.pop_back();
+		        transaccion_mntr.dato = dm_hijo.queue_out.pop_front();
                 transaccion_mntr.direccion = transaccion_mntr.dato[pckg_sz-1:8];
 		        mntr_chkr_mbx.put(transaccion_mntr);
 		        //transaccion.print("[DRVER] Dato recibido");

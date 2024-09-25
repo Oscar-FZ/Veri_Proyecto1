@@ -44,7 +44,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
         forever begin
             drvr_chkr_mbx.get(transaccion_drvr);
             $display("Transaccion recibida");
-            emul_fifo[transaccion_drvr.direccion].push_front(transaccion_drvr.dato);
+            emul_fifo[transaccion_drvr.direccion].push_back(transaccion_drvr.dato);
             transaccion_drvr.print("[CHECKER FIFO]");
         end
     endtask
@@ -52,10 +52,11 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
     task check();
         forever begin
             mntr_chkr_mbx.get(transaccion_mntr);
-            auxiliar.dato = emul_fifo[transaccion_mntr.direccion].pop_back();
-            $display("[FIFO]%h",emul_fifo[transaccion_mntr.direccion][$]);
+            auxiliar.dato = emul_fifo[transaccion_mntr.direccion].pop_front();
             if (auxiliar.dato == transaccion_mntr.dato) begin
                 $display("[CHECKER] LETS FUCKING GO!!!");
+                auxiliar.print("[AUXILIAR]");
+                transaccion_mntr.print("[recibido]");
             end
 
             else begin
