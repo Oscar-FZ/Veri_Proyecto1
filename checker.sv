@@ -6,6 +6,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
     //    destino
     //3 - Recibir el paquete leido por el monitor
     //4 - Revisar en la FIFO si ese era el paquete esperado
+    //TODO 
     
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_drvr;
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_mntr;

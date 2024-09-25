@@ -145,7 +145,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 	    join_none
 
         @(posedge dm_hijo.vif.clk);
-        @(posedge dm_hijo.vif.pop[0][id]) begin
+        if (dm_hijo.vif.pop[0][id]) begin
             drvr_chkr_mbx.put(dm_hijo.queue_in[$]);
         end        
         forever begin
