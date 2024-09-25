@@ -49,14 +49,17 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
     endtask
 
     task check();
-        mntr_chkr_mbx.get(transaccion_mntr);
-        auxiliar.dato = emul_fifo[transaccion_mntr.direccion].pop_back(); 
-        if (auxiliar.dato == transaccion_mntr.dato) begin
-            $display("[CHECKER] LETS FUCKING GO!!!");
-        end
+        forever begin
+            mntr_chkr_mbx.get(transaccion_mntr);
+            auxiliar.dato = emul_fifo[transaccion_mntr.direccion].pop_back(); 
+            if (auxiliar.dato == transaccion_mntr.dato) begin
+                $display("[CHECKER] LETS FUCKING GO!!!");
+            end
 
-        else begin
-            $display("[CHECKER] Diay no :(");
+            else begin
+                $display("[CHECKER] Diay no :(");
+                auxiliar.print
+            end
         end
     endtask
 endclass    
