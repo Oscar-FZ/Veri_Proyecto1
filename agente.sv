@@ -6,7 +6,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     int max_retardo; //Retardo maximo entre transacciones
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
     int ret_spec; //Retardo específico para las transacciones
-    int info_spec;
+    int info_spec; //Tal vez el dato no entre en 32 bits
     transaction tpo_spec;
     int dsp_spec;
     int dir_spec;
