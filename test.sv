@@ -21,11 +21,11 @@ function new();
     ambiente_inst.agent_inst.test_agent_mbx = test_agent_mbx;
 
     //Valores que usa el agente
-    ambiente_inst.agent_inst.ret_spec = //TODO
-    ambiente_inst.agent_inst.info_spec = //TODO
-    ambiente_inst.agent_inst.tpo_spec = //TODO
-    ambiente_inst.agent_inst.dsp_spec = //TODO
-    ambiente_inst.agent_inst.dir_spec = //TODO
+    //ambiente_inst.agent_inst.ret_spec = //TODO
+    //ambiente_inst.agent_inst.info_spec = //TODO
+    //ambiente_inst.agent_inst.tpo_spec = //TODO
+    //ambiente_inst.agent_inst.dsp_spec = //TODO
+    //ambiente_inst.agent_inst.dir_spec = //TODO
     //Tal vez agregar max retardo
 endfunction
 
