@@ -2,11 +2,12 @@
 `include "Library.sv"
 `include "transactions.sv"
 `include "driver_monitor.sv"
-//
 `include "agente.sv"
-//
+`include "ambiente.sv"
+`include "test.sv"
 
 module DUT_TB();
+    bit CLK_100MHZ;
 	parameter WIDTH = 16;
 	parameter PERIOD = 2;
 	parameter bits = 1;
@@ -14,9 +15,42 @@ module DUT_TB();
 	parameter pckg_sz =16;
 	parameter broadcast = {8{1'b1}};
 
+    test #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) t0;
+	
+    bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) _if (.clk(CLK_100MHZ));
+    always #(PERIOD/2) CLK_100MHZ = ~CLK_100MHZ;
 
-	bit CLK_100MHZ;
+    bs_gnrtr_n_rbtr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) bus_DUT
+    (
+    	.clk    (_if.clk),	    //Input
+    	.reset  (_if.reset),    //Input
+    	.pndng  (_if.pndng),    //Input
+    	.push   (_if.push),	    //Output
+    	.pop    (_if.pop),	    //Output
+    	.D_pop  (_if.D_pop),    //Input
+    	.D_push (_if.D_push)    //Output
+    );
 
+    initial begin
+        CLK_100MHZ = 0;
+        t0 = new();
+        t0._if = _if;
+        t0.ambiente_inst.driver_monitor_inst.vif = _if;
+        fork
+            t0.run();   
+        join_none
+        #1;
+        _if.reset = 1;
+        #1;
+        _if.reset = 0;
+    end
+
+    always @(posedge CLK_100MHZ) begin
+        if ($time > 100000) begin
+            $display("Tiempo limite del testbench alcanzado");
+            $finish;
+        end
+    end
     //strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
 
     //
@@ -30,30 +64,22 @@ module DUT_TB();
     //instr_pckg_mbx test_agent_mbx;
     //
 
-    instruccion tipo;
+    //instruccion tipo;
 
-    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) trans[8];
+    //bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) trans[8]; //WHAT THE FUCK IS THIS???
     //bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
 
-    int max_retardo = 20;
+    //int max_retardo = 20;
 
-    bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) _if (.clk(CLK_100MHZ));
-	always #(PERIOD/2) CLK_100MHZ = ~CLK_100MHZ;
+    //bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) _if (.clk(CLK_100MHZ));
+	
 
 
-	bs_gnrtr_n_rbtr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) bus_DUT
-    (
-    	.clk    (_if.clk),	    //Input
-    	.reset  (_if.reset),    //Input
-    	.pndng  (_if.pndng),    //Input
-    	.push   (_if.push),	    //Output
-    	.pop    (_if.pop),	    //Output
-    	.D_pop  (_if.D_pop),    //Input
-    	.D_push (_if.D_push)    //Output
-    );
+	
 
-	initial begin 
-		CLK_100MHZ = 0;
+	//initial begin 
+		//CLK_100MHZ = 0;
+        
         
         //for (int i = 0; i<drvrs; i++) begin
             //agnt_drvr_mbx[i] = new();
@@ -83,9 +109,9 @@ module DUT_TB();
         //    #1;
         //end
 
-        _if.reset = 1;
-        #1;
-        _if.reset = 0;
+       // _if.reset = 1;
+        //#1;
+       // _if.reset = 0;
 
         //fork
             //
@@ -95,18 +121,18 @@ module DUT_TB();
         //    driver_monitor_inst.start_monitor();  
         //join_none
 
-        #10;
-        $display("[%g]  Enviando instruccion al agente",$time);
-        tipo = broadcast;
-        test_agent_mbx.put(tipo); 
+        //#10;
+        //$display("[%g]  Enviando instruccion al agente",$time);
+        //tipo = broadcast;
+       // test_agent_mbx.put(tipo); 
 
-        #10000;
-		$finish;
-	end
+        //#10000;
+		//$finish;
+	//end
 
-    initial begin
-        $dumpfile("prueba.vcd");
-        $dumpvars(0, DUT_TB);
-    end
+    //initial begin
+        //$dumpfile("prueba.vcd");
+        //$dumpvars(0, DUT_TB);
+    //end
     
 endmodule
