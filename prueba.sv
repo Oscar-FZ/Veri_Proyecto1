@@ -35,7 +35,11 @@ module DUT_TB();
         CLK_100MHZ = 0;
         t0 = new();
         t0._if = _if;
-        t0.ambiente_inst.driver_monitor_inst.vif = _if;
+
+        for (int i = 0; i < drvrs; i++) begin
+            t0.ambiente_inst.driver_monitor_inst.strt_dm[i].dm_hijo.vif = _if;
+        end
+
         fork
             t0.run();   
         join_none
@@ -44,6 +48,8 @@ module DUT_TB();
         #1;
         _if.reset = 0;
     end
+
+    //    driver_monitor_inst.strt_dm[i].dm_hijo.vif = _if;
 
     always @(posedge CLK_100MHZ) begin
         if ($time > 100000) begin
