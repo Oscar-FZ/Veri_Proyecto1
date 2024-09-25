@@ -14,7 +14,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
     sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) to_sb;
 
     //bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) [drvrs-1:0] emul_fifo[$];
-    bit [pckg_sz-1:0] emul_fifo[drvrs-1:0][$];
+    bit [pckg_sz-1:0] emul_fifo[7:0][$];
 
 
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
@@ -31,6 +31,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
         to_sb               = new();
         transaccion_drvr    = new();
         transaccion_mntr    = new();
+        auxiliar            = new();
         drvr_chkr_mbx       = new();
         mntr_chkr_mbx       = new();
         chkr_sb_mbx         = new();
@@ -43,13 +44,14 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
         forever begin
             drvr_chkr_mbx.get(transaccion_drvr);
             $display("Transaccion recibida");
-            emul_fifo[transaccion_drvr.direccion].push_front(transaccion_drvr);
+            emul_fifo[transaccion_drvr.direccion].push_front(transaccion_drvr.dato);
         end
     endtask
 
     task check();
         mntr_chkr_mbx.get(transaccion_mntr);
-        if (emul_fifo[transaccion_mntr.direccion].pop_back == transaccion_mntr) begin
+        auxiliar.dato = emul_fifo[transaccion_mntr.direccion].pop_back(); 
+        if (auxiliar.dato == transaccion_mntr.dato) begin
             $display("[CHECKER] LETS FUCKING GO!!!");
         end
 
