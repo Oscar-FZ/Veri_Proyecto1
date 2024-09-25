@@ -39,7 +39,7 @@ task run;
     test_agent_mbx.put(trans_agente);
     $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
 
-    #10000
+    #1000000;
     $display("[%g] Test: Se alcanzó el tiempo límite de la prueba", $time);
     #20;
     $finish;
