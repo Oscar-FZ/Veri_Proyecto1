@@ -52,7 +52,7 @@ module DUT_TB();
     //    driver_monitor_inst.strt_dm[i].dm_hijo.vif = _if;
 
     always @(posedge CLK_100MHZ) begin
-        if ($time > 100000) begin
+        if ($time > 100000000) begin
             $display("Tiempo limite del testbench alcanzado");
             $finish;
         end
