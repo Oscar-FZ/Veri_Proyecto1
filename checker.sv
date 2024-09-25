@@ -14,7 +14,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
     sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) to_sb;
 
     //bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) [drvrs-1:0] emul_fifo[$];
-    bit [7:0] emul_fifo[$];
+    bit [pckg_sz-1:0] emul_fifo[drvrs-1:0][$];
 
 
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
