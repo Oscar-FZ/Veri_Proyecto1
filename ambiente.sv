@@ -9,7 +9,7 @@
     //etc
 
     //Declaración de la interfaz que conecta al DUT
-    virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) _if; //Tengo que parchear el reloj xd
+    virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) _if;
 
     //Declaración de los mailboxes
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs]; //Mailbox del agente a los drivers
@@ -42,7 +42,6 @@
             driver_monitor_inst.strt_dm[i].drvr_chkr_mbx = drvr_chkr_mbx;
             driver_monitor_inst.strt_dm[i].mntr_chkr_mbx = mntr_chkr_mbx;
             agent_inst.agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
-            //#1; //Por qué se espera un ciclo de simulación cada ciclo?
         end    
     endfunction
 
