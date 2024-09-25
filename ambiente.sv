@@ -9,7 +9,7 @@
     //etc
 
     //Declaración de la interfaz que conecta al DUT
-    virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) _if;
+    virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) _if; //TODO
 
     //Declaración de los mailboxes
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs]; //Mailbox del agente a los drivers

@@ -39,14 +39,14 @@ module DUT_TB();
         for (int i = 0; i < drvrs; i++) begin
             t0.ambiente_inst.driver_monitor_inst.strt_dm[i].dm_hijo.vif = _if;
         end
+         #1;
+        _if.reset = 1;
+        #1;
+        _if.reset = 0;
 
         fork
             t0.run();   
         join_none
-        #1;
-        _if.reset = 1;
-        #1;
-        _if.reset = 0;
     end
 
     //    driver_monitor_inst.strt_dm[i].dm_hijo.vif = _if;
