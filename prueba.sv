@@ -2,9 +2,9 @@
 `include "Library.sv"
 `include "transactions.sv"
 `include "driver_monitor.sv"
-//
+`include "checker.sv"
 `include "agente.sv"
-//
+
 
 module DUT_TB();
 	parameter WIDTH = 16;
@@ -18,10 +18,10 @@ module DUT_TB();
 	bit CLK_100MHZ;
 
     strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
+    
+    my_checker #(.drvrs(drvrs), .pckg_sz(pckg_sz)) checker_inst;
 
-    //
     agent #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) agent_inst; //Primero va el nombre de la clase
-    //
     
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs];
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
@@ -61,14 +61,14 @@ module DUT_TB();
 
         drvr_chkr_mbx = new();
         mntr_chkr_mbx = new();
+        chkr_sb_mbx = new();
         test_agent_mbx = new();
 
         $display("INICIO");
+        checker_inst = new();
         driver_monitor_inst = new();
-        //
         agent_inst = new();
         agent_inst.test_agent_mbx = test_agent_mbx; 
-        //
 
 
         for (int i = 0; i<drvrs; i++) begin
@@ -77,11 +77,13 @@ module DUT_TB();
             driver_monitor_inst.strt_dm[i].agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
             driver_monitor_inst.strt_dm[i].drvr_chkr_mbx = drvr_chkr_mbx;
             driver_monitor_inst.strt_dm[i].mntr_chkr_mbx = mntr_chkr_mbx;
-            //
             agent_inst.agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
-            //
             #1;
         end
+
+        checker_inst.drvr_chkr_mbx = drvr_chkr_mbx;
+        checker_inst.mntr_chkr_mbx = mntr_chkr_mbx;
+        checker_inst.chkr_sb_mbx = chkr_sb_mbx;
 
         _if.reset = 1;
         #1;
@@ -93,12 +95,14 @@ module DUT_TB();
             //
             driver_monitor_inst.start_driver();
             driver_monitor_inst.start_monitor();
-            
+
+            checker_inst.update(); //Estos 2 deberia de ser 1
+            checker_inst.check();
         join_none
 
         #10;
         $display("[%g]  Enviando instruccion al agente",$time);
-        tipo = broadcast;
+        tipo = aleatorio;
         test_agent_mbx.put(tipo); 
 
         #10000;

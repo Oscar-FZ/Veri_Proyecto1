@@ -1,4 +1,4 @@
-class checker #(parameter drvrs = 4, parameter pckg_sz = 16);
+class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
 
     //Plan actual
     //1 - Hacer una FIFO por cada dispositivo
@@ -14,7 +14,9 @@ class checker #(parameter drvrs = 4, parameter pckg_sz = 16);
 
     sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) to_sb;
 
-    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) [drvrs-1:0] emul_fifo[$];
+    //bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) [drvrs-1:0] emul_fifo[$];
+    bit [7:0] emul_fifo[$];
+
 
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;

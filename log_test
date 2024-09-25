@@ -1,0 +1,48 @@
+
+Warning-[DEBUG_DEP] Option will be deprecated
+  The option '-debug_all' will be deprecated in a future release.  Please use 
+  '-debug_acc+all+dmptf -debug_region+cell+encrypt' instead.
+
+Command: vcs -Mupdate prueba.sv -o salida -full64 -debug_all -sverilog -kdb -lca \
+-l log_test +lint=TFIPC-L
+                         Chronologic VCS (TM)
+       Version R-2020.12-SP2_Full64 -- Tue Sep 24 20:08:29 2024
+
+                    Copyright (c) 1991 - 2021 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+            or distribution of this software is strictly prohibited.
+
+
+Warning-[LCA_FEATURES_ENABLED] Usage warning
+  LCA features enabled by '-lca' argument on the command line.  For more 
+  information regarding list of LCA features please refer to Chapter "LCA 
+  features" in the VCS Release Notes
+
+
+Warning-[DEBUG_DEP] Option will be deprecated
+  The option '-debug_all' will be deprecated in a future release.  Please use 
+  '-debug_acc+all -debug_region+cell+encrypt' instead.
+
+Parsing design file 'prueba.sv'
+Parsing included file 'Library.sv'.
+Back to file 'prueba.sv'.
+Parsing included file 'transactions.sv'.
+Back to file 'prueba.sv'.
+Parsing included file 'driver_monitor.sv'.
+Back to file 'prueba.sv'.
+Parsing included file 'checker.sv'.
+Back to file 'prueba.sv'.
+Parsing included file 'agente.sv'.
+Back to file 'prueba.sv'.
+
+Error-[SE] Syntax error
+  Following verilog source has syntax error :
+  "prueba.sv", 9: token is 'module'
+  module DUT_TB();
+        ^
+
+2 warnings
+1 error
+CPU time: .280 seconds to compile
