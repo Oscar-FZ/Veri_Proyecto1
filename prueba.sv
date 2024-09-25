@@ -2,6 +2,9 @@
 `include "Library.sv"
 `include "transactions.sv"
 `include "driver_monitor.sv"
+//
+`include "agente.sv"
+//
 
 module DUT_TB();
 	parameter WIDTH = 16;
@@ -15,15 +18,22 @@ module DUT_TB();
 	bit CLK_100MHZ;
 
     strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
+
+    //
+    agent #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) agent_inst; //Primero va el nombre de la clase
+    //
     
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs];
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;
+    //
+    instr_pckg_mbx test_agent_mbx;
+    //
 
     instruccion tipo;
 
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) trans[8];
-    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
+    //bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
 
     int max_retardo = 20;
 
@@ -51,9 +61,14 @@ module DUT_TB();
 
         drvr_chkr_mbx = new();
         mntr_chkr_mbx = new();
+        test_agent_mbx = new();
 
         $display("INICIO");
         driver_monitor_inst = new();
+        //
+        agent_inst = new();
+        agent_inst.test_agent_mbx = test_agent_mbx; 
+        //
 
 
         for (int i = 0; i<drvrs; i++) begin
@@ -62,6 +77,9 @@ module DUT_TB();
             driver_monitor_inst.strt_dm[i].agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
             driver_monitor_inst.strt_dm[i].drvr_chkr_mbx = drvr_chkr_mbx;
             driver_monitor_inst.strt_dm[i].mntr_chkr_mbx = mntr_chkr_mbx;
+            //
+            agent_inst.agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
+            //
             #1;
         end
 
@@ -70,22 +88,18 @@ module DUT_TB();
         _if.reset = 0;
 
         fork
+            //
+            agent_inst.run_agent();
+            //
             driver_monitor_inst.start_driver();
             driver_monitor_inst.start_monitor();
+            
         join_none
 
-        /////////////////////////////////////////////////
-        for (int i = 0; i<10; i++) begin
-            transaccion = new();
-            transaccion.max_retardo = max_retardo;
-            transaccion.randomize();
-            transaccion.dato = {transaccion.direccion, transaccion.info};
-            transaccion.print("[PRUEBA]");
-            agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
-        end
-        /////////////////////////////////////////////////
-
-
+        #10;
+        $display("[%g]  Enviando instruccion al agente",$time);
+        tipo = broadcast;
+        test_agent_mbx.put(tipo); 
 
         #10000;
 		$finish;
@@ -102,7 +116,5 @@ module DUT_TB();
         $dumpoff;
         //$vpdpluson();
     end
-
-
-
+    
 endmodule

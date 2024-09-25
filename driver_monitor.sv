@@ -52,7 +52,7 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
     task send_data_bus();
 	    forever begin
 	        @(posedge vif.clk);
-	        vif.D_pop[0][id] = queue_in[$];
+	        vif.D_pop[0][id] = queue_in[$]; //Probably check this as well
 	        if (pop) begin
     	        queue_in.pop_back();
 	        end
@@ -158,8 +158,8 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
             if (transaccion.tipo == escritura) begin
                 $display("[ESCRITURA]");
 		        transaccion.tiempo = $time;
-                dm_hijo.queue_in.push_front(transaccion.dato);
-		        transaccion.print("[DRIVER] Dato enviado");
+                dm_hijo.queue_in.push_front(transaccion.dato); //Esto no debería ser transaccion.info? Se está guardando todo en la fifo
+		        transaccion.print("[DEBUG] Dato enviado");
 		        drvr_chkr_mbx.put(transaccion);
             end
         end
@@ -183,6 +183,8 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 		        transaccion_mntr.dato = dm_hijo.queue_out.pop_back();
 		        mntr_chkr_mbx.put(transaccion_mntr);
 		        transaccion.print("[DRVER] Dato recibido");
+                $display("Dato leido del fifo:");
+                $display("%h", transaccion_mntr.dato);
 	        end
         end
     endtask

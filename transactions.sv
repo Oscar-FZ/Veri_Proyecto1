@@ -25,9 +25,9 @@ class bus_pckg #(parameter drvrs = 4, parameter pckg_sz = 16);
     int tiempo;                         //El tiempo en el que se envio el paquete
     transaction tipo;                   //El tipo de paquete
     int max_retardo;                    //El retardo máximo del paquete
-    rand bit [drvrs-1:0] dispositivo;   //El dispositivo desde el cual se envia el paquete
-    rand bit [7:0] direccion;           //La direccion del dispositivo destino del paquete
-    rand bit [pckg_sz-9:0] info;        //Información del paquete
+    rand bit [drvrs-1:0] dispositivo;   //El dispositivo al que está destinado el paquete //WTF does this mean?
+    rand bit [7:0] direccion;           //La dirección de la ubicación de memoria que se leerá o escribirá //WTF does this mean?
+    rand bit [pckg_sz-9:0] info;        //Información adicional sobre el paquete
 
     constraint const_retardo {retardo < max_retardo; retardo>0;}
     constraint const_direccion {direccion < drvrs; direccion >=0; direccion != dispositivo;}
@@ -117,4 +117,4 @@ endinterface
 //Define 3 tipos diferentes de mailboxes
 typedef mailbox #(bus_pckg #(.drvrs(4), .pckg_sz(16))) bus_pckg_mbx;
 typedef mailbox #(sb_pckg #(.drvrs(4), .pckg_sz(16))) sb_pckg_mbx;
-typedef mailbox #(instruccion) instr_pckg_mbx;
+typedef mailbox #(instruccion) instr_pckg_mbx; //Este lo voy a usar para conectar el test con el agente
