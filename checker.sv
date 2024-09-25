@@ -58,7 +58,8 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
 
             else begin
                 $display("[CHECKER] Diay no :(");
-                auxiliar.print
+                auxiliar.print("[AUXILIAR]");
+                transaccion_mntr.print("[recibido]");
             end
         end
     endtask
