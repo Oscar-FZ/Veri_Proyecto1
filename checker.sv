@@ -20,7 +20,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;
 
-    sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) cjkr_sb_mbx;
+    sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;
     int contador_auxiliar;
 
     function new();
@@ -41,7 +41,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
         $display("[%g] El Checker se esta actualizando", $time);
 
         forever begin
-            drvr_chkr_mbx.get(trannsaccion_drvr);
+            drvr_chkr_mbx.get(transaccion_drvr);
             $display("Transaccion recibida");
             emul_fifo[transaccion_drvr.direccion].push_front(transaccion_drvr);
         end
@@ -57,4 +57,4 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
             $display("[CHECKER] Diay no :(");
         end
     endtask
-
+endclass    
