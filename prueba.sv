@@ -2,6 +2,7 @@
 `include "Library.sv"
 `include "transactions.sv"
 `include "driver_monitor.sv"
+`include "checker.sv"
 `include "agente.sv"
 `include "ambiente.sv"
 `include "test.sv"

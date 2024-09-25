@@ -5,23 +5,26 @@
     //Declaración del agente
     agent #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) agent_inst;
     //checker
+    my_checker #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) checker_inst;
     //scoreboard
     //etc
 
     //Declaración de la interfaz que conecta al DUT
-    virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) _if; //TODO
+    virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) _if; 
 
     //Declaración de los mailboxes
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs]; //Mailbox del agente a los drivers
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;        //Mailbox de los drivers a los checkers
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;        //Mailbox de los checkers al monitor
+    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;        //Mailbox de los drivers al checker
+    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;        //Mailbox de los monitores al checker
     instr_pckg_mbx test_agent_mbx;                                         //Mailbox del test al agente
+    sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;           //Mailbox del checker al scoreboard
 
     function new();
         //Instanciación de los mailboxes
         drvr_chkr_mbx = new();
         mntr_chkr_mbx = new();
         test_agent_mbx = new();
+        chkr_sb_mbx = new();
 
         for (int i = 0; i < drvrs; i++) begin
             agnt_drvr_mbx[i] = new();
@@ -31,9 +34,13 @@
         $display("Instanciando componentes del ambiente");
         driver_monitor_inst = new();
         agent_inst = new();
+        checker_inst = new();
 
         //Conexión de las interfaces y mailboxes en el ambiente
         agent_inst.test_agent_mbx = test_agent_mbx;
+        checker_inst.drvr_chkr_mbx = drvr_chkr_mbx;
+        checker_inst.mntr_chkr_mbx = mntr_chkr_mbx;
+        checker_inst.chkr_sb_mbx = chkr_sb_mbx;
 
         for (int i = 0; i<drvrs; i++) begin
             $display("[%d]",i);
@@ -51,6 +58,8 @@
             driver_monitor_inst.start_driver();
             driver_monitor_inst.start_monitor();
             agent_inst.run_agent();
+            checker_inst.update();
+            checker_inst.check();
         join_none
     endtask
 endclass
