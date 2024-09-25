@@ -159,7 +159,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
                 $display("[ESCRITURA]");
 		        transaccion.tiempo = $time;
                 dm_hijo.queue_in.push_front(transaccion.dato); //Esto no debería ser transaccion.info? Se está guardando todo en la fifo
-		        transaccion.print("[DEBUG] Dato enviado");
+		        //transaccion.print("[DEBUG] Dato enviado");
 		        drvr_chkr_mbx.put(transaccion);
             end
         end
@@ -181,8 +181,9 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 	    	    $display("[LECTURA]");
 		        transaccion_mntr.tiempo = $time;
 		        transaccion_mntr.dato = dm_hijo.queue_out.pop_back();
+                transaccion_mntr.direccion = transaccion_mntr.dato[pckg_sz-1:8];
 		        mntr_chkr_mbx.put(transaccion_mntr);
-		        transaccion.print("[DRVER] Dato recibido");
+		        //transaccion.print("[DRVER] Dato recibido");
                 $display("Dato leido del fifo:");
                 $display("%h", transaccion_mntr.dato);
 	        end
