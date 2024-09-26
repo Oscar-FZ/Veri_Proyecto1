@@ -48,8 +48,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         transaccion.dato = {transaccion.direccion, transaccion.info};
                         transaccion.print("[PRUEBA]");
                         agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
-                        //$finish; //Quitar el finish antes de probar las cosas
-                        //Ver como aleatorizar todo menos transaccion.direccion :)
+                        //Ver como aleatorizar todo menos transaccion.direccion :) DONEZO
                     end
 
                     retardos: begin
@@ -66,6 +65,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         transaccion.dispositivo = dsp_spec;
                         transaccion.direccion = dir_spec;
                         transaccion.info = info_spec;
+                        $display(dir_spec);
                         transaccion.dato = {dir_spec, info_spec};
                         transaccion.print("[PRUEBA]");
                         agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
