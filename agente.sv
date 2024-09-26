@@ -59,13 +59,11 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         $display("[%g]  Agente: se recibe instruccion especifica del test",$time);
                         transaccion = new;
                         transaccion.retardo = ret_spec;
-                        //transaccion.dato = dto_spec;
                         transaccion.tipo = tpo_spec;
                         transaccion.max_retardo = max_retardo;
                         transaccion.dispositivo = dsp_spec;
                         transaccion.direccion = dir_spec;
                         transaccion.info = info_spec;
-                        $display(dir_spec);
                         transaccion.dato = {transaccion.direccion, transaccion.info};
                         transaccion.print("[PRUEBA]");
                         agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
