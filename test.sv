@@ -39,7 +39,7 @@ task run;
     //test_agent_mbx.put(trans_agente);
     //$display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
 
-    for (i = 0; i < 10; i++) begin
+    for (int i = 0; i < 10; i++) begin
         ambiente_inst.agent_inst.ret_spec = 4;
         ambiente_inst.agent_inst.tpo_spec = escritura;
         ambiente_inst.agent_inst.max_retardo = 9;
