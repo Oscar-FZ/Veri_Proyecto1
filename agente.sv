@@ -66,7 +66,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         transaccion.direccion = dir_spec;
                         transaccion.info = info_spec;
                         $display(dir_spec);
-                        transaccion.dato = {dir_spec, info_spec};
+                        transaccion.dato = {transaccion.direccion, transaccion.info};
                         transaccion.print("[PRUEBA]");
                         agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
                         //$finish;
