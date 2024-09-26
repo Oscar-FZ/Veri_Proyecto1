@@ -39,13 +39,14 @@ task run;
     //test_agent_mbx.put(trans_agente);
     //$display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
 
-    for (virtual int i = 0; i < 10; i++) begin
+    for (int i = 0; i < 10; i++) begin
+        automatic int l = i;
         ambiente_inst.agent_inst.ret_spec = 4;
         ambiente_inst.agent_inst.tpo_spec = escritura;
         ambiente_inst.agent_inst.max_retardo = 9;
         ambiente_inst.agent_inst.dsp_spec = 1;
         ambiente_inst.agent_inst.dir_spec = 2;
-        ambiente_inst.agent_inst.info_spec = i;
+        ambiente_inst.agent_inst.info_spec = l;
         trans_agente = especifico;
         test_agent_mbx.put(trans_agente);
         $display("[%g] Test: Enviada la instrucción prueba de transacción especifica 1", $time);
