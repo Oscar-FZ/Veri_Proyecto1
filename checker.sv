@@ -1,4 +1,4 @@
-class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
+class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
 
     //Plan actual
     //1 - Hacer una FIFO por cada dispositivo
@@ -48,8 +48,18 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
         forever begin
             drvr_chkr_mbx.get(transaccion_drvr);
             $display("Transaccion recibida");
-            emul_fifo[transaccion_drvr.direccion].push_back(transaccion_drvr.dato);
-            transaccion_drvr.print("[CHECKER FIFO]");
+            if (transaccion_drvr.direccion == broadcast) begin
+                for (bit [7:0] i = 8'b0; i < drvrs; i++) begin
+                    if (i != transaccion_drvr.dispositivo) begin
+                        emul_fifo[i].push_back(transaccion_drvr.dato);
+                    end
+                end
+            end
+
+            else begin
+                emul_fifo[transaccion_drvr.direccion].push_back(transaccion_drvr.dato);
+                transaccion_drvr.print("[CHECKER FIFO]");
+            end
         end
     endtask
 
