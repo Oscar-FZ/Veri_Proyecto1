@@ -9,7 +9,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     int info_spec; //Tal vez el dato no entre en 32 bits
     transaction tpo_spec;
     int dsp_spec;
-    int dir_spec;
+    bit [7:0] dir_spec;
 
     function new();
         cant_trans = 10;
