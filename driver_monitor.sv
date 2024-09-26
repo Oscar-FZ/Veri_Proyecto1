@@ -145,9 +145,9 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 	    join_none
 
         @(posedge dm_hijo.vif.clk);
-        if (dm_hijo.vif.pop[0][id]) begin
-            drvr_chkr_mbx.put(dm_hijo.queue_in[$]);
-        end        
+        //if (dm_hijo.vif.pop[0][id]) begin
+        //    drvr_chkr_mbx.put(dm_hijo.queue_in[$]);
+        //end        
         forever begin
             dm_hijo.vif.reset = 0;
 	        espera = 0;
@@ -162,8 +162,8 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
                 $display("[ESCRITURA]");
 		        transaccion.tiempo = $time;
                 dm_hijo.queue_in.push_back(transaccion.dato); //Esto no debería ser transaccion.info? Se está guardando todo en la fifo
-		        //transaccion.print("[DEBUG] Dato enviado");
-		        //drvr_chkr_mbx.put(transaccion);
+		        transaccion.print("[DEBUG] Dato enviado");
+		        drvr_chkr_mbx.put(transaccion);
             end
         end
     endtask

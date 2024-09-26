@@ -58,6 +58,11 @@ module DUT_TB();
             $finish;
         end
     end
+
+    initial begin
+        $dumpvars;
+        $dumpfile("dump.vcd");
+    end
     //strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
 
     //

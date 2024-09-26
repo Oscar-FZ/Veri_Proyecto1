@@ -16,6 +16,9 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
 
     //bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) [drvrs-1:0] emul_fifo[$];
     bit [pckg_sz-1:0] emul_fifo[7:0][$];
+    typedef enum {CORRECTO, INCORRECTO} valid;
+
+    valid result = INCORRECTO;
 
 
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
@@ -52,15 +55,23 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16);
 
     task check();
         forever begin
+            result = INCORRECTO;
             mntr_chkr_mbx.get(transaccion_mntr);
-            auxiliar.dato = emul_fifo[transaccion_mntr.direccion].pop_front();
-            if (auxiliar.dato == transaccion_mntr.dato) begin
-                $display("[CHECKER] LETS FUCKING GO!!!");
+            for (int i = 0; i < emul_fifo[transaccion_mntr.direccion].size(); i++) begin
+                auxiliar.dato = emul_fifo[transaccion_mntr.direccion][i];
                 auxiliar.print("[AUXILIAR]");
                 transaccion_mntr.print("[recibido]");
+
+                if (emul_fifo[transaccion_mntr.direccion][i] == transaccion_mntr.dato) begin
+                    $display("[CHECKER] LETS FUCKING GO!!!");
+                    result = CORRECTO;
+                    break;
+                end
+
+                else result = INCORRECTO;
             end
 
-            else begin
+            if (result == INCORRECTO) begin
                 $display("[CHECKER] Diay no :(");
                 auxiliar.print("[AUXILIAR]");
                 transaccion_mntr.print("[recibido]");
