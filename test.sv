@@ -45,7 +45,7 @@ task run;
         ambiente_inst.agent_inst.tpo_spec = escritura;
         ambiente_inst.agent_inst.max_retardo = 9;
         ambiente_inst.agent_inst.dsp_spec = 1;
-        ambiente_inst.agent_inst.dir_spec = 2;
+        ambiente_inst.agent_inst.dir_spec = 8'b00000010;
         ambiente_inst.agent_inst.info_spec = l;
         trans_agente = especifico;
         test_agent_mbx.put(trans_agente);
