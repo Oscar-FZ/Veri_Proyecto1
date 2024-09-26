@@ -47,7 +47,17 @@ task run;
     ambiente_inst.agent_inst.info_spec = 9;
     trans_agente = especifico;
     test_agent_mbx.put(trans_agente);
-    $display("[%g] Test: Enviada la instrucción prueba de transacción especifica", $time);
+    $display("[%g] Test: Enviada la instrucción prueba de transacción especifica 1", $time);
+
+    ambiente_inst.agent_inst.ret_spec = 4;
+    ambiente_inst.agent_inst.tpo_spec = escritura;
+    ambiente_inst.agent_inst.max_retardo = 9;
+    ambiente_inst.agent_inst.dsp_spec = 1;
+    ambiente_inst.agent_inst.dir_spec = 2;
+    ambiente_inst.agent_inst.info_spec = 8;
+    trans_agente = especifico;
+    test_agent_mbx.put(trans_agente);
+    $display("[%g] Test: Enviada la instrucción prueba de transacción especifica 2", $time);
 
     #1000000;
     $display("[%g] Test: Se alcanzó el tiempo límite de la prueba", $time);
