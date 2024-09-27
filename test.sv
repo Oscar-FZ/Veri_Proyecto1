@@ -39,21 +39,23 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //Prueba de envío de paquetes aleatorios
         aleatorizacion = new;
         aleatorizacion.randomize();
-        aleatorizacion.print("aver");
-        //ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
-        //trans_agente = aleatorio;
-        //test_agent_mbx.put(trans_agente);
-        //$display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
+        ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
+        trans_agente = aleatorio;
+        test_agent_mbx.put(trans_agente);
+        $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
 
         //Prueba de envío de paquetes broadcast
         aleatorizacion = new;
         aleatorizacion.randomize();
-        aleatorizacion.print("al cine");
+        ambiente_inst.agente_inst.cant_trans = 2;
+        trans_agente = retardos; //For testing
+        test_agent_mbx.put(trans_agente);
+        $display("[%g] Test: Enviada la instrucción de transacción broadcast", $time);
 
         //Reset
-        aleatorizacion = new;
-        aleatorizacion.randomize();
-        aleatorizacion.print("pvto");
+        //aleatorizacion = new;
+        //aleatorizacion.randomize();
+        //aleatorizacion.print("pvto");
 
         //Diff disp
 
