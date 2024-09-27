@@ -100,6 +100,26 @@ class sb_pckg #(parameter drvrs = 4, parameter pckg_sz = 16);
 
 endclass
 
+class randomizer #(parameter drvrs = 4, parameter pckg_sz = 16);
+  //Atributos
+  rand int num_trans; //Número de transacciones que se van a realizar
+
+  //Constraints
+  constraint const_ntrans {num_trans >= 20; num_trans <= 100;}
+
+  //Valores por defecto
+  function new (int n_trans = 1);
+    this.num_trans = n_trans;
+  endfunction
+
+  //Impresion de datos
+  function void print(input string tag = "");
+    $display("---------------------------");
+    $display("Numero de transacciones=%i", this.num_trans);
+    $display("---------------------------");
+  endfunction
+endclass
+
 //Define los atributos de la interface
 interface bus_if #(parameter bits = 1,parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}}) 
     (
