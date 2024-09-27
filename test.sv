@@ -48,7 +48,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         aleatorizacion = new;
         aleatorizacion.randomize();
         ambiente_inst.agente_inst.cant_trans = 2;
-        trans_agente = retardos; //For testing
+        trans_agente = broadcast; //For testing
         test_agent_mbx.put(trans_agente);
         $display("[%g] Test: Enviada la instrucción de transacción broadcast", $time);
 
@@ -66,7 +66,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //Disp inex
 
 
-        //From to same
+        //From to same 0f, 00, 62, 34, ba, 48, 14, 57
 
         #10000;
         $display("[%g] Test: Se alcanzó el tiempo límite de la prueba", $time);
