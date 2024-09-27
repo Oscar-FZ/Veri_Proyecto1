@@ -12,7 +12,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     bit [7:0] dir_spec;
 
     function new();
-        cant_trans = 10;
+        //cant_trans = 10;
         max_retardo = 20;
         //for (int i = 0; i < drvrs; i++) begin
           //  agnt_drvr_mbx[i] = new();

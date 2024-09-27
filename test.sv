@@ -38,11 +38,12 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
 
         aleatorizacion = new;
         aleatorizacion.randomize();
-        aleatorizacion.print("PRUEBA DE LA NUEVA CLASE ALV!!!!!!!!!!!!!!!!!!!!!!")
+        aleatorizacion.print("PRUEBA DE LA NUEVA CLASE ALV!!!!!!!!!!!!!!!!!!!!!!");
 
-        //trans_agente = broadcast;
-        //test_agent_mbx.put(trans_agente);
-        //$display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
+        ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
+        trans_agente = aleatorio;
+        test_agent_mbx.put(trans_agente);
+        $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
 
         //for (int i = 0; i < 3; i++) begin
             //automatic int l = i;
