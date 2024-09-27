@@ -1,5 +1,5 @@
 class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
-    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) aleatorizacion;
+    randomizer #(.drvrs(drvrs), .pckg_sz(pckg_sz)) aleatorizacion;
     instr_pckg_mbx test_agent_mbx;
 
     //Definición del ambiente de la prueba
@@ -36,7 +36,9 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
             ambiente_inst.run();
         join_none
 
-        $display("aver", aleatorizacion.randomize);
+        aleatorizacion = new;
+        aleatorizacion.randomize();
+        aleatorizacion.print("PRUEBA DE LA NUEVA CLASE ALV!!!!!!!!!!!!!!!!!!!!!!")
 
         //trans_agente = broadcast;
         //test_agent_mbx.put(trans_agente);
