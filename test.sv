@@ -36,28 +36,37 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
             ambiente_inst.run();
         join_none
 
-        //Prueba de transacciones aleatorias
+        //Prueba de envío de paquetes aleatorios
         aleatorizacion = new;
         aleatorizacion.randomize();
-        ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
-        trans_agente = aleatorio;
-        test_agent_mbx.put(trans_agente);
-        $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
+        aleatorizacion.print("aver");
+        //ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
+        //trans_agente = aleatorio;
+        //test_agent_mbx.put(trans_agente);
+        //$display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
 
-        //for (int i = 0; i < 3; i++) begin
-            //automatic int l = i;
-            //ambiente_inst.agent_inst.ret_spec = 4;
-            //ambiente_inst.agent_inst.tpo_spec = escritura;
-            //ambiente_inst.agent_inst.max_retardo = 9;
-            //ambiente_inst.agent_inst.dsp_spec = 1;
-            //ambiente_inst.agent_inst.dir_spec = 8'b00000010;
-            //ambiente_inst.agent_inst.info_spec = l;
-            //trans_agente = especifico;
-            //test_agent_mbx.put(trans_agente);
-            //$display("[%g] Test: Enviada la instrucción prueba de transacción especifica 1", $time);
-        //end
+        //Prueba de envío de paquetes broadcast
+        aleatorizacion = new;
+        aleatorizacion.randomize();
+        aleatorizacion.print("al cine");
 
-        #1000000;
+        //Reset
+        aleatorizacion = new;
+        aleatorizacion.randomize();
+        aleatorizacion.print("pvto");
+
+        //Diff disp
+
+
+        //Max alt
+
+
+        //Disp inex
+
+
+        //From to same
+
+        #10000;
         $display("[%g] Test: Se alcanzó el tiempo límite de la prueba", $time);
         #20;
         $finish;
