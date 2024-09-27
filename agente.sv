@@ -28,13 +28,16 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                 test_agent_mbx.get(instruccion); //Se saca la instruccion del mailbox
                 case(instruccion)
                     aleatorio: begin
-                        for(int i = 0; i <= cant_trans; i++) begin
-                            transaccion = new; //Construye una nueva transaccion
-                            transaccion.max_retardo = max_retardo;
-                            transaccion.randomize();
-                            transaccion.dato = {transaccion.direccion, transaccion.info};
-                            transaccion.print("[PRUEBA]");
-                            agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
+                        for(int i = 0; i < drvrs; i++) begin
+                            for (int j = 0; j < cant_trans; j++) begin
+                                transaccion = new;
+                                transaccion.max_retardo = max_retardo;
+                                transaccion.randomize() with { dispositivo == i; };
+                                transaccion.dato = {transaccion.direccion, transaccion.info};
+                                transaccion.print("BOMBOCLAT");
+                                agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
+                                //Si dispositivo no sirve usar variable dinamica :)
+                            end
                         end
                     end
 
@@ -52,17 +55,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                     end
 
                     retardos: begin
-                        for(int i = 0; i < drvrs; i++) begin
-                            for (int j = 0; j < cant_trans; j++) begin
-                                transaccion = new;
-                                transaccion.max_retardo = max_retardo;
-                                transaccion.randomize() with { dispositivo == i; };
-                                transaccion.dato = {transaccion.direccion, transaccion.info};
-                                transaccion.print("BOMBOCLAT");
-                                agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
-                                //Si dispositivo no sirve usar variable dinamica :)
-                            end
-                        end
+                        
                     end
 
                     especifico: begin
