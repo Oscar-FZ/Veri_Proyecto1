@@ -1,4 +1,4 @@
-class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16);
+class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
 
     bit pop;                            //Señal de pop de la FIFO
     bit push;                           //Señal de push de la FIFO
@@ -104,7 +104,7 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
 endclass
 
     
-class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16);
+class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
     drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) dm_hijo;
     //virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) vif_hijo;
 
@@ -182,9 +182,19 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
             @(posedge dm_hijo.vif.clk);    
 	        if (dm_hijo.pndng_mntr) begin
 	    	    $display("[LECTURA]");
+                $display("[BIT ID] %b", id[7:0]);
+                $display("[BROADCAST %b]", broadcast);
+                $display("[DIRECCION %b]", transaccion_mntr.dato[pckg_sz-1:8]);
+                $display("[pruebita] %b", {8{1'b1}});
 		        transaccion_mntr.tiempo = $time;
 		        transaccion_mntr.dato = dm_hijo.queue_out.pop_front();
-                transaccion_mntr.direccion = transaccion_mntr.dato[pckg_sz-1:8];
+                if (transaccion_mntr.dato[pckg_sz-1:8] == broadcast) begin
+                    $display("BROADCAST IDENTIFICADO");
+                    transaccion_mntr.direccion = id[7:0];
+                end
+                else begin
+                    transaccion_mntr.direccion = transaccion_mntr.dato[pckg_sz-1:8];
+                end
 		        mntr_chkr_mbx.put(transaccion_mntr);
 		        //transaccion.print("[DRVER] Dato recibido");
                 $display("Dato leido del fifo:");
@@ -194,8 +204,8 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
     endtask
 endclass
 
-class strt_drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16);
-    drvr_mntr_hijo #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) strt_dm [drvrs];
+class strt_drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
+    drvr_mntr_hijo #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) strt_dm [drvrs];
 	
     function new();
         for(int i = 0; i < drvrs; i++) begin
