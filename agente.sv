@@ -61,7 +61,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                                 transaccion = new;
                                 transaccion.const_direccion.constraint_mode(0);
                                 transaccion.max_retardo = max_retardo;
-                                transaccion.randomize() with { direccion == broadcast ;};
+                                transaccion.randomize() with { direccion == broadcast; dispositivo == i; };
                                 transaccion.dato = {transaccion.direccion, transaccion.info};
                                 transaccion.print("[PRUEBA]");
                                 agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
