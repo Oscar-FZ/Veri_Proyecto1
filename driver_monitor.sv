@@ -182,10 +182,6 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
             @(posedge dm_hijo.vif.clk);    
 	        if (dm_hijo.pndng_mntr) begin
 	    	    $display("[LECTURA]");
-                $display("[BIT ID] %b", id[7:0]);
-                $display("[BROADCAST %b]", broadcast);
-                $display("[DIRECCION %b]", transaccion_mntr.dato[pckg_sz-1:8]);
-                $display("[pruebita] %b", {8{1'b1}});
 		        transaccion_mntr.tiempo = $time;
 		        transaccion_mntr.dato = dm_hijo.queue_out.pop_front();
                 if (transaccion_mntr.dato[pckg_sz-1:8] == broadcast) begin

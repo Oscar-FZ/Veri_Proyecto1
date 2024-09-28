@@ -2,6 +2,10 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
     //Plan actual
     //TODO Que el checker no explote si llega un dato con direccion invalida
+    //TODO El checker aun no envia informacion al scoreboard
+    //TODO Caso reset
+    //TODO Verificar que todos los dispositivos hayan recibido el paquete de
+    //un broadcast
 
     //Definicion de los paquetes
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_drvr;  //Guarda los paquetes que vengan del driver 
@@ -47,12 +51,17 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         forever begin
             drvr_chkr_mbx.get(transaccion_drvr);
             $display("Transaccion recibida");
+            $display("[DISPOSITIVOS] %b", drvrs);
             if (transaccion_drvr.direccion == broadcast) begin
                 for (bit [drvrs-1:0] i = 8'b0; i < drvrs; i++) begin
                     if (i != transaccion_drvr.dispositivo) begin
                         emul_fifo[i].push_back(transaccion_drvr.dato);
                     end
                 end
+            end
+
+            else if (transaccion_drvr.direccion >= drvrs[7:0]) begin
+                $display("[ERROR] Direccion Inexistente");
             end
 
             else begin
@@ -69,7 +78,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         forever begin
             result = INCORRECTO;
             mntr_chkr_mbx.get(transaccion_mntr);
-            for (int i = 0; i < emul_fifo[transaccion_mntr.direccion].size(); i++) begin //TODO Aqui esta el error
+            for (int i = 0; i < emul_fifo[transaccion_mntr.direccion].size(); i++) begin 
                 //auxiliar.dato = emul_fifo[transaccion_mntr.direccion][i];
                 //auxiliar.print("[AUXILIAR]");
                 //transaccion_mntr.print("[recibido]");
