@@ -13,7 +13,8 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) to_sb;              //Guarda los paquetes que van para el score board
 
     //Define una queue por dispositivo
-    bit [pckg_sz-1:0] emul_fifo[7:0][$];
+    //bit [pckg_sz-1:0] emul_fifo[7:0][$];
+    bus_pckg emul_fifo[7:0][$];
     //Se guardan los paquetes que envia el driver en la queue del dispositivo
     //al que este deberia de llegar para posteriormente cuando llegue un
     //paquete del monitor revisar si ese paquete era el esperado.
@@ -55,7 +56,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             if (transaccion_drvr.direccion == broadcast) begin
                 for (bit [drvrs-1:0] i = 8'b0; i < drvrs; i++) begin
                     if (i != transaccion_drvr.dispositivo) begin
-                        emul_fifo[i].push_back(transaccion_drvr.dato);
+                        emul_fifo[i].push_back(transaccion_drvr);
                     end
                 end
             end
@@ -65,7 +66,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             end
 
             else begin
-                emul_fifo[transaccion_drvr.direccion].push_back(transaccion_drvr.dato);
+                emul_fifo[transaccion_drvr.direccion].push_back(transaccion_drvr);
                 transaccion_drvr.print("[CHECKER FIFO]");
             end
         end
@@ -83,8 +84,10 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                 //auxiliar.print("[AUXILIAR]");
                 //transaccion_mntr.print("[recibido]");
 
-                if (emul_fifo[transaccion_mntr.direccion][i] == transaccion_mntr.dato) begin
+                if (emul_fifo[transaccion_mntr.direccion][i].dato == transaccion_mntr.dato) begin
                     $display("[CHECKER] LETS FUCKING GO!!!");
+                    emul_fifo[transaccion_mntr.direccion][i].print("[CHECKER] Dato Esperado");
+                    transaccion_mntr.print("[CHECKER] Dato Recibido");
                     result = CORRECTO;
                     break;
                 end
@@ -93,7 +96,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             end
 
             if (result == INCORRECTO) begin
-                $display("[CHECKER] Diay no :(");
+                $display("[CHECKER] El paquete recibido no era esperado");
                 //auxiliar.print("[AUXILIAR]");
                 //transaccion_mntr.print("[recibido]");
             end

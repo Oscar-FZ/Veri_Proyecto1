@@ -184,12 +184,14 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 	    	    $display("[LECTURA]");
 		        transaccion_mntr.tiempo = $time;
 		        transaccion_mntr.dato = dm_hijo.queue_out.pop_front();
+                transaccion_mntr.dispositivo = id[drvrs-1:0];
+                transaccion_mntr.info = transaccion_mntr.dato[pckg_sz-9:0];
                 if (transaccion_mntr.dato[pckg_sz-1:8] == broadcast) begin
                     $display("BROADCAST IDENTIFICADO");
                     transaccion_mntr.direccion = id[7:0];
                 end
                 else begin
-                    transaccion_mntr.direccion = transaccion_mntr.dato[pckg_sz-1:8];
+                    transaccion_mntr.direccion = transaccion_mntr.dato[pckg_sz-1:pckg_sz-8];
                 end
 		        mntr_chkr_mbx.put(transaccion_mntr);
 		        //transaccion.print("[DRVER] Dato recibido");
