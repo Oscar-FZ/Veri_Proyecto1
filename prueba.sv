@@ -2,6 +2,7 @@
 `include "Library.sv"
 `include "transactions.sv"
 `include "driver_monitor.sv"
+`include "checker.sv"
 `include "agente.sv"
 `include "ambiente.sv"
 `include "test.sv"
@@ -57,88 +58,9 @@ module DUT_TB();
             $finish;
         end
     end
-    //strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
 
-    //
-    //agent #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) agent_inst; //Primero va el nombre de la clase
-    //
-    
-    //bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs];
-    //bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
-    //bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;
-    //
-    //instr_pckg_mbx test_agent_mbx;
-    //
-
-    //instruccion tipo;
-
-    //bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) trans[8]; //WHAT THE FUCK IS THIS???
-    //bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
-
-    //int max_retardo = 20;
-
-    //bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) _if (.clk(CLK_100MHZ));
-	
-
-
-	
-
-	//initial begin 
-		//CLK_100MHZ = 0;
-        
-        
-        //for (int i = 0; i<drvrs; i++) begin
-            //agnt_drvr_mbx[i] = new();
-        //end
-
-        //drvr_chkr_mbx = new();
-        //mntr_chkr_mbx = new();
-        //test_agent_mbx = new();
-
-        //$display("INICIO");
-        //driver_monitor_inst = new();
-        //
-        //agent_inst = new();
-        //agent_inst.test_agent_mbx = test_agent_mbx; 
-        //
-
-
-        //for (int i = 0; i<drvrs; i++) begin
-        //    $display("[%d]",i);
-        //    driver_monitor_inst.strt_dm[i].dm_hijo.vif = _if;
-        //    driver_monitor_inst.strt_dm[i].agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
-        //    driver_monitor_inst.strt_dm[i].drvr_chkr_mbx = drvr_chkr_mbx;
-        //    driver_monitor_inst.strt_dm[i].mntr_chkr_mbx = mntr_chkr_mbx;
-            //
-        //    agent_inst.agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
-            //
-        //    #1;
-        //end
-
-       // _if.reset = 1;
-        //#1;
-       // _if.reset = 0;
-
-        //fork
-            //
-        //    agent_inst.run_agent();
-            //
-        //    driver_monitor_inst.start_driver();
-        //    driver_monitor_inst.start_monitor();  
-        //join_none
-
-        //#10;
-        //$display("[%g]  Enviando instruccion al agente",$time);
-        //tipo = broadcast;
-       // test_agent_mbx.put(tipo); 
-
-        //#10000;
-		//$finish;
-	//end
-
-    //initial begin
-        //$dumpfile("prueba.vcd");
-        //$dumpvars(0, DUT_TB);
-    //end
-    
+    initial begin
+        $dumpvars;
+        $dumpfile("dump.vcd");
+    end
 endmodule
