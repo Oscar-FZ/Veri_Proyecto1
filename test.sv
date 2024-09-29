@@ -35,7 +35,7 @@ task run;
         ambiente_inst.run();
     join_none
 
-    trans_agente = broadcast;
+    trans_agente = aleatorio;
     test_agent_mbx.put(trans_agente);
     $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
 

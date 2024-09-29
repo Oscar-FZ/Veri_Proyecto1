@@ -28,7 +28,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                 test_agent_mbx.get(instruccion); //Se saca la instruccion del mailbox
                 case(instruccion)
                     aleatorio: begin
-                        for(int i = 0; i <= cant_trans; i++) begin
+                        for(int i = 0; i < cant_trans; i++) begin
                             transaccion = new; //Construye una nueva transaccion
                             transaccion.max_retardo = max_retardo;
                             transaccion.randomize();

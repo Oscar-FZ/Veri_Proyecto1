@@ -162,7 +162,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
                 $display("[ESCRITURA]");
 		        transaccion.tiempo = $time;
                 dm_hijo.queue_in.push_back(transaccion.dato); //Esto no debería ser transaccion.info? Se está guardando todo en la fifo
-		        transaccion.print("[DEBUG] Dato enviado");
+		        //transaccion.print("[DEBUG] Dato enviado");
 		        drvr_chkr_mbx.put(transaccion);
             end
         end
@@ -186,7 +186,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 		        transaccion_mntr.dato = dm_hijo.queue_out.pop_front();
                 transaccion_mntr.dispositivo = id[drvrs-1:0];
                 transaccion_mntr.info = transaccion_mntr.dato[pckg_sz-9:0];
-                if (transaccion_mntr.dato[pckg_sz-1:8] == broadcast) begin
+                if (transaccion_mntr.dato[pckg_sz-1:pckg_sz-8] == broadcast) begin
                     $display("BROADCAST IDENTIFICADO");
                     transaccion_mntr.direccion = id[7:0];
                 end
@@ -195,8 +195,8 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
                 end
 		        mntr_chkr_mbx.put(transaccion_mntr);
 		        //transaccion.print("[DRVER] Dato recibido");
-                $display("Dato leido del fifo:");
-                $display("%h", transaccion_mntr.dato);
+                //$display("Dato leido del fifo:");
+                //$display("%h", transaccion_mntr.dato);
 	        end
         end
     endtask

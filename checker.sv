@@ -4,8 +4,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     //TODO Que el checker no explote si llega un dato con direccion invalida
     //TODO El checker aun no envia informacion al scoreboard
     //TODO Caso reset
-    //TODO Verificar que todos los dispositivos hayan recibido el paquete de
-    //un broadcast
+    //TODO Que el checker rciba cant_trans del test por medio de un mailbox
 
     //Definicion de los paquetes
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_drvr;  //Guarda los paquetes que vengan del driver 
@@ -24,6 +23,14 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     typedef enum {CORRECTO, INCORRECTO} valid;
     valid result = INCORRECTO;
 
+    //TODO Explicar que es esto
+    int cant_trans;
+    int cant_trans_env;
+    int cant_trans_rec;
+
+    int brdcst_pckg [bit [pckg_sz-1:0]];
+
+
 
     //Definicion de los mailboxes
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx; //Mailbox entre el driver y el checker
@@ -41,6 +48,9 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         drvr_chkr_mbx       = new();
         mntr_chkr_mbx       = new();
         chkr_sb_mbx         = new();
+        cant_trans          = 10; //TODO Cambiar a 0
+        cant_trans_env      = 0;
+        cant_trans_rec      = 0;
     endfunction
     
     //El task update() esta constantemente revisando el mailbox del
@@ -51,12 +61,13 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
         forever begin
             drvr_chkr_mbx.get(transaccion_drvr);
-            $display("Transaccion recibida");
-            $display("[DISPOSITIVOS] %b", drvrs);
+            //$display("Transaccion recibida");
+            //$display("[DISPOSITIVOS] %b", drvrs);
             if (transaccion_drvr.direccion == broadcast) begin
                 for (bit [drvrs-1:0] i = 8'b0; i < drvrs; i++) begin
                     if (i != transaccion_drvr.dispositivo) begin
                         emul_fifo[i].push_back(transaccion_drvr);
+                        brdcst_pckg[transaccion_drvr.dato] = 0; 
                     end
                 end
             end
@@ -67,7 +78,11 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
             else begin
                 emul_fifo[transaccion_drvr.direccion].push_back(transaccion_drvr);
-                transaccion_drvr.print("[CHECKER FIFO]");
+                //transaccion_drvr.print("[CHECKER FIFO]");
+            end
+            cant_trans_env += 1;
+            if (cant_trans_env == cant_trans) begin 
+                $display("[CHECKER] Se enviaron todos los paquetes");
             end
         end
     endtask
@@ -80,15 +95,21 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             result = INCORRECTO;
             mntr_chkr_mbx.get(transaccion_mntr);
             for (int i = 0; i < emul_fifo[transaccion_mntr.direccion].size(); i++) begin 
-                //auxiliar.dato = emul_fifo[transaccion_mntr.direccion][i];
-                //auxiliar.print("[AUXILIAR]");
-                //transaccion_mntr.print("[recibido]");
-
                 if (emul_fifo[transaccion_mntr.direccion][i].dato == transaccion_mntr.dato) begin
-                    $display("[CHECKER] LETS FUCKING GO!!!");
-                    emul_fifo[transaccion_mntr.direccion][i].print("[CHECKER] Dato Esperado");
-                    transaccion_mntr.print("[CHECKER] Dato Recibido");
+                    $display("[CHECKER] Paquete Valido!");
                     result = CORRECTO;
+
+                    if (transaccion_mntr.dato[pckg_sz-1:pckg_sz-8] == broadcast) begin
+                        brdcst_pckg[transaccion_mntr.dato] += 1;
+
+                        if (brdcst_pckg[transaccion_mntr.dato] == drvrs-1) begin
+                            $display("[CHECKER] Broadcast Completado!");
+                            cant_trans_rec += 1;
+                        end
+                    end
+
+                    else cant_trans_rec += 1;
+                    //TODO Enviar paquete al scoreboard
                     break;
                 end
 
@@ -97,8 +118,14 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
             if (result == INCORRECTO) begin
                 $display("[CHECKER] El paquete recibido no era esperado");
-                //auxiliar.print("[AUXILIAR]");
-                //transaccion_mntr.print("[recibido]");
+                //TODO Enviar paquete erroneo al scoreboard para que lo
+                //registre
+            end
+
+            if (cant_trans_rec == cant_trans) begin
+                $display("[CHECKER] Se completaron todas las transacciones");
+                //TODO Usar una bandera para indicarle al scoreboard que puede
+                //iniciar
             end
         end
     endtask
