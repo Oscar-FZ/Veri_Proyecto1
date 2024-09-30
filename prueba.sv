@@ -57,6 +57,12 @@ module DUT_TB();
             $finish;
         end
     end
+
+    initial begin
+        $dumpfile("results.vcd");
+        $dumpvars(0, DUT_TB);
+        $dumpvars(0);
+    end
     //strt_drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) driver_monitor_inst;
 
     //
