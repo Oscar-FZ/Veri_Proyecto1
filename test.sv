@@ -64,7 +64,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //Disp inex
         aleatorizacion = new;
         aleatorizacion.randomize();
-        ambiente_inst.agent_inst.cant_trans = 2; //For the moment
+        ambiente_inst.agent_inst.cant_trans = 5; //For the moment
         ambiente_inst.agent_inst.dir_spec = aleatorizacion.wrong_addr;
         trans_agente = retardos; //Might have to create a new trans type
         aleatorizacion.print("Prueba dir erronea");
