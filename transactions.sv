@@ -14,7 +14,8 @@ typedef enum {
     aleatorio,
     broadcast,
     retardos,
-    especifico
+    especifico,
+    dir_inex
 } instruccion;
     
 

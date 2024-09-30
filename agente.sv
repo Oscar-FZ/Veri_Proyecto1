@@ -82,6 +82,18 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
                         //$finish;
                     end
+
+                    dir_inex: begin
+                        for (int i = 0; i < cant_trans; i++) begin
+                            transaccion = new;
+                            transaccion.const_direccion.constraint_mode(0);
+                            transaccion.max_retardo = max_retardo;
+                            transaccion.randomize() with { direccion == dir_spec; };
+                            transaccion.dato = {transaccion.direccion, transaccion.info};
+                            transaccion.print("Direccion inexistente");
+                            agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
+                        end
+                    end
                 endcase
             end
             
