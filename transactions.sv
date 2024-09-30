@@ -15,7 +15,8 @@ typedef enum {
     broadcast,
     retardos,
     especifico,
-    dir_inex
+    dir_inex,
+    mismo_disp
 } instruccion;
     
 

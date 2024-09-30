@@ -61,18 +61,20 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //Max alt
 
 
-        //Disp inex
+        //Prueba de envío de paquetes hacia dispositivos inexistentes
         aleatorizacion = new;
         aleatorizacion.randomize();
         ambiente_inst.agent_inst.cant_trans = 5; //For the moment
         ambiente_inst.agent_inst.dir_spec = aleatorizacion.wrong_addr;
         trans_agente = dir_inex; //Might have to create a new trans type
         aleatorizacion.print("Prueba dir erronea");
-        test_agent_mbx.put(trans_agente);
+        //test_agent_mbx.put(trans_agente);
         //Cuando la dirección no existe nunca se le hace un push a ninguna FIFO para recibir el dato. Al dato si se le hace pop y si aparece en D_pop
 
 
-        //From to same 0f, 00, 62, 34, ba, 48, 14, 57
+        //Prueba de envío de paquetes hacia el mismo dispositivo de salida
+        trans_agente = mismo_disp;
+        test_agent_mbx.put(trans_agente);
 
         #10000;
         $display("[%g] Test: Se alcanzó el tiempo límite de la prueba", $time);
