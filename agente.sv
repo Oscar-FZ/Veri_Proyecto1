@@ -58,6 +58,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
 
                     retardos: begin
                         transaccion = new;
+                        transaccion.const_direccion.constraint_mode(0);
                         transaccion.max_retardo = max_retardo;
                         transaccion.randomize() with { direccion == dir_spec; };
                         transaccion.dato = {transaccion.direccion, transaccion.info};
