@@ -47,7 +47,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //Prueba de envío de paquetes broadcast
         ambiente_inst.agent_inst.cant_trans = 2;
         trans_agente = broadcast;
-        test_agent_mbx.put(trans_agente);
+        //test_agent_mbx.put(trans_agente);
         $display("[%g] Test: Enviada la instrucción de transacción broadcast", $time);
 
         //Reset
@@ -67,6 +67,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         ambiente_inst.agent_inst.cant_trans = 2; //For the moment
         ambiente_inst.agent_inst.dir_spec = aleatorizacion.wrong_addr;
         trans_agente = retardos; //Might have to create a new trans type
+        test_agent_mbx.put(trans_agente);
 
 
         //From to same 0f, 00, 62, 34, ba, 48, 14, 57
