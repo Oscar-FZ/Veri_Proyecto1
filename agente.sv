@@ -35,6 +35,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         for(int i = 0; i < drvrs; i++) begin
                             aleatorizacion = new;
                             aleatorizacion.randomize();
+                            //aleatorizacion.num_trans = 11;
                             cant_trans = aleatorizacion.num_trans;
                             aleatorizacion.print("PRUEBA XD");
                             agnt_chkr_mbx.put(cant_trans);

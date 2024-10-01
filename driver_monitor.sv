@@ -29,19 +29,23 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
     //Tambien conecta la señal de pending de la FIFO del driver con la señal
     //de pendign del bus.
     task update_drvr(); 
+        
 	    forever begin
 	        @(negedge vif.clk);
 	        pop = vif.pop[0][id];
 	        vif.pndng[0][id] = pndng_bus;
+            #1;
         end
     endtask
 
     //Este task esta revisando constantemente la señal de push del bus para
     //que el monitor sepa cuando va a recibir un dato.
     task update_mntr();
+        
 	    forever begin
 	        @(negedge vif.clk);
 	        push = vif.push[0][id];
+            #1;
         end
     endtask
  
@@ -51,8 +55,9 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
     //Tambien actualiza la señal de peding del Driver.
     task send_data_bus();
 	    forever begin
+            
 	        @(posedge vif.clk);
-	        vif.D_pop[0][id] = queue_in[$]; //Probably check this as well
+	        vif.D_pop[0][id] = queue_in[0]; //Probably check this as well
 	        if (pop) begin
     	        queue_in.pop_front();
 	        end
@@ -61,6 +66,7 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
                 pndng_bus = 1;
             else
                 pndng_bus = 0;
+            #1;
 	    end
     endtask
 
@@ -69,6 +75,7 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
     //Tambien actualiza el valor de pending de la FIFO del monitor.
     task receive_data_bus();
 	    forever begin
+            
 	        @(posedge vif.clk);
 	        if (push) begin
 	            queue_out.push_back(vif.D_push[0][id]);
@@ -79,6 +86,7 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
 	        end
                 else
                     pndng_mntr = 0;
+
 	    end
     endtask     
 
@@ -100,7 +108,7 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
         $display("id=%d", this.id);
         $display("---------------------------");
     endfunction
-
+    
 endclass
 
     
@@ -149,9 +157,10 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
         //    drvr_chkr_mbx.put(dm_hijo.queue_in[$]);
         //end        
         forever begin
+            
             dm_hijo.vif.reset = 0;
 	        espera = 0;
-            
+            @(posedge dm_hijo.vif.clk);
 	        agnt_drvr_mbx[id].get(transaccion);
 	        while(espera <= transaccion.retardo) begin
 	            @(posedge dm_hijo.vif.clk);
@@ -179,6 +188,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 	    join_none
         
 	    forever begin
+            
             dm_hijo.vif.reset = 0;
             @(posedge dm_hijo.vif.clk);    
 	        if (dm_hijo.pndng_mntr) begin
@@ -195,7 +205,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
                     transaccion_mntr.direccion = transaccion_mntr.dato[pckg_sz-1:pckg_sz-8];
                 end
 		        mntr_chkr_mbx.put(transaccion_mntr);
-                transaccion_mntr.print("[MONITOR]");
+                //transaccion_mntr.print("[MONITOR]");
 		        //transaccion.print("[DRVER] Dato recibido");
                 //$display("Dato leido del fifo:");
                 //$display("%h", transaccion_mntr.dato);

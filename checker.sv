@@ -79,7 +79,9 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         $display("[%g] El Checker se esta actualizando", $time);
 
         forever begin
+            #1;
             drvr_chkr_mbx.get(transaccion_drvr);
+            transaccion_drvr.print("[DEBUG]");
             //test_checker_mbx.get(cant_trans);
             //cant_trans += cant_trans;
             //$display("%i", cant_trans);
@@ -114,6 +116,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     //esperado.
     task check();
         forever begin
+            #1;
             stop = 0;
             result = INCORRECTO;
             while (stop < 1000) begin
@@ -143,6 +146,8 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                     to_sb.completado    = 1;
                     to_sb.calc_latencia();
                     chkr_sb_mbx.put(to_sb);
+                    transaccion_mntr.print("[CORRCTO]");
+                    emul_fifo[transaccion_mntr.direccion].delete(i);
 
                     if (transaccion_mntr.dato[pckg_sz-1:pckg_sz-8] == broadcast) begin
                         brdcst_pckg[transaccion_mntr.dato] += 1;
@@ -163,6 +168,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
             if (result == INCORRECTO) begin
                 $display("[CHECKER] El paquete recibido no era esperado");
+                transaccion_mntr.print("[ERROR]");
                 //TODO Enviar paquete erroneo al scoreboard para que lo
                 //registre
             end
