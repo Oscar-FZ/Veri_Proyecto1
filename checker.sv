@@ -25,6 +25,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
     //TODO Explicar que es esto
     int cant_trans;
+    int cant_trans_total;
     int cant_trans_env;
     int cant_trans_rec;
     int stop;
@@ -57,6 +58,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         agnt_chkr_mbx   = new();
         //
         cant_trans          = 0; //TODO Cambiar a 0
+        cant_trans_total    = 0;
         cant_trans_env      = 0;
         cant_trans_rec      = 0;
         stop                = 0;
@@ -69,6 +71,8 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     task update_cant_trans();
         forever begin
             agnt_chkr_mbx.get(cant_trans);
+            cant_trans_total += cant_trans;
+            $display("[AQUI] Total = %i; x = %i", cant_trans_total, cant_trans);
         end
     endtask
     task update();
@@ -128,7 +132,6 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             end
 
             for (int i = 0; i < emul_fifo[transaccion_mntr.direccion].size(); i++) begin 
-                $display("[ID] %i", i);
                 if (emul_fifo[transaccion_mntr.direccion][i].dato == transaccion_mntr.dato) begin
                     $display("[CHECKER] Paquete Valido!");
                     result = CORRECTO;
@@ -155,8 +158,9 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                 //TODO Enviar paquete erroneo al scoreboard para que lo
                 //registre
             end
-
-            if (cant_trans_rec == cant_trans) begin
+            
+            $display("[CANTIDAD] Agnt = %i; Chkr = %i;", cant_trans_total, cant_trans_rec);
+            if (cant_trans_rec == cant_trans_total) begin
                 $display("[CHECKER] Se completaron todas las transacciones");
                 //TODO Usar una bandera para indicarle al scoreboard que puede
                 //iniciar
