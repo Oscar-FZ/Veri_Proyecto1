@@ -2,9 +2,8 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
     //randomizer #(.drvrs(drvrs), .pckg_sz(pckg_sz)) aleatorizacion;
     instr_pckg_mbx test_agent_mbx;
 
-    //Mailbox para pasarle el # de transacciones al checker
-    //test_checker_mbx test_checker_mbx;
-    //
+    //Mailbox para pasarle el tipo de prueba al scoreboard
+    test_type test_sb_mbx;
 
     //Definición del ambiente de la prueba
     ambiente #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) ambiente_inst;
@@ -19,8 +18,8 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //Instanciación de los mailboxes
         test_agent_mbx = new();
         
-        //Instancia del mailbox de test_checker para pasarle el num de transacciones
-        //test_checker_mbx = new();
+        //Instancia del mailbox de test_sb para pasarle el tipo de test
+        test_sb_mbx = new();
 
         //Definición y conexión del driver
         ambiente_inst = new();
