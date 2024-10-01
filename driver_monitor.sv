@@ -164,6 +164,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
                 dm_hijo.queue_in.push_back(transaccion.dato); //Esto no debería ser transaccion.info? Se está guardando todo en la fifo
 		        //transaccion.print("[DEBUG] Dato enviado");
 		        drvr_chkr_mbx.put(transaccion);
+                //transaccion.print("[DRIVER]");
             end
         end
     endtask
@@ -194,6 +195,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
                     transaccion_mntr.direccion = transaccion_mntr.dato[pckg_sz-1:pckg_sz-8];
                 end
 		        mntr_chkr_mbx.put(transaccion_mntr);
+                transaccion_mntr.print("[MONITOR]");
 		        //transaccion.print("[DRVER] Dato recibido");
                 //$display("Dato leido del fifo:");
                 //$display("%h", transaccion_mntr.dato);

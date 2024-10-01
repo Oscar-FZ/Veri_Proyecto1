@@ -56,6 +56,7 @@
         //And again here
         checker_inst.agnt_chkr_mbx = agnt_chkr_mbx;
         scoreboard_inst.test_sb_mbx = test_sb_mbx;
+        scoreboard_inst.chkr_sb_mbx = chkr_sb_mbx;
 
         for (int i = 0; i<drvrs; i++) begin
             $display("[%d]",i);

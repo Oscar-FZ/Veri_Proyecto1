@@ -135,6 +135,14 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                 if (emul_fifo[transaccion_mntr.direccion][i].dato == transaccion_mntr.dato) begin
                     $display("[CHECKER] Paquete Valido!");
                     result = CORRECTO;
+                    to_sb.dato_enviado  = transaccion_mntr.dato;
+                    to_sb.disp_origen   = emul_fifo[transaccion_mntr.direccion][i].dispositivo;
+                    to_sb.disp_destino  = transaccion_mntr.dispositivo;
+                    to_sb.tiempo_push   = emul_fifo[transaccion_mntr.direccion][i].tiempo;
+                    to_sb.tiempo_pop    = transaccion_mntr.tiempo;
+                    to_sb.completado    = 1;
+                    to_sb.calc_latencia();
+                    chkr_sb_mbx.put(to_sb);
 
                     if (transaccion_mntr.dato[pckg_sz-1:pckg_sz-8] == broadcast) begin
                         brdcst_pckg[transaccion_mntr.dato] += 1;
@@ -162,6 +170,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             $display("[CANTIDAD] Agnt = %i; Chkr = %i;", cant_trans_total, cant_trans_rec);
             if (cant_trans_rec == cant_trans_total) begin
                 $display("[CHECKER] Se completaron todas las transacciones");
+                -> fin_test;
                 //TODO Usar una bandera para indicarle al scoreboard que puede
                 //iniciar
             end

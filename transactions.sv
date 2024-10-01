@@ -50,7 +50,7 @@ class bus_pckg #(parameter drvrs = 4, parameter pckg_sz = 16);
     //Se muestra en pantalla los datos de la clase paquete
     function void print(input string tag = "");
 	    $display("---------------------------");
-        $display("[TIME %g]", $time);
+        $display("[TIME sim = %g, pack = %d]", $time, this.tiempo);
         $display("%s", tag);
         $display("tipo=%s", this.tipo);
         $display("retardo=%g", this.retardo);
@@ -88,8 +88,8 @@ class sb_pckg #(parameter drvrs = 4, parameter pckg_sz = 16);
   endfunction
 
   //Calcular la latencia del paquete
-  task calc_latencia;
-    this.latencia = this.tiempo_push - this.tiempo_pop;
+  task calc_latencia();
+    this.latencia = this.tiempo_pop - this.tiempo_push;
   endtask
 
   //Imprimir el contenido del paquete
@@ -150,3 +150,5 @@ typedef mailbox #(sb_pckg #(.drvrs(4), .pckg_sz(16))) sb_pckg_mbx;
 typedef mailbox #(instruccion) instr_pckg_mbx; //Este lo voy a usar para conectar el test con el agente
 typedef mailbox #(int) trans_data; //Ver si le cambio el nombre
 typedef mailbox #(string) test_type; //Referencia a Evangelion
+
+event fin_test;
