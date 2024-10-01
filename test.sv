@@ -66,7 +66,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //aleatorizacion.randomize();
         //aleatorizacion.print("pvto");
 
-        //Diff disp
+        //Todos los dispositivos envian con retraso 0
 
 
         //Max alt
