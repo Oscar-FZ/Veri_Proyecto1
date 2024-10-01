@@ -33,6 +33,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                             aleatorizacion = new;
                             aleatorizacion.randomize();
                             cant_trans = aleatorizacion.num_trans;
+                            aleatorizacion.print("PRUEBA XD");
                             for (int j = 0; j < cant_trans; j++) begin
                                 transaccion = new;
                                 transaccion.max_retardo = max_retardo;
