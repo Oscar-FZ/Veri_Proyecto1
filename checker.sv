@@ -38,6 +38,9 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx; //Mailbox entre el monitor y el checker
     sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;    //Mailbox entre el checker y el scoreboard
 
+    //Nuevo mailbox
+    int test_checker_mbx;
+
     //Funcion constructora
     function new();
         for (int i = 0; i < drvrs; i++) begin

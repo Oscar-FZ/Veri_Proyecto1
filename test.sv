@@ -2,6 +2,10 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
     randomizer #(.drvrs(drvrs), .pckg_sz(pckg_sz)) aleatorizacion;
     instr_pckg_mbx test_agent_mbx;
 
+    //Mailbox para pasarle el # de transacciones al checker
+    int test_checker_mbx;
+    //
+
     //Definición del ambiente de la prueba
     ambiente #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) ambiente_inst;
 
@@ -14,12 +18,18 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
     function new();
         //Instanciación de los mailboxes
         test_agent_mbx = new();
+        
+        //Instancia del mailbox de test_checker para pasarle el num de transacciones
+        test_checker_mbx = new();
 
         //Definición y conexión del driver
         ambiente_inst = new();
         ambiente_inst._if = _if;
         ambiente_inst.test_agent_mbx = test_agent_mbx;
         ambiente_inst.agent_inst.test_agent_mbx = test_agent_mbx;
+
+        //You already know
+        ambiente_inst.checker_inst.test_checker_mbx = test_checker_mbx;
 
         //Valores que usa el agente
         //ambiente_inst.agent_inst.ret_spec = //TODO
@@ -42,6 +52,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
         trans_agente = aleatorio;
         //test_agent_mbx.put(trans_agente);
+        test_checker_mbx.put(aleatorizacion.num_trans);
         $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
 
         //Prueba de envío de paquetes broadcast
