@@ -12,7 +12,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
   
 //Definicion de mailboxes
   test_type test_sb_mbx;
-  sb_pckg #(parameter drvrs = 4, parameter pckg_sz = 16) chkr_sb_mbx;
+  sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;
 
   function new();
     chkr_sb_mbx.new();
