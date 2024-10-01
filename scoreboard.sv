@@ -15,8 +15,8 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
   sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;
 
   function new();
-    chkr_sb_mbx.new();
-    test_sb_mbx.new();
+    chkr_sb_mbx = new();
+    test_sb_mbx = new();
     inicio = 1;
     nombre_archivo = "Aleatorio.csv";
     tipo_test = "Aleatorio";
