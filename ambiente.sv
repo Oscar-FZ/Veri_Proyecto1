@@ -19,7 +19,7 @@
     instr_pckg_mbx test_agent_mbx;                                         //Mailbox del test al agente
     sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;           //Mailbox del checker al scoreboard
     //U know >:)
-    test_checker_mbx test_checker_mbx;
+    trans_data agnt_chkr_mbx;
 
     function new();
         //Instanciación de los mailboxes
@@ -28,7 +28,7 @@
         test_agent_mbx = new();
         chkr_sb_mbx = new();
         //U know >:)
-        test_checker_mbx = new();
+        agnt_chkr_mbx = new();
 
         for (int i = 0; i < drvrs; i++) begin
             agnt_drvr_mbx[i] = new();
@@ -42,12 +42,14 @@
 
         //Conexión de las interfaces y mailboxes en el ambiente
         agent_inst.test_agent_mbx = test_agent_mbx;
+        agent_inst.agnt_chkr_mbx = agnt_chkr_mbx;
+
         checker_inst.drvr_chkr_mbx = drvr_chkr_mbx;
         checker_inst.mntr_chkr_mbx = mntr_chkr_mbx;
         checker_inst.chkr_sb_mbx = chkr_sb_mbx;
 
         //And again here
-        checker_inst.test_checker_mbx = test_checker_mbx;
+        checker_inst.agnt_chkr_mbx = agnt_chkr_mbx;
 
         for (int i = 0; i<drvrs; i++) begin
             $display("[%d]",i);

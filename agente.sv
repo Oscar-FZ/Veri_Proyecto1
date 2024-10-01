@@ -12,12 +12,15 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     bit [7:0] dir_spec;
     randomizer #(.drvrs(drvrs), .pckg_sz(pckg_sz)) aleatorizacion;
 
+    trans_data agnt_chkr_mbx;
+
     function new();
         //cant_trans = 10;
         max_retardo = 20;
         //for (int i = 0; i < drvrs; i++) begin
           //  agnt_drvr_mbx[i] = new();
         //end //Me parece que esto se puede quitar
+        agnt_chkr_mbx = new();
     endfunction
 
     task run_agent;
@@ -34,6 +37,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                             aleatorizacion.randomize();
                             cant_trans = aleatorizacion.num_trans;
                             aleatorizacion.print("PRUEBA XD");
+                            agnt_chkr_mbx.put(cant_trans);
                             for (int j = 0; j < cant_trans; j++) begin
                                 transaccion = new;
                                 transaccion.max_retardo = max_retardo;
