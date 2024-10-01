@@ -14,7 +14,9 @@ typedef enum {
     aleatorio,
     broadcast,
     retardos,
-    especifico
+    especifico,
+    dir_inex,
+    mismo_disp
 } instruccion;
     
 
@@ -98,6 +100,30 @@ class sb_pckg #(parameter drvrs = 4, parameter pckg_sz = 16);
     $display("---------------------------");
   endfunction
 
+endclass
+
+class randomizer #(parameter drvrs = 4, parameter pckg_sz = 16);
+  //Atributos
+  rand int num_trans; //Número de transacciones que se van a realizar
+  rand int wrong_addr;
+
+  //Constraints
+  constraint const_ntrans {num_trans >= 20; num_trans <= 100;}
+  constraint const_waddr {wrong_addr > drvrs; wrong_addr < 255;}
+
+  //Valores por defecto
+  function new (int n_trans = 1, int w_addr = 1);
+    this.num_trans = n_trans;
+    this.wrong_addr = w_addr;
+  endfunction
+
+  //Impresion de datos
+  function void print(input string tag = "");
+    $display("---------------------------");
+    $display("Numero de transacciones=%i", this.num_trans);
+    $display("Direccion erronea=%h", this.wrong_addr);
+    $display("---------------------------");
+  endfunction
 endclass
 
 //Define los atributos de la interface
