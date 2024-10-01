@@ -31,6 +31,7 @@
         chkr_sb_mbx = new();
         //U know >:)
         agnt_chkr_mbx = new();
+        test_sb_mbx = new();
         
 
         for (int i = 0; i < drvrs; i++) begin
@@ -42,6 +43,7 @@
         driver_monitor_inst = new();
         agent_inst = new();
         checker_inst = new();
+        scoreboard_inst = new();
 
         //Conexión de las interfaces y mailboxes en el ambiente
         agent_inst.test_agent_mbx = test_agent_mbx;
@@ -53,6 +55,7 @@
 
         //And again here
         checker_inst.agnt_chkr_mbx = agnt_chkr_mbx;
+        scoreboard_inst.test_sb_mbx = test_sb_mbx;
 
         for (int i = 0; i<drvrs; i++) begin
             $display("[%d]",i);
