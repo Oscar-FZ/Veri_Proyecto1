@@ -3,7 +3,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
     instr_pckg_mbx test_agent_mbx;
 
     //Mailbox para pasarle el # de transacciones al checker
-    test_checker_mbx test_checker_mbx;
+    //test_checker_mbx test_checker_mbx;
     //
 
     //Definición del ambiente de la prueba
@@ -20,7 +20,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         test_agent_mbx = new();
         
         //Instancia del mailbox de test_checker para pasarle el num de transacciones
-        test_checker_mbx = new();
+        //test_checker_mbx = new();
 
         //Definición y conexión del driver
         ambiente_inst = new();
@@ -29,7 +29,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         ambiente_inst.agent_inst.test_agent_mbx = test_agent_mbx;
 
         //You already know
-        ambiente_inst.checker_inst.test_checker_mbx = test_checker_mbx;
+        //ambiente_inst.checker_inst.test_checker_mbx = test_checker_mbx;
 
         //Valores que usa el agente
         //ambiente_inst.agent_inst.ret_spec = //TODO
