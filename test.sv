@@ -3,7 +3,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
     instr_pckg_mbx test_agent_mbx;
 
     //Mailbox para pasarle el # de transacciones al checker
-    int test_checker_mbx;
+    test_checker_mbx test_checker_mbx;
     //
 
     //Definición del ambiente de la prueba

@@ -19,7 +19,7 @@
     instr_pckg_mbx test_agent_mbx;                                         //Mailbox del test al agente
     sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;           //Mailbox del checker al scoreboard
     //U know >:)
-    int test_checker_mbx;
+    test_checker_mbx test_checker_mbx;
 
     function new();
         //Instanciación de los mailboxes

@@ -39,7 +39,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;    //Mailbox entre el checker y el scoreboard
 
     //Nuevo mailbox
-    int test_checker_mbx;
+    test_checker_mbx test_checker_mbx;
 
     //Funcion constructora
     function new();
@@ -52,6 +52,10 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         drvr_chkr_mbx       = new();
         mntr_chkr_mbx       = new();
         chkr_sb_mbx         = new();
+
+        //aver
+        test_checker_mbx    = new();
+        //
         cant_trans          = 10; //TODO Cambiar a 0
         cant_trans_env      = 0;
         cant_trans_rec      = 0;
