@@ -27,6 +27,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     int cant_trans;
     int cant_trans_env;
     int cant_trans_rec;
+    int stop;
 
     int brdcst_pckg [bit [pckg_sz-1:0]];
 
@@ -51,6 +52,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         cant_trans          = 10; //TODO Cambiar a 0
         cant_trans_env      = 0;
         cant_trans_rec      = 0;
+        stop                = 0;
     endfunction
     
     //El task update() esta constantemente revisando el mailbox del
@@ -92,8 +94,23 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     //esperado.
     task check();
         forever begin
+            stop = 0;
             result = INCORRECTO;
-            mntr_chkr_mbx.get(transaccion_mntr);
+            while (stop < 1000) begin
+                #1;
+                if (mntr_chkr_mbx.num()>0) break;
+                else stop += 1;
+            end
+
+            if (stop >= 1000) begin
+                $display("NO LLEGAN MAS PAQUETES");
+                $finish;
+            end
+
+            else begin
+                mntr_chkr_mbx.get(transaccion_mntr);
+            end
+
             for (int i = 0; i < emul_fifo[transaccion_mntr.direccion].size(); i++) begin 
                 if (emul_fifo[transaccion_mntr.direccion][i].dato == transaccion_mntr.dato) begin
                     $display("[CHECKER] Paquete Valido!");
