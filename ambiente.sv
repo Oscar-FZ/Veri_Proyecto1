@@ -67,6 +67,7 @@
             agent_inst.run_agent();
             checker_inst.update();
             checker_inst.check();
+            checker_inst.update_cant_trans();
         join_none
     endtask
 endclass

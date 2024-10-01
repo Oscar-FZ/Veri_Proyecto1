@@ -65,14 +65,20 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     //El task update() esta constantemente revisando el mailbox del
     //driver-checker y cuando recibe un paquete lo guarda en la queue del
     //dispositivo al que ese paquete deberia de llegar.
+
+    task update_cant_trans();
+        forever begin
+            test_chkr_mbx.get(cant_trans);
+        end
+    endtask
     task update();
         $display("[%g] El Checker se esta actualizando", $time);
 
         forever begin
             drvr_chkr_mbx.get(transaccion_drvr);
-            test_checker_mbx.get(cant_trans);
-            cant_trans += cant_trans;
-            $display("%i", cant_trans);
+            //test_checker_mbx.get(cant_trans);
+            //cant_trans += cant_trans;
+            //$display("%i", cant_trans);
             //$display("Transaccion recibida");
             //$display("[DISPOSITIVOS] %b", drvrs);
             if (transaccion_drvr.direccion == broadcast) begin
@@ -122,6 +128,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             end
 
             for (int i = 0; i < emul_fifo[transaccion_mntr.direccion].size(); i++) begin 
+                $display("[ID] %i", i);
                 if (emul_fifo[transaccion_mntr.direccion][i].dato == transaccion_mntr.dato) begin
                     $display("[CHECKER] Paquete Valido!");
                     result = CORRECTO;
