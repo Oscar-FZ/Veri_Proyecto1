@@ -3,10 +3,11 @@
 `include "transactions.sv"
 `include "driver_monitor.sv"
 `include "checker.sv"
+`include "scoreboard.sv"
 `include "agente.sv"
 `include "ambiente.sv"
 `include "test.sv"
-`include "scoreboard.sv"
+
 
 module DUT_TB();
     bit CLK_100MHZ;
