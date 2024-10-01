@@ -6,6 +6,7 @@
 `include "agente.sv"
 `include "ambiente.sv"
 `include "test.sv"
+`include "scoreboard.sv"
 
 module DUT_TB();
     bit CLK_100MHZ;

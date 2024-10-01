@@ -7,6 +7,7 @@
     //checker
     my_checker #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) checker_inst;
     //scoreboard
+    scoreboard #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) scoreboard_inst; 
     //etc
 
     //Declaración de la interfaz que conecta al DUT
@@ -19,6 +20,7 @@
     instr_pckg_mbx test_agent_mbx;                                         //Mailbox del test al agente
     sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;           //Mailbox del checker al scoreboard
     //U know >:)
+    test_type test_sb_mbx;
     trans_data agnt_chkr_mbx;
 
     function new();
@@ -29,6 +31,7 @@
         chkr_sb_mbx = new();
         //U know >:)
         agnt_chkr_mbx = new();
+        
 
         for (int i = 0; i < drvrs; i++) begin
             agnt_drvr_mbx[i] = new();
