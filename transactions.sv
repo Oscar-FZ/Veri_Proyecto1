@@ -68,6 +68,8 @@ class sb_pckg #(parameter drvrs = 4, parameter pckg_sz = 16);
 
   //Atributos
   bit [pckg_sz-1:0] dato_enviado;   // Los datos que se enviaron en el bus.
+  bit [drvrs-1:0] disp_origen;
+  bit [drvrs-1:0] disp_destino;
   int tiempo_push;                  // El tiempo en el que los datos se enviaron al bus.
   int tiempo_pop;                   // El tiempo en el que los datos se recibieron del bus.
   bit completado;                   // Si el paquete se ha completado.
@@ -77,6 +79,8 @@ class sb_pckg #(parameter drvrs = 4, parameter pckg_sz = 16);
   // Limpiar los atributos del paquete
   function clean();
     this.dato_enviado = 0;
+    this.disp_origen = 0;
+    this.disp_destino = 0;
     this.tiempo_push = 0;
     this.tiempo_pop = 0;
     this.completado = 0;
