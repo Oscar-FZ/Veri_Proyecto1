@@ -73,10 +73,10 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
 
 
         //Prueba de envío de paquetes hacia dispositivos inexistentes
-        aleatorizacion = new;
-        aleatorizacion.randomize();
+        //aleatorizacion = new;
+        //aleatorizacion.randomize();
         ambiente_inst.agent_inst.cant_trans = 5; //For the moment
-        ambiente_inst.agent_inst.dir_spec = aleatorizacion.wrong_addr;
+        //ambiente_inst.agent_inst.dir_spec = aleatorizacion.wrong_addr;
         trans_agente = dir_inex; //Might have to create a new trans type
         //test_agent_mbx.put(trans_agente);
         $display("[%g] Test: Enviada la instrucción de envío hacia dispositivos inexistentes", $time);
