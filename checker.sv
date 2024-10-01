@@ -56,7 +56,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         //aver
         test_checker_mbx    = new();
         //
-        cant_trans          = 10; //TODO Cambiar a 0
+        cant_trans          = 0; //TODO Cambiar a 0
         cant_trans_env      = 0;
         cant_trans_rec      = 0;
         stop                = 0;
@@ -70,6 +70,9 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
         forever begin
             drvr_chkr_mbx.get(transaccion_drvr);
+            test_checker_mbx.get(cant_trans);
+            cant_trans += cant_trans;
+            $display("%i", cant_trans);
             //$display("Transaccion recibida");
             //$display("[DISPOSITIVOS] %b", drvrs);
             if (transaccion_drvr.direccion == broadcast) begin
