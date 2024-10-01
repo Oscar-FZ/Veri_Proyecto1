@@ -27,7 +27,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
       if (inicio) begin
         test_sb_mbx.get(tipo_test);
         test_aleatorio = $fopen(nombre_archivo, "w");
-        $fwrite(test_aleatorio, "Test: " + tipo_test + "\n");
+        $fwrite(test_aleatorio, "Test: ", tipo_test, "\n");
         $fwrite(test_aleatorio, "Parametros del Ambiente\n");
         $fwrite(test_aleatorio, "Bits = %i\n", bits);
         $fwrite(test_aleatorio, "Drivers = %i\n", drvrs);
