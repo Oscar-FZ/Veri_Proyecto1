@@ -10,6 +10,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     transaction tpo_spec;
     int dsp_spec;
     bit [7:0] dir_spec;
+    randomizer #(.drvrs(drvrs), .pckg_sz(pckg_sz)) aleatorizacion;
 
     function new();
         //cant_trans = 10;
@@ -29,6 +30,9 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                 case(instruccion)
                     aleatorio: begin
                         for(int i = 0; i < drvrs; i++) begin
+                            aleatorizacion = new;
+                            aleatorizacion.randomize();
+                            cant_trans = aleatorizacion.num_trans;
                             for (int j = 0; j < cant_trans; j++) begin
                                 transaccion = new;
                                 transaccion.max_retardo = max_retardo;

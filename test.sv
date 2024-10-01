@@ -1,5 +1,5 @@
 class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
-    randomizer #(.drvrs(drvrs), .pckg_sz(pckg_sz)) aleatorizacion;
+    //randomizer #(.drvrs(drvrs), .pckg_sz(pckg_sz)) aleatorizacion;
     instr_pckg_mbx test_agent_mbx;
 
     //Mailbox para pasarle el # de transacciones al checker
@@ -47,12 +47,12 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         join_none
 
         //Prueba de envío de paquetes aleatorios
-        aleatorizacion = new;
-        aleatorizacion.randomize();
-        ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
+        //aleatorizacion = new;
+        //aleatorizacion.randomize();
+        //ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
         trans_agente = aleatorio;
-        //test_agent_mbx.put(trans_agente);
-        test_checker_mbx.put(aleatorizacion.num_trans);
+        test_agent_mbx.put(trans_agente);
+        //test_checker_mbx.put(aleatorizacion.num_trans);
         $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
 
         //Prueba de envío de paquetes broadcast
@@ -85,7 +85,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
 
         //Prueba de envío de paquetes hacia el mismo dispositivo de salida
         trans_agente = mismo_disp;
-        test_agent_mbx.put(trans_agente);
+        //test_agent_mbx.put(trans_agente);
         $display("[%g] Test: Enviada la instrucción de envío hacia el mismo dispositivo", $time);
         //Cuando se envía al mismo dispositivo nunca se le hace un push a ninguna FIFO para recibir el dato. Al dato si se le hace pop y si aparece en D_pop y D_push
 
