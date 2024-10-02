@@ -104,6 +104,8 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                             cant_trans = aleatorizacion.num_trans;
                             agnt_chkr_mbx.put(cant_trans);
                             for (int j = 0; j < cant_trans; j++) begin
+                                aleatorizacion = new;
+                                aleatorizacion.randomize();
                                 transaccion = new;
                                 transaccion.const_direccion.constraint_mode(0);
                                 transaccion.max_retardo = max_retardo;
