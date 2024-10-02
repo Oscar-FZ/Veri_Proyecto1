@@ -11,24 +11,29 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
     int test_aleatorio;
     int test_broadcast;
     int cont;
+    int flag;
 
     sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_chkr;
 
     //Definicion de mailboxes
     test_type test_sb_mbx;
     sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;
+    trans_data chkr_sb_flag_mbx;
+    trans_data sb_test_flag_mbx;
 
     function new();
         chkr_sb_mbx = new();
         test_sb_mbx = new();
         transaccion_chkr = new();
+        chkr_sb_flag_mbx = new();
+        sb_test_flag_mbx = new();
         inicio = 1;
         cont = 1;
+        flag = 0;
         nombre_archivo = "Aleatorio.csv";
         tipo_test = "Aleatorio";
     endfunction
-
-    task run();
+task run();
         
             //wait(fin_test.triggered);
             test_sb_mbx.get(tipo_test);
@@ -57,8 +62,10 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                             cont += 1;
                         end
     
-                        if ((chkr_sb_mbx.num() == 0) && (fin_test.triggered)) begin
-                            $finish;
+                        if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
+                            chkr_sb_flag_mbx.get(flag);
+                            sb_test_flag_mbx.put(1);
+                            break;
                         end
                     end
                 end
@@ -87,8 +94,10 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                             cont += 1;
                         end
     
-                        if ((chkr_sb_mbx.num() == 0) && (fin_test.triggered)) begin
-                            $finish;
+                        if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
+                            chkr_sb_flag_mbx.get(flag);
+                            sb_test_flag_mbx.put(1);
+                            break;
                         end
                     end
                 end

@@ -4,6 +4,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
 
     //Mailbox para pasarle el tipo de prueba al scoreboard
     test_type test_sb_mbx;
+    trans_data sb_test_flag_mbx;
 
     //Definición del ambiente de la prueba
     ambiente #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) ambiente_inst;
@@ -14,13 +15,17 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
     instruccion trans_agente;
     string tipo_test;
 
+    int flag;
+
     //Definición de las condiciones iniciales del test.
     function new();
+        flag = 0;
         //Instanciación de los mailboxes
         test_agent_mbx = new();
         
         //Instancia del mailbox de test_sb para pasarle el tipo de test
         test_sb_mbx = new();
+        sb_test_flag_mbx = new();
 
         //Definición y conexión del driver
         ambiente_inst = new();
@@ -31,6 +36,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //You already know
         //ambiente_inst.checker_inst.test_checker_mbx = test_checker_mbx;
         ambiente_inst.scoreboard_inst.test_sb_mbx = test_sb_mbx;
+        ambiente_inst.scoreboard_inst.sb_test_flag_mbx = sb_test_flag_mbx;
 
         //Valores que usa el agente
         //ambiente_inst.agent_inst.ret_spec = //TODO
@@ -52,14 +58,15 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //aleatorizacion.randomize();
         //ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
         //-------------------------------------------------------------------------------------------
-        //trans_agente = aleatorio;
-        //tipo_test = "Aleatorio";
-        //test_agent_mbx.put(trans_agente);
-        //test_sb_mbx.put(tipo_test);
+        trans_agente = aleatorio;
+        tipo_test = "Aleatorio";
+        test_agent_mbx.put(trans_agente);
+        test_sb_mbx.put(tipo_test);
         //test_checker_mbx.put(aleatorizacion.num_trans);
-        //$display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
+        $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
         //--------------------------------------------------------------------------------------------
-
+        
+        sb_test_flag_mbx.get(flag);
         //Prueba de envío de paquetes broadcast
         ambiente_inst.agent_inst.cant_trans = 2;
         trans_agente = broadcast;
@@ -67,6 +74,9 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         test_agent_mbx.put(trans_agente);
         test_sb_mbx.put(tipo_test);
         $display("[%g] Test: Enviada la instrucción de transacción broadcast", $time);
+        
+        sb_test_flag_mbx.get(flag);
+        $finish;
 
         //Reset
         //aleatorizacion = new;

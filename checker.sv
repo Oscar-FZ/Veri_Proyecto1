@@ -6,6 +6,8 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     //TODO Caso reset
     //TODO Que el checker rciba cant_trans del test por medio de un mailbox
 
+    //Mailbox entre checker y sb y entre sb y test
+
     //Definicion de los paquetes
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_drvr;  //Guarda los paquetes que vengan del driver 
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_mntr;  //Guarda los paquetes que vengan del monitor
@@ -41,6 +43,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
     //Nuevo mailbox
     trans_data agnt_chkr_mbx;
+    trans_data chkr_sb_flag_mbx;
 
     //Funcion constructora
     function new();
@@ -56,6 +59,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
         //aver
         agnt_chkr_mbx   = new();
+        chkr_sb_flag_mbx = new();
         //
         cant_trans          = 0; //TODO Cambiar a 0
         cant_trans_total    = 0;
@@ -81,7 +85,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         forever begin
             #1;
             drvr_chkr_mbx.get(transaccion_drvr);
-            transaccion_drvr.print("[DEBUG]");
+            //transaccion_drvr.print("[DEBUG]");
             //test_checker_mbx.get(cant_trans);
             //cant_trans += cant_trans;
             //$display("%i", cant_trans);
@@ -127,7 +131,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
             if (stop >= 1000) begin
                 $display("NO LLEGAN MAS PAQUETES");
-                $finish;
+                chkr_sb_flag_mbx.put(1);
             end
 
             else begin
@@ -146,7 +150,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                     to_sb.completado    = 1;
                     to_sb.calc_latencia();
                     chkr_sb_mbx.put(to_sb);
-                    transaccion_mntr.print("[CORRCTO]");
+                    //transaccion_mntr.print("[CORRCTO]");
 
                     if (transaccion_mntr.dato[pckg_sz-1:pckg_sz-8] == broadcast) begin
                         brdcst_pckg[transaccion_mntr.dato] += 1;
@@ -181,7 +185,8 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             $display("[CANTIDAD] Agnt = %i; Chkr = %i;", cant_trans_total, cant_trans_rec);
             if (cant_trans_rec == cant_trans_total) begin
                 $display("[CHECKER] Se completaron todas las transacciones");
-                -> fin_test;
+                chkr_sb_flag_mbx.put(1);
+                //-> fin_test;
                 //TODO Usar una bandera para indicarle al scoreboard que puede
                 //iniciar
             end
