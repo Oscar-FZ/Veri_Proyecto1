@@ -153,8 +153,8 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                     else begin
                         chkr_sb_mbx.get(transaccion_chkr);
                         test_dir_inexistente = $fopen(nombre_archivo, "a");
-                        $fwrite(test_dir_inexistente, "%d; 0x%h; %b; %d; %d; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino);
-                        $fclose(test_dir_inexistente);
+                        $fwrite(test_ret_0, "%d; 0x%h; %b; %d; %d; %d; %d; %d; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino, transaccion_chkr.tiempo_push, transaccion_chkr.tiempo_pop, transaccion_chkr.latencia);
+                            $fclose(test_ret_0);
                         cont += 1;
                     end
 
