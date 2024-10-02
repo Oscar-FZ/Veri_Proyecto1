@@ -6,6 +6,8 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     //TODO Caso reset
     //TODO Que el checker rciba cant_trans del test por medio de un mailbox
 
+    //Mailbox entre checker y sb y entre sb y test
+
     //Definicion de los paquetes
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_drvr;  //Guarda los paquetes que vengan del driver 
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_mntr;  //Guarda los paquetes que vengan del monitor
@@ -41,6 +43,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
     //Nuevo mailbox
     trans_data agnt_chkr_mbx;
+    trans_data chkr_sb_flag_mbx;
 
     //Funcion constructora
     function new();
@@ -56,6 +59,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
         //aver
         agnt_chkr_mbx   = new();
+        chkr_sb_flag_mbx = new();
         //
         cant_trans          = 0; //TODO Cambiar a 0
         cant_trans_total    = 0;
