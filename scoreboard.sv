@@ -37,6 +37,8 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
     task update();
         forever begin
             test_sb_mbx.get(tipo_test);
+            inicio = 1;
+            cont = 1;
         end
     endtask
 
