@@ -63,7 +63,7 @@
             driver_monitor_inst.strt_dm[i].dm_hijo.vif = _if;
             driver_monitor_inst.strt_dm[i].agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
             driver_monitor_inst.strt_dm[i].dm_hijo.drvr_chkr_mbx = drvr_chkr_mbx;
-            driver_monitor_inst.strt_dm[i].mntr_chkr_mbx = mntr_chkr_mbx;
+            driver_monitor_inst.strt_dm[i].dm_hijo.mntr_chkr_mbx = mntr_chkr_mbx;
             agent_inst.agnt_drvr_mbx[i] = agnt_drvr_mbx[i];
         end    
     endfunction

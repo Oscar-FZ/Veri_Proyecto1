@@ -11,12 +11,18 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
     int id;                             //
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
+
+    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;
+    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_mntr;
+
   
     virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) vif;
   
     function new (input int identificador);
         drvr_chkr_mbx = new();
+        mntr_chkr_mbx = new();
         transaccion = new();
+        transaccion_mntr = new();
         this.pop = 0;
         this.push = 0;
       	this.pndng_bus = 0;
@@ -88,6 +94,17 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
 	        @(posedge vif.clk);
 	        if (push) begin
 	            queue_out.push_back(vif.D_push[0][id]);
+                transaccion_mntr.tiempo = $time;
+                transaccion_mntr.dato = vif.D_push[0][id];
+                transaccion_mntr.dispositivo = id[drvrs-1:0];
+                transaccion_mntr.info = transaccion_mntr.dato[pckg_sz-9:0];
+                if (transaccion_mntr.dato[pckg_sz-1:pckg_sz-8] == broadcast) begin
+                    $display("BROADCAST IDENTIFICADO");
+                end
+                else begin
+                    transaccion_mntr.direccion = transaccion_mntr.dato[pckg_sz-1:pckg_sz-8];
+                end
+                mntr_chkr_mbx.put(transaccion_mntr);
 	        end
       
 	        if (queue_out.size() != 0) begin 
@@ -151,7 +168,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 
 	    drvr_chkr_mbx = new();
 	    mntr_chkr_mbx = new();
-        dm_hijo.drvr_chkr_mbx = drvr_chkr_mbx;
+        //dm_hijo.drvr_chkr_mbx = drvr_chkr_mbx;
     endfunction
 
 
@@ -199,7 +216,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 	        dm_hijo.receive_data_bus();
 	    join_none
         
-	    forever begin
+	    /*forever begin
             
             dm_hijo.vif.reset = 0;
             @(posedge dm_hijo.vif.clk);    
@@ -222,7 +239,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
                 //$display("Dato leido del fifo:");
                 //$display("%h", transaccion_mntr.dato);
 	        end
-        end
+        end*/
     endtask
 endclass
 
