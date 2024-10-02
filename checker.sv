@@ -86,6 +86,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             #1;
             drvr_chkr_mbx.get(transaccion_drvr);
             if (transaccion_drvr.direccion == broadcast) begin
+                cant_trans_total = (cant_trans * (drvrs-1));
                 for (bit [drvrs-1:0] i = 8'b0; i < drvrs; i++) begin
                     if (i != transaccion_drvr.dispositivo) begin
                         emul_fifo[i].push_back(transaccion_drvr);
