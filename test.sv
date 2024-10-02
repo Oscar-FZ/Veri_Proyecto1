@@ -76,7 +76,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
 
         //Todos los dispositivos envian con retraso 0
         trans_agente = retardos;
-        tipo_test = "Retardo 0"
+        tipo_test = "Retardo 0";
         test_agent_mbx.put(trans_agente);
         test_sb_mbx.put(tipo_test);
         $display("[%g] Test: Enviada la instrucción de envío con retardo 0", $time);
