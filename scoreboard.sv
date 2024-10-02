@@ -129,7 +129,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                         cont += 1;
                     end
 
-                    if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
+                    if ((chkr_sb_mbx.num() == 0)) begin
                         chkr_sb_flag_mbx.get(flag);
                         sb_test_flag_mbx.put(1);
                     end
