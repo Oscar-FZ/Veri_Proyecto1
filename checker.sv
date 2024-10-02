@@ -85,12 +85,6 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         forever begin
             #1;
             drvr_chkr_mbx.get(transaccion_drvr);
-            //transaccion_drvr.print("[DEBUG]");
-            //test_checker_mbx.get(cant_trans);
-            //cant_trans += cant_trans;
-            //$display("%i", cant_trans);
-            //$display("Transaccion recibida");
-            //$display("[DISPOSITIVOS] %b", drvrs);
             if (transaccion_drvr.direccion == broadcast) begin
                 for (bit [drvrs-1:0] i = 8'b0; i < drvrs; i++) begin
                     if (i != transaccion_drvr.dispositivo) begin
@@ -109,8 +103,8 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                 //to_sb.tiempo_push   = emul_fifo[transaccion_mntr.direccion][i].tiempo;
                 to_sb.completado    = 0;
                 chkr_sb_mbx.put(to_sb);
-                cant_trans_rec += 1;
-                $display("%i", cant_trans_rec);
+                cant_trans_env += 1;
+                $display("%i", cant_trans_env);
             end
 
             else begin
