@@ -33,16 +33,20 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
 
             if (inicio) begin
                 test_sb_mbx.get(tipo_test);
-                test_aleatorio = $fopen(nombre_archivo, "w");
-                $fwrite(test_aleatorio, "Test: ", tipo_test, "\n");
-                $fwrite(test_aleatorio, "Parametros del Ambiente\n");
-                $fwrite(test_aleatorio, "Bits = %0d\n", bits);
-                $fwrite(test_aleatorio, "Drivers = %0d\n", drvrs);
-                $fwrite(test_aleatorio, "Tamaño del Paquete = %0d\n", pckg_sz);
-                $fwrite(test_aleatorio, "Identificador de Broadcast = %b\n", broadcast);
-                $fwrite(test_aleatorio, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
-                $fclose(test_aleatorio);
-                inicio = 0;
+                case(tipo_test)
+                    "Broadcast": begin
+                        test_aleatorio = $fopen("Broadcast.csv", "w");
+                        $fwrite(test_aleatorio, "Test: ", tipo_test, "\n");
+                        $fwrite(test_aleatorio, "Parametros del Ambiente\n");
+                        $fwrite(test_aleatorio, "Bits = %0d\n", bits);
+                        $fwrite(test_aleatorio, "Drivers = %0d\n", drvrs);
+                        $fwrite(test_aleatorio, "Tamaño del Paquete = %0d\n", pckg_sz);
+                        $fwrite(test_aleatorio, "Identificador de Broadcast = %b\n", broadcast);
+                        $fwrite(test_aleatorio, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
+                        $fclose(test_aleatorio);
+                        inicio = 0;
+                    end
+                endcase                          
             end
 
             else begin
