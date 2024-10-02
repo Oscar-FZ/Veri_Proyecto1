@@ -119,14 +119,19 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
 
                     mismo_disp: begin
                         for (int i = 0; i < drvrs; i++) begin
-                            transaccion = new;
-                            transaccion.const_direccion.constraint_mode(0);
-                            transaccion.max_retardo = max_retardo;
-                            transaccion.randomize() with { dispositivo == i; direccion == i;};
-                            transaccion.dato = {transaccion.direccion, transaccion.info};
-                            transaccion.print("Enviando al mismo dispositivo");
-                            agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
-
+                            aleatorizacion = new;
+                            aleatorizacion.randomize();
+                            cant_trans = aleatorizacion.num_trans;
+                            agnt_chkr_mbx.put(cant_trans);
+                            for (int j = 0; j < cant_trans; j++) begin
+                                transaccion = new;
+                                transaccion.const_direccion.constraint_mode(0);
+                                transaccion.max_retardo = max_retardo;
+                                transaccion.randomize() with { dispositivo == j; direccion == j; };
+                                transaccion.dato = {transaccion.direccion, transaccion.info};
+                                transaccion.print("Enviando el dato al mismo dispositivo");
+                                agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
+                            end
                         end
                     end
                 endcase
