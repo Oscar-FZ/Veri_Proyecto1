@@ -13,7 +13,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
     //Define una queue por dispositivo
     //bit [pckg_sz-1:0] emul_fifo[7:0][$];
-    bus_pckg emul_fifo[7:0][$];
+    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) emul_fifo[7:0][$];
     //Se guardan los paquetes que envia el driver en la queue del dispositivo
     //al que este deberia de llegar para posteriormente cuando llegue un
     //paquete del monitor revisar si ese paquete era el esperado.

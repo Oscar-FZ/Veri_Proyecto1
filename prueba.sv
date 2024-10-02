@@ -14,7 +14,7 @@ module DUT_TB();
 	parameter WIDTH = 16;
 	parameter PERIOD = 2;
 	parameter bits = 1;
-	parameter drvrs = 4;
+	parameter drvrs = 6;
 	parameter pckg_sz =16;
 	parameter broadcast = {8{1'b1}};
 
