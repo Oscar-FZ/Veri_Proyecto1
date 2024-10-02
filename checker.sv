@@ -94,7 +94,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                 end
             end
 
-            else if (transaccion_drvr.direccion >= drvrs[7:0]) begin
+            else if (transaccion_drvr.direccion > drvrs && transaccion_drvr.direccion != broadcast) begin
                 $display("[ERROR] Direccion Inexistente");
                 $display("[CHECKER] Enviando informacion al scoreboard");
                 $display("%i", cant_trans_total);

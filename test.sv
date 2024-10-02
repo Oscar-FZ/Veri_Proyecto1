@@ -67,10 +67,10 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //ambiente_inst.agent_inst.cant_trans = 2;
         trans_agente = broadcast;
         tipo_test = "Broadcast";
-        //test_agent_mbx.put(trans_agente);
-        //test_sb_mbx.put(tipo_test);
+        test_agent_mbx.put(trans_agente);
+        test_sb_mbx.put(tipo_test);
         $display("[%g] Test: Enviada la instrucción de transacción broadcast", $time);
-        //sb_test_flag_mbx.get(flag);
+        sb_test_flag_mbx.get(flag);
         //-------------------------------------------------------------------------------------------
         
 
