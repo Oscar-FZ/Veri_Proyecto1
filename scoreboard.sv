@@ -33,6 +33,14 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
         nombre_archivo = "Aleatorio.csv";
         tipo_test = "Aleatorio";
     endfunction
+
+task update_stuff();
+    forever begin
+        chkr_sb_flag_mbx.get(flag);
+    end 
+endtask
+
+
 task run();
         
             //wait(fin_test.triggered);
@@ -63,7 +71,7 @@ task run();
                         end
     
                         if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
-                            chkr_sb_flag_mbx.get(flag);
+                            //chkr_sb_flag_mbx.get(flag);
                             sb_test_flag_mbx.put(1);
                             break;
                         end
@@ -95,7 +103,7 @@ task run();
                         end
     
                         if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
-                            chkr_sb_flag_mbx.get(flag);
+                            //chkr_sb_flag_mbx.get(flag);
                             sb_test_flag_mbx.put(1);
                             break;
                         end
