@@ -63,17 +63,6 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //-------------------------------------------------------------------------------------------
         
         //-------------------------------------------------------------------------------------------
-        //Prueba de envío de paquetes broadcast
-        //ambiente_inst.agent_inst.cant_trans = 2;
-        trans_agente = broadcast;
-        tipo_test = "Broadcast";
-        test_agent_mbx.put(trans_agente);
-        test_sb_mbx.put(tipo_test);
-        $display("[%g] Test: Enviada la instrucción de transacción broadcast", $time);
-        sb_test_flag_mbx.get(flag);
-        //-------------------------------------------------------------------------------------------
-        
-
         //Todos los dispositivos envian con retraso 0
         trans_agente = retardos;
         tipo_test = "Retardo 0";
@@ -81,6 +70,8 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         test_sb_mbx.put(tipo_test);
         $display("[%g] Test: Enviada la instrucción de envío con retardo 0", $time);
         sb_test_flag_mbx.get(flag);
+        //-------------------------------------------------------------------------------------------
+        
         //Max alt
 
         //-------------------------------------------------------------------------------------------
@@ -93,6 +84,18 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         sb_test_flag_mbx.get(flag);
         //Cuando la dirección no existe nunca se le hace un push a ninguna FIFO para recibir el dato. Al dato si se le hace pop y si aparece en D_pop y D_push
         //-------------------------------------------------------------------------------------------
+
+        //-------------------------------------------------------------------------------------------
+        //Prueba de envío de paquetes broadcast
+        //ambiente_inst.agent_inst.cant_trans = 2;
+        trans_agente = broadcast;
+        tipo_test = "Broadcast";
+        test_agent_mbx.put(trans_agente);
+        test_sb_mbx.put(tipo_test);
+        $display("[%g] Test: Enviada la instrucción de transacción broadcast", $time);
+        sb_test_flag_mbx.get(flag);
+        //-------------------------------------------------------------------------------------------
+
         $finish;
 
         //Prueba de envío de paquetes hacia el mismo dispositivo de salida
