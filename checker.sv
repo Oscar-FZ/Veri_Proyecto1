@@ -112,6 +112,10 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                 end
             end
 
+            else if (transaccion_drvr.direccion == transaccion_drvr.dispositivo) begin
+                $display("[ERROR] El dispositivo se intenta enviar un dato a si mismo");
+            end
+
             else begin
                 emul_fifo[transaccion_drvr.direccion].push_back(transaccion_drvr);
                 //transaccion_drvr.print("[CHECKER FIFO]");
