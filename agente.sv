@@ -44,7 +44,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                                 transaccion.max_retardo = max_retardo;
                                 transaccion.randomize() with { dispositivo == i; };
                                 transaccion.dato = {transaccion.direccion, transaccion.info};
-                                transaccion.print("BOMBOCLAT");
+                                //transaccion.print("BOMBOCLAT");
                                 agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
                                 //Si dispositivo no sirve usar variable dinamica :)
                             end

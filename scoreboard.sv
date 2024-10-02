@@ -11,6 +11,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
     int test_aleatorio;
     int test_broadcast;
     int cont;
+    int flag;
 
     sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_chkr;
   
@@ -28,71 +29,80 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
         sb_test_flag_mbx = new();
         inicio = 1;
         cont = 1;
+        flag = 0;
         nombre_archivo = "Aleatorio.csv";
         tipo_test = "Aleatorio";
     endfunction
-
-    task run();
-        forever begin
+task run();
+        
             //wait(fin_test.triggered);
             test_sb_mbx.get(tipo_test);
             case (tipo_test)
+                
                 "Aleatorio": begin
-                    if (inicio) begin
-                        test_aleatorio = $fopen(nombre_archivo, "w");
-                        $fwrite(test_aleatorio, "Test: ", tipo_test, "\n");
-                        $fwrite(test_aleatorio, "Parametros del Ambiente\n");
-                        $fwrite(test_aleatorio, "Bits = %0d\n", bits);
-                        $fwrite(test_aleatorio, "Drivers = %0d\n", drvrs);
-                        $fwrite(test_aleatorio, "Tamaño del Paquete = %0d\n", pckg_sz);
-                        $fwrite(test_aleatorio, "Identificador de Broadcast = %b\n", broadcast);
-                        $fwrite(test_aleatorio, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
-                        $fclose(test_aleatorio);
-                        inicio = 0;
-                    end
-
-                    else begin
-                        chkr_sb_mbx.get(transaccion_chkr);
-                        test_aleatorio = $fopen(nombre_archivo, "a");
-                        $fwrite(test_aleatorio, "%d; 0x%h; %b; %d; %d; %d; %d; %d; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino, transaccion_chkr.tiempo_push, transaccion_chkr.tiempo_pop, transaccion_chkr.latencia);
-                        $fclose(test_aleatorio);
-                        cont += 1;
-                    end
-
-                    if ((chkr_sb_mbx.num() == 0) && (fin_test.triggered)) begin
-                        $finish;
+                    forever begin
+                        if (inicio) begin
+                            test_aleatorio = $fopen(nombre_archivo, "w");
+                            $fwrite(test_aleatorio, "Test: ", tipo_test, "\n");
+                            $fwrite(test_aleatorio, "Parametros del Ambiente\n");
+                            $fwrite(test_aleatorio, "Bits = %0d\n", bits);
+                            $fwrite(test_aleatorio, "Drivers = %0d\n", drvrs);
+                            $fwrite(test_aleatorio, "Tamaño del Paquete = %0d\n", pckg_sz);
+                            $fwrite(test_aleatorio, "Identificador de Broadcast = %b\n", broadcast);
+                            $fwrite(test_aleatorio, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
+                            $fclose(test_aleatorio);
+                            inicio = 0;
+                        end
+    
+                        else begin
+                            chkr_sb_mbx.get(transaccion_chkr);
+                            test_aleatorio = $fopen(nombre_archivo, "a");
+                            $fwrite(test_aleatorio, "%d; 0x%h; %b; %d; %d; %d; %d; %d; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino, transaccion_chkr.tiempo_push, transaccion_chkr.tiempo_pop, transaccion_chkr.latencia);
+                            $fclose(test_aleatorio);
+                            cont += 1;
+                        end
+    
+                        if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
+                            chkr_sb_flag_mbx.get(flag);
+                            sb_test_flag_mbx.put(1);
+                            break;
+                        end
                     end
                 end
 
                 "Broadcast": begin
-                    nombre_archivo = "Broadcast.csv";
-                    if (inicio) begin
-                        test_broadcast = $fopen(nombre_archivo, "w");
-                        $fwrite(test_broadcast, "Test: ", tipo_test, "\n");
-                        $fwrite(test_broadcast, "Parametros del Ambiente\n");
-                        $fwrite(test_broadcast, "Bits = %0d\n", bits);
-                        $fwrite(test_broadcast, "Drivers = %0d\n", drvrs);
-                        $fwrite(test_broadcast, "Tamaño del Paquete = %0d\n", pckg_sz);
-                        $fwrite(test_broadcast, "Identificador de Broadcast = %b\n", broadcast);
-                        $fwrite(test_broadcast, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
-                        $fclose(test_broadcast);
-                        inicio = 0;
-                    end
-
-                    else begin
-                        chkr_sb_mbx.get(transaccion_chkr);
-                        test_broadcast = $fopen(nombre_archivo, "a");
-                        $fwrite(test_broadcast, "%d; 0x%h; %b; %d; %d; %d; %d; %d; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino, transaccion_chkr.tiempo_push, transaccion_chkr.tiempo_pop, transaccion_chkr.latencia);
-                        $fclose(test_broadcast);
-                        cont += 1;
-                    end
-
-                    if ((chkr_sb_mbx.num() == 0) && (fin_test.triggered)) begin
-                        $finish;
+                    forever begin
+                        nombre_archivo = "Broadcast.csv";
+                        if (inicio) begin
+                            test_broadcast = $fopen(nombre_archivo, "w");
+                            $fwrite(test_broadcast, "Test: ", tipo_test, "\n");
+                            $fwrite(test_broadcast, "Parametros del Ambiente\n");
+                            $fwrite(test_broadcast, "Bits = %0d\n", bits);
+                            $fwrite(test_broadcast, "Drivers = %0d\n", drvrs);
+                            $fwrite(test_broadcast, "Tamaño del Paquete = %0d\n", pckg_sz);
+                            $fwrite(test_broadcast, "Identificador de Broadcast = %b\n", broadcast);
+                            $fwrite(test_broadcast, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
+                            $fclose(test_broadcast);
+                            inicio = 0;
+                        end
+    
+                        else begin
+                            chkr_sb_mbx.get(transaccion_chkr);
+                            test_broadcast = $fopen(nombre_archivo, "a");
+                            $fwrite(test_broadcast, "%d; 0x%h; %b; %d; %d; %d; %d; %d; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino, transaccion_chkr.tiempo_push, transaccion_chkr.tiempo_pop, transaccion_chkr.latencia);
+                            $fclose(test_broadcast);
+                            cont += 1;
+                        end
+    
+                        if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
+                            chkr_sb_flag_mbx.get(flag);
+                            sb_test_flag_mbx.put(1);
+                            break;
+                        end
                     end
                 end
 
             endcase 
-        end
+        
     endtask
 endclass
