@@ -10,6 +10,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
     string nombre_archivo;
     int test_aleatorio;
     int test_broadcast;
+    int test_dir_inexistente;
     int cont;
     int flag;
 
@@ -104,34 +105,34 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                         end
                 end
 
-                //"Direccion Inexistente": begin
-                    //nombre_archivo = "Dir_Inexistente.csv";
-                    //if (inicio) begin
-                        //test_broadcast = $fopen(nombre_archivo, "w");
-                        //$fwrite(test_broadcast, "Test: ", tipo_test, "\n");
-                        //$fwrite(test_broadcast, "Parametros del Ambiente\n");
-                        //$fwrite(test_broadcast, "Bits = %0d\n", bits);
-                        //$fwrite(test_broadcast, "Drivers = %0d\n", drvrs);
-                        //$fwrite(test_broadcast, "Tamaño del Paquete = %0d\n", pckg_sz);
-                        //$fwrite(test_broadcast, "Identificador de Broadcast = %b\n", broadcast);
-                        //$fwrite(test_broadcast, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; \n");
-                        //$fclose(test_broadcast);
-                        //inicio = 0;
-                    //end
+                "Direccion Inexistente": begin
+                    nombre_archivo = "Dir_Inexistente.csv";
+                    if (inicio) begin
+                        test_dir_inexistente = $fopen(nombre_archivo, "w");
+                        $fwrite(test_dir_inexistente, "Test: ", tipo_test, "\n");
+                        $fwrite(test_dir_inexistente, "Parametros del Ambiente\n");
+                        $fwrite(test_dir_inexistente, "Bits = %0d\n", bits);
+                        $fwrite(test_dir_inexistente, "Drivers = %0d\n", drvrs);
+                        $fwrite(test_dir_inexistente, "Tamaño del Paquete = %0d\n", pckg_sz);
+                        $fwrite(test_dir_inexistente, "Identificador de Broadcast = %b\n", broadcast);
+                        $fwrite(test_dir_inexistente, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; \n");
+                        $fclose(test_dir_inexistente);
+                        inicio = 0;
+                    end
 
-                    //else begin
-                        //chkr_sb_mbx.get(transaccion_chkr);
-                        //test_broadcast = $fopen(nombre_archivo, "a");
-                        //$fwrite(test_broadcast, "%d; 0x%h; %b; %d; %d; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino);
-                        //$fclose(test_broadcast);
-                        //cont += 1;
-                    //end
+                    else begin
+                        chkr_sb_mbx.get(transaccion_chkr);
+                        test_dir_inexistente = $fopen(nombre_archivo, "a");
+                        $fwrite(test_dir_inexistente, "%d; 0x%h; %b; %d; %d; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino);
+                        $fclose(test_dir_inexistente);
+                        cont += 1;
+                    end
 
                     //if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
                         //chkr_sb_flag_mbx.get(flag);
                         //sb_test_flag_mbx.put(1);
                     //end
-                //end
+                end
 
                 "Nada": begin
                     tipo_test = tipo_test;
