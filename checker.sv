@@ -98,13 +98,13 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             else if (transaccion_drvr.direccion > drvrs && transaccion_drvr.direccion != broadcast) begin
                 $display("[ERROR] Direccion Inexistente");
                 $display("[CHECKER] Enviando informacion al scoreboard");
-                $display("%i", cant_trans_total);
                 to_sb.dato_enviado  = transaccion_drvr.dato;
                 to_sb.disp_origen   = transaccion_drvr.dispositivo;
                 to_sb.disp_destino  = transaccion_drvr.direccion;
                 to_sb.completado    = 0;
                 chkr_sb_mbx.put(to_sb);
                 cant_trans_rec += 1;
+                $display("%i, %i", cant_trans_total, cant_trans_rec);
                 if (cant_trans_rec == cant_trans_total) begin
                     chkr_sb_flag_mbx.put(1);
                     cant_trans_total = 0;
