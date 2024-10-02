@@ -2,7 +2,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs]; //Mailbox del agente al driver
     instr_pckg_mbx test_agent_mbx; //Mailbox del test al agente
     instruccion instruccion;
-    int cant_trans; //Cantidad de transacciones a realizar
+    int cant_trans; //Cantidad de transacciones a realizar.
     int max_retardo; //Retardo maximo entre transacciones
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
     int ret_spec; //Retardo específico para las transacciones

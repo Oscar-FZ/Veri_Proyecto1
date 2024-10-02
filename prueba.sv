@@ -28,7 +28,7 @@ module DUT_TB();
     (
     	.clk    (_if.clk),	    //Input
     	.reset  (_if.reset),    //Input
-    	.pndng  (_if.pndng),    //Input
+    	.pndng  (_if.pndng),    //Input.
     	.push   (_if.push),	    //Output
     	.pop    (_if.pop),	    //Output
     	.D_pop  (_if.D_pop),    //Input

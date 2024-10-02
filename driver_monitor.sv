@@ -87,7 +87,7 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
 
     //Este task recibe el dato del bus que viene en D_push y lo guarda en la
     //FIFO del monitor.
-    //Tambien actualiza el valor de pending de la FIFO del monitor.
+    //Tambien actualiza el valor de pending de la FIFO del monitor..
     task receive_data_bus();
 	    forever begin
             

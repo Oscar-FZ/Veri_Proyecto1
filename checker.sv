@@ -2,7 +2,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
     //Plan actual
     //TODO Que el checker no explote si llega un dato con direccion invalida
-    //TODO El checker aun no envia informacion al scoreboard
+    //TODO El checker aun no envia informacion al scoreboard.
     //TODO Caso reset
     //TODO Que el checker rciba cant_trans del test por medio de un mailbox
 
