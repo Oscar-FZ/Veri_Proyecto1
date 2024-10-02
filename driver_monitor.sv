@@ -9,10 +9,14 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
     bit [pckg_sz-1:0] queue_in [$];     //
     bit [pckg_sz-1:0] queue_out [$];    //
     int id;                             //
+    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
+    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
   
     virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) vif;
   
     function new (input int identificador);
+        drvr_chkr_mbx = new();
+        transaccion = new();
         this.pop = 0;
         this.push = 0;
       	this.pndng_bus = 0;
@@ -59,7 +63,12 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
 	        @(posedge vif.clk);
 	        vif.D_pop[0][id] = queue_in[0]; //Probably check this as well
 	        if (pop) begin
-    	        queue_in.pop_front();
+    	        transaccion.dato = queue_in.pop_front();
+                transaccion.tiempo = $time;
+                transaccion.dispositivo = id[drvrs-1:0];
+                transaccion.direccion = transaccion.dato[pckg_sz-1:pckg_sz-8];
+                transaccion.info = transaccion.dato[pckg_sz-9:0];
+                drvr_chkr_mbx.put(transaccion);
 	        end
 
 	        if (queue_in.size() != 0) 
@@ -142,7 +151,10 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 
 	    drvr_chkr_mbx = new();
 	    mntr_chkr_mbx = new();
+        dm_hijo.drvr_chkr_mbx = drvr_chkr_mbx;
     endfunction
+
+
     
     task run_drvr();
 	    $display("[ID] %d", id);
@@ -169,10 +181,10 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
                 
             if (transaccion.tipo == escritura) begin
                 $display("[ESCRITURA]");
-		        transaccion.tiempo = $time;
+		        //transaccion.tiempo = $time;
                 dm_hijo.queue_in.push_back(transaccion.dato); //Esto no debería ser transaccion.info? Se está guardando todo en la fifo
 		        //transaccion.print("[DEBUG] Dato enviado");
-		        drvr_chkr_mbx.put(transaccion);
+		        //drvr_chkr_mbx.put(transaccion);
                 //transaccion.print("[DRIVER]");
             end
         end
