@@ -104,6 +104,12 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                 to_sb.disp_destino  = transaccion_drvr.direccion;
                 to_sb.completado    = 0;
                 chkr_sb_mbx.put(to_sb);
+                cant_trans_rec += 1;
+                if (cant_trans_rec == cant_trans_total) begin
+                    chkr_sb_flag_mbx.put(1);
+                    cant_trans_total = 0;
+                    cant_trans_rec = 0;
+                end
             end
 
             else begin
