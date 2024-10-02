@@ -4,6 +4,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
 
     //Mailbox para pasarle el tipo de prueba al scoreboard
     test_type test_sb_mbx;
+    trans_data sb_test_flag_mbx;
 
     //Definición del ambiente de la prueba
     ambiente #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) ambiente_inst;
@@ -21,6 +22,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         
         //Instancia del mailbox de test_sb para pasarle el tipo de test
         test_sb_mbx = new();
+        sb_test_flag_mbx = new();
 
         //Definición y conexión del driver
         ambiente_inst = new();
@@ -31,6 +33,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //You already know
         //ambiente_inst.checker_inst.test_checker_mbx = test_checker_mbx;
         ambiente_inst.scoreboard_inst.test_sb_mbx = test_sb_mbx;
+        ambiente_inst.scoreboard_inst.sb_test_flag_mbx = sb_test_flag_mbx;
 
         //Valores que usa el agente
         //ambiente_inst.agent_inst.ret_spec = //TODO

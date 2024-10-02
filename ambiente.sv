@@ -23,6 +23,7 @@
     test_type test_sb_mbx;
     trans_data agnt_chkr_mbx;
     trans_data chkr_sb_flag_mbx;
+    trans_data sb_test_flag_mbx;
 
     function new();
         //Instanciación de los mailboxes
@@ -34,6 +35,7 @@
         agnt_chkr_mbx = new();
         test_sb_mbx = new();
         chkr_sb_flag_mbx = new();
+        sb_test_flag_mbx = new();
         
 
         for (int i = 0; i < drvrs; i++) begin
@@ -63,7 +65,8 @@
         //Nuevos mailboxes
         checker_inst.chkr_sb_flag_mbx = chkr_sb_flag_mbx;
         scoreboard_inst.chkr_sb_flag_mbx = chkr_sb_flag_mbx;
-
+        scoreboard_inst.sb_test_flag_mbx = sb_test_flag_mbx;
+        
         for (int i = 0; i<drvrs; i++) begin
             $display("[%d]",i);
             driver_monitor_inst.strt_dm[i].dm_hijo.vif = _if;
