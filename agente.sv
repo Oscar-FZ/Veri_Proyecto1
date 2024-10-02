@@ -15,11 +15,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     trans_data agnt_chkr_mbx;
 
     function new();
-        //cant_trans = 10;
         max_retardo = 20;
-        //for (int i = 0; i < drvrs; i++) begin
-          //  agnt_drvr_mbx[i] = new();
-        //end //Me parece que esto se puede quitar
         agnt_chkr_mbx = new();
     endfunction
 
@@ -70,14 +66,19 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                     end
 
                     retardos: begin
-                        for (int i = 0; i < cant_trans; i++) begin
-                            transaccion = new;
-                            transaccion.const_direccion.constraint_mode(0);
-                            transaccion.max_retardo = max_retardo;
-                            transaccion.randomize() with { direccion == dir_spec; };
-                            transaccion.dato = {transaccion.direccion, transaccion.info};
-                            transaccion.print("Direccion inexistente");
-                            agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
+                        for (int i = 0; i < drvrs; i++) begin
+                            aleatorizacion = new;
+                            aleatorizacion.randomize();
+                            cant_trans = aleatorizacion.num_trans;
+                            agnt_chkr_mbx.put(cant_trans);
+                            for (int j = 0; j < cant_trans; j++) begin
+                                transaccion = new;
+                                transaccion.const_retardo.constraint_mode(0);
+                                transaccion.max_retardo = 0;
+                                transaccion.randomize() with { retardo == 0; };
+                                transaccion.dato = {transaccion.direccion, transaccion.info};
+                                agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
+                            end
                         end
                     end
 
