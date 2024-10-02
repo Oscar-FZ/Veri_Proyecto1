@@ -111,7 +111,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                                 transaccion.max_retardo = max_retardo;
                                 transaccion.randomize() with { direccion == aleatorizacion.wrong_addr; };
                                 transaccion.dato = {transaccion.direccion, transaccion.info};
-                                transaccion.print("Direccion inexistente");
+                                //transaccion.print("Direccion inexistente");
                                 agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
                             end
                         end
