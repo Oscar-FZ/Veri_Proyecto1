@@ -87,6 +87,7 @@
             checker_inst.check();
             checker_inst.update_cant_trans();
             scoreboard_inst.run();
+            scoreboard_inst.update();
         join_none
     endtask
 endclass
