@@ -31,24 +31,23 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
         cont = 1;
         flag = 0;
         nombre_archivo = "Aleatorio.csv";
-        tipo_test = "Aleatorio";
+        tipo_test = "Nada";
     endfunction
-
-task update_stuff();
-    forever begin
-        chkr_sb_flag_mbx.get(flag);
-    end 
-endtask
-
-
-task run();
-        
-            //wait(fin_test.triggered);
+    
+    task update();
+        forever begin
             test_sb_mbx.get(tipo_test);
+            inicio = 1;
+            cont = 1;
+        end
+    endtask
+
+    task run();
+        forever begin
+            #1;
             case (tipo_test)
                 
                 "Aleatorio": begin
-                    forever begin
                         if (inicio) begin
                             test_aleatorio = $fopen(nombre_archivo, "w");
                             $fwrite(test_aleatorio, "Test: ", tipo_test, "\n");
@@ -73,13 +72,10 @@ task run();
                         if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
                             //chkr_sb_flag_mbx.get(flag);
                             sb_test_flag_mbx.put(1);
-                            break;
                         end
-                    end
                 end
 
                 "Broadcast": begin
-                    forever begin
                         nombre_archivo = "Broadcast.csv";
                         if (inicio) begin
                             test_broadcast = $fopen(nombre_archivo, "w");
@@ -105,12 +101,14 @@ task run();
                         if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
                             //chkr_sb_flag_mbx.get(flag);
                             sb_test_flag_mbx.put(1);
-                            break;
                         end
-                    end
+                end
+
+                "Nada": begin
+                    tipo_test = tipo_test;
                 end
 
             endcase 
-        
+        end
     endtask
 endclass

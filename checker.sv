@@ -131,8 +131,8 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
             if (stop >= 1000) begin
                 $display("NO LLEGAN MAS PAQUETES");
-                //chkr_sb_flag_mbx.put(1);
-                $finish;
+                chkr_sb_flag_mbx.put(1);
+                break;
             end
 
             else begin
@@ -155,10 +155,11 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
                     if (transaccion_mntr.dato[pckg_sz-1:pckg_sz-8] == broadcast) begin
                         brdcst_pckg[transaccion_mntr.dato] += 1;
+                        cant_trans_rec += 1;
 
                         if (brdcst_pckg[transaccion_mntr.dato] == drvrs-1) begin
                             $display("[CHECKER] Broadcast Completado!");
-                            cant_trans_rec += 1;
+                            //cant_trans_rec += 1;
                             emul_fifo[transaccion_mntr.direccion].delete(i);
 
                         end
@@ -186,7 +187,10 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             $display("[CANTIDAD] Agnt = %i; Chkr = %i;", cant_trans_total, cant_trans_rec);
             if (cant_trans_rec == cant_trans_total) begin
                 $display("[CHECKER] Se completaron todas las transacciones");
-                //chkr_sb_flag_mbx.put(1);
+                chkr_sb_flag_mbx.put(1);
+                cant_trans_total = 0;
+                cant_trans_rec = 0;
+                cant_trans_env = 0;
                 //-> fin_test;
                 //TODO Usar una bandera para indicarle al scoreboard que puede
                 //iniciar
