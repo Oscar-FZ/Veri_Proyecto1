@@ -104,6 +104,10 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                         end
                 end
 
+                "Direccion Inexistente": begin
+                    $display("Encara Messi");
+                end
+
                 "Nada": begin
                     tipo_test = tipo_test;
                 end
