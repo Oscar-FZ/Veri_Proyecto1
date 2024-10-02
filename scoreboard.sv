@@ -114,7 +114,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                         $fwrite(test_broadcast, "Drivers = %0d\n", drvrs);
                         $fwrite(test_broadcast, "Tamaño del Paquete = %0d\n", pckg_sz);
                         $fwrite(test_broadcast, "Identificador de Broadcast = %b\n", broadcast);
-                        $fwrite(test_broadcast, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
+                        $fwrite(test_broadcast, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; \n");
                         $fclose(test_broadcast);
                         inicio = 0;
                     end

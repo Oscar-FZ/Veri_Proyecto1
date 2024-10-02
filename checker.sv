@@ -107,7 +107,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                 to_sb.disp_origen   = transaccion_drvr.dispositivo;
                 to_sb.disp_destino  = transaccion_mntr.direccion;
                 //to_sb.tiempo_push   = emul_fifo[transaccion_mntr.direccion][i].tiempo;
-                to_sb.completado    = 1;
+                to_sb.completado    = 0;
                 chkr_sb_mbx.put(to_sb);
                 cant_trans_rec += 1;
                 $display("%i", cant_trans_rec);
