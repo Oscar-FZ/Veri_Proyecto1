@@ -53,20 +53,17 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
             ambiente_inst.run();
         join_none
 
-        //Prueba de envío de paquetes aleatorios
-        //aleatorizacion = new;
-        //aleatorizacion.randomize();
-        //ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
         //-------------------------------------------------------------------------------------------
+        //Prueba de envío de paquetes aleatorios
         trans_agente = aleatorio;
         tipo_test = "Aleatorio";
         test_agent_mbx.put(trans_agente);
         test_sb_mbx.put(tipo_test);
-        //test_checker_mbx.put(aleatorizacion.num_trans);
         $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
-        //--------------------------------------------------------------------------------------------
-        
         sb_test_flag_mbx.get(flag);
+        //-------------------------------------------------------------------------------------------
+        
+        //-------------------------------------------------------------------------------------------
         //Prueba de envío de paquetes broadcast
         ambiente_inst.agent_inst.cant_trans = 2;
         trans_agente = broadcast;
@@ -74,8 +71,8 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         test_agent_mbx.put(trans_agente);
         test_sb_mbx.put(tipo_test);
         $display("[%g] Test: Enviada la instrucción de transacción broadcast", $time);
-        
         sb_test_flag_mbx.get(flag);
+        //-------------------------------------------------------------------------------------------
         $finish;
 
         //Reset
