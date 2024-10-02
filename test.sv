@@ -14,7 +14,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
     instruccion trans_agente;
     string tipo_test;
 
-    //Definición de las condiciones iniciales del test
+    //Definición de las condiciones iniciales del test.
     function new();
         //Instanciación de los mailboxes
         test_agent_mbx = new();
