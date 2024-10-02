@@ -58,11 +58,11 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //aleatorizacion.randomize();
         //ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
         //-------------------------------------------------------------------------------------------
-        //trans_agente = aleatorio;
-        //tipo_test = "Aleatorio";
-        //test_agent_mbx.put(trans_agente);
-        //test_sb_mbx.put(tipo_test);
-        //$display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
+        trans_agente = aleatorio;
+        tipo_test = "Aleatorio";
+        test_agent_mbx.put(trans_agente);
+        test_sb_mbx.put(tipo_test);
+        $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
         //--------------------------------------------------------------------------------------------
         
         sb_test_flag_mbx.get(flag);
