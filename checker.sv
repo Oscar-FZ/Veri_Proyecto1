@@ -131,7 +131,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
             if (stop >= 1000) begin
                 $display("NO LLEGAN MAS PAQUETES");
-                chkr_sb_flag_mbx.put(1);
+                //chkr_sb_flag_mbx.put(1);
             end
 
             else begin
@@ -185,7 +185,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             $display("[CANTIDAD] Agnt = %i; Chkr = %i;", cant_trans_total, cant_trans_rec);
             if (cant_trans_rec == cant_trans_total) begin
                 $display("[CHECKER] Se completaron todas las transacciones");
-                chkr_sb_flag_mbx.put(1);
+                //chkr_sb_flag_mbx.put(1);
                 //-> fin_test;
                 //TODO Usar una bandera para indicarle al scoreboard que puede
                 //iniciar

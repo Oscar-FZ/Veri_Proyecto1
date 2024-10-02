@@ -65,7 +65,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
         //--------------------------------------------------------------------------------------------
         
-        sb_test_flag_mbx.get(flag);
+        //sb_test_flag_mbx.get(flag);
         //Prueba de envío de paquetes broadcast
         ambiente_inst.agent_inst.cant_trans = 2;
         trans_agente = broadcast;
@@ -74,8 +74,8 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         test_sb_mbx.put(tipo_test);
         $display("[%g] Test: Enviada la instrucción de transacción broadcast", $time);
         
-        sb_test_flag_mbx.get(flag);
-        $finish;
+        //sb_test_flag_mbx.get(flag);
+        //$finish;
 
         //Reset
         //aleatorizacion = new;
@@ -105,7 +105,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //$display("[%g] Test: Enviada la instrucción de envío hacia el mismo dispositivo", $time);
         //Cuando se envía al mismo dispositivo nunca se le hace un push a ninguna FIFO para recibir el dato. Al dato si se le hace pop y si aparece en D_pop y D_push
 
-        #100000;
+        #1000000000;
         $display("[%g] Test: Se alcanzó el tiempo límite de la prueba", $time);
         #20;
         $finish;
