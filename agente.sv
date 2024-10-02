@@ -54,6 +54,10 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                     broadcast: begin
                         $display("[%g]  Agente: se recibe instruccion broadcast del test",$time);
                         for(int i = 0; i < drvrs; i++) begin
+                            aleatorizacion = new;
+                            aleatorizacion.randomize();
+                            cant_trans = aleatorizacion.num_trans;
+                            agnt_chkr_mbx.put(cant_trans);
                             for (int j = 0; j < cant_trans; j++) begin
                                 transaccion = new;
                                 transaccion.const_direccion.constraint_mode(0);

@@ -51,17 +51,21 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //aleatorizacion = new;
         //aleatorizacion.randomize();
         //ambiente_inst.agent_inst.cant_trans = aleatorizacion.num_trans;
-        trans_agente = aleatorio;
-        tipo_test = "Aleatorio";
-        test_agent_mbx.put(trans_agente);
-        test_sb_mbx.put(tipo_test);
+        //-------------------------------------------------------------------------------------------
+        //trans_agente = aleatorio;
+        //tipo_test = "Aleatorio";
+        //test_agent_mbx.put(trans_agente);
+        //test_sb_mbx.put(tipo_test);
         //test_checker_mbx.put(aleatorizacion.num_trans);
-        $display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
+        //$display("[%g] Test: Enviada la instrucción de transacción aleatoria", $time);
+        //--------------------------------------------------------------------------------------------
 
         //Prueba de envío de paquetes broadcast
         ambiente_inst.agent_inst.cant_trans = 2;
         trans_agente = broadcast;
-        //test_agent_mbx.put(trans_agente);
+        tipo_test = "Broadcast";
+        test_agent_mbx.put(trans_agente);
+        test_sb_mbx.put(tipo_test);
         $display("[%g] Test: Enviada la instrucción de transacción broadcast", $time);
 
         //Reset
@@ -78,18 +82,18 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         //Prueba de envío de paquetes hacia dispositivos inexistentes
         //aleatorizacion = new;
         //aleatorizacion.randomize();
-        ambiente_inst.agent_inst.cant_trans = 5; //For the moment
+        //ambiente_inst.agent_inst.cant_trans = 5; //For the moment
         //ambiente_inst.agent_inst.dir_spec = aleatorizacion.wrong_addr;
-        trans_agente = dir_inex; //Might have to create a new trans type
+        //trans_agente = dir_inex; //Might have to create a new trans type
         //test_agent_mbx.put(trans_agente);
-        $display("[%g] Test: Enviada la instrucción de envío hacia dispositivos inexistentes", $time);
+        //$display("[%g] Test: Enviada la instrucción de envío hacia dispositivos inexistentes", $time);
         //Cuando la dirección no existe nunca se le hace un push a ninguna FIFO para recibir el dato. Al dato si se le hace pop y si aparece en D_pop y D_push
 
 
         //Prueba de envío de paquetes hacia el mismo dispositivo de salida
-        trans_agente = mismo_disp;
+        //trans_agente = mismo_disp;
         //test_agent_mbx.put(trans_agente);
-        $display("[%g] Test: Enviada la instrucción de envío hacia el mismo dispositivo", $time);
+        //$display("[%g] Test: Enviada la instrucción de envío hacia el mismo dispositivo", $time);
         //Cuando se envía al mismo dispositivo nunca se le hace un push a ninguna FIFO para recibir el dato. Al dato si se le hace pop y si aparece en D_pop y D_push
 
         #100000;
