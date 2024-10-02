@@ -147,7 +147,6 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                     to_sb.calc_latencia();
                     chkr_sb_mbx.put(to_sb);
                     transaccion_mntr.print("[CORRCTO]");
-                    emul_fifo[transaccion_mntr.direccion].delete(i);
 
                     if (transaccion_mntr.dato[pckg_sz-1:pckg_sz-8] == broadcast) begin
                         brdcst_pckg[transaccion_mntr.dato] += 1;
@@ -155,10 +154,16 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                         if (brdcst_pckg[transaccion_mntr.dato] == drvrs-1) begin
                             $display("[CHECKER] Broadcast Completado!");
                             cant_trans_rec += 1;
+                            emul_fifo[transaccion_mntr.direccion].delete(i);
+
                         end
                     end
 
-                    else cant_trans_rec += 1;
+                    else begin 
+                        cant_trans_rec += 1;
+                        emul_fifo[transaccion_mntr.direccion].delete(i);
+                    end
+
                     //TODO Enviar paquete al scoreboard
                     break;
                 end

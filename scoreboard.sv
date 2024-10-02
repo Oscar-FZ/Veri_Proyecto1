@@ -30,6 +30,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
     task run();
         forever begin
             //wait(fin_test.triggered);
+
             if (inicio) begin
                 test_sb_mbx.get(tipo_test);
                 test_aleatorio = $fopen(nombre_archivo, "w");
