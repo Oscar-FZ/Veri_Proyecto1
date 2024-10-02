@@ -12,6 +12,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
     int test_broadcast;
     int test_dir_inexistente;
     int test_ret_0;
+    int test_mismo_disp;
     int cont;
     int flag;
 
@@ -155,6 +156,35 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                         test_dir_inexistente = $fopen(nombre_archivo, "a");
                         $fwrite(test_ret_0, "%d; 0x%h; %b; %d; %d; %d; %d; %d; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino, transaccion_chkr.tiempo_push, transaccion_chkr.tiempo_pop, transaccion_chkr.latencia);
                             $fclose(test_ret_0);
+                        cont += 1;
+                    end
+
+                    if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
+                        chkr_sb_flag_mbx.get(flag);
+                        sb_test_flag_mbx.put(1);
+                    end
+                end
+
+                "Mismo Dispositivo": begin
+                    nombre_archivo = "Mismo_Dispositivo.csv";
+                    if (inicio) begin
+                        test_mismo_disp = $fopen(nombre_archivo, "w");
+                        $fwrite(test_mismo_disp, "Test: ", tipo_test, "\n");
+                        $fwrite(test_mismo_disp, "Parametros del Ambiente\n");
+                        $fwrite(test_mismo_disp, "Bits = %0d\n", bits);
+                        $fwrite(test_mismo_disp, "Drivers = %0d\n", drvrs);
+                        $fwrite(test_mismo_disp, "Tamaño del Paquete = %0d\n", pckg_sz);
+                        $fwrite(test_mismo_disp, "Identificador de Broadcast = %b\n", broadcast);
+                        $fwrite(test_mismo_disp, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
+                        $fclose(test_mismo_disp);
+                        inicio = 0;
+                    end
+
+                    else begin
+                        chkr_sb_mbx.get(transaccion_chkr);
+                        test_dir_inexistente = $fopen(nombre_archivo, "a");
+                        $fwrite(test_mismo_disp, "%d; 0x%h; %b; %d; %h; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino);
+                        $fclose(test_mismo_disp);
                         cont += 1;
                     end
 
