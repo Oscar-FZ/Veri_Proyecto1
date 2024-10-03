@@ -1,3 +1,4 @@
+//Esta clase define las FIFO que se vana conectar en la entrada y salida de cada dispositivo
 class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
 
     bit pop;                            // Señal de pop de la FIFO
@@ -64,9 +65,9 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
     //para que este sea enviado en el momento que el bus mande la señal de
     //pop.
     //Tambien actualiza la señal de peding del Driver.
+    //Cuando ocurre un Pop este task manda el paquete con la informacion adicional necesaria hacia el checker por medio de un mailbox.
     task send_data_bus();
 	    forever begin
-            
 	        @(posedge vif.clk);
 	        vif.D_pop[0][id] = queue_in[0];
 	        if (pop) begin
@@ -89,6 +90,8 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
     //Este task recibe el dato del bus que viene en D_push y lo guarda en la
     //FIFO del monitor.
     //Tambien actualiza el valor de pending de la FIFO del monitor.
+    //Cuando ocurre un push este task manda el paquete con la informacion adicional necesaria hacia el checker por medio de un mailbox.
+	
     task receive_data_bus();
 	    forever begin
             
@@ -117,7 +120,7 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
     endtask     
 
     
-    //Esta funcion imprimer las FIFO del Driver y del Monitor junto con sus
+    //Esta funcion imprime las FIFO del Driver y del Monitor junto con sus
     //señales de control para debuguear.
     function void print(input string tag);
         $display("---------------------------");
@@ -136,20 +139,21 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
     endfunction  
 endclass
 
-    
+//Esta clase define el comportamiento del monitor y del driver.
 class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
-    drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) dm_hijo;
+    drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) dm_hijo; //Este objeto son la FIFO de entrada y de salida de un dispositivo.
 
-    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
-    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_mntr;
+    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;      //Variable que se usa para guardar los paquetes provenientes del agente y que seran enviados por el driver.
+    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_mntr; //Variable que se usa para guardar los paquetes leidos por el monitor.
 
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs];
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;
+    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs]; //Mailbox entre el agente y el driver de cada dispositivo.
+    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;        //Mailbox entre el driver y el checker.
+    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;        //Mailbox entre el monitor y el checker.
 
-    int espera;
-    int id;
+    int espera; //Variable que se usa para contar el retardo que tiene que esperar cada paquete antes de entrar a la FIFO.
+    int id;     //Variable que indica a cual dispositivo estan conectados el driver y el monitor.
     
+    //Funcion constructora
     function new (input int identification);
       	dm_hijo = new(identification);
         id = identification;
@@ -165,7 +169,9 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
     endfunction
 
 
-    
+    //Este task define el comportamiento del driver, para esto inicializa los task update_drvr() 
+    //y send_data_bus() de la FIFO, también está constantemente esperando paquetes del agente por
+    //medio de un mailbox.
     task run_drvr();
 	    $display("[ID] %d", id);
         $display("[%g] El Driver fue inicializado", $time);
@@ -193,6 +199,8 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
         end
     endtask
 
+    //Este task define el comportamiento del monitor, para esto inicializa los task update_mntr() 
+    //y receive_data_bus().
     task run_mntr();
 	    $display("[ID] %d", id);
         $display("[%g] El Monitor fue inicializado", $time);
@@ -204,15 +212,19 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
     endtask
 endclass
 
+// Esta es la clase padre de todos los driver y monitores que se encarga de crear la cantidad de 
+//driver y monitores requeridas y de inicializarlas.
 class strt_drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
-    drvr_mntr_hijo #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) strt_dm [drvrs];
-	
+    drvr_mntr_hijo #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) strt_dm [drvrs]; //Se crean las instancias del objeto que define el driver y el monitor
+
+    //Funcion constructora. Inicializa todos los objetos requeridos.
     function new();
         for(int i = 0; i < drvrs; i++) begin
             strt_dm[i] = new(i);
         end
     endfunction
 
+    //Inicia el funcionamiento de todos los drivers.
     task start_driver();
         for (int i = 0; i < drvrs; i++)begin
             fork
@@ -224,6 +236,7 @@ class strt_drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
         end
     endtask
 
+    //Inicia el funcionamuiento de todos los monitores.
     task start_monitor();
         for (int i = 0; i < drvrs; i++)begin
             fork
