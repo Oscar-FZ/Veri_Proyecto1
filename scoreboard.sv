@@ -13,6 +13,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
     int test_dir_inexistente;
     int test_ret_0;
     int test_mismo_disp;
+    int test_max_alt;
     int cont;
     int flag;
 
@@ -185,6 +186,34 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                         test_dir_inexistente = $fopen(nombre_archivo, "a");
                         $fwrite(test_mismo_disp, "%d; 0x%h; %b; %d; %h; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino);
                         $fclose(test_mismo_disp);
+                        cont += 1;
+                    end
+
+                    if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
+                        chkr_sb_flag_mbx.get(flag);
+                        sb_test_flag_mbx.put(1);
+                    end
+                end
+
+                "Maxima Alternancia": begin
+                    if (inicio) begin
+                        test_max_alt = $fopen(nombre_archivo, "w");
+                        $fwrite(test_max_alt, "Test: ", tipo_test, "\n");
+                        $fwrite(test_max_alt, "Parametros del Ambiente\n");
+                        $fwrite(test_max_alt, "Bits = %0d\n", bits);
+                        $fwrite(test_max_alt, "Drivers = %0d\n", drvrs);
+                        $fwrite(test_max_alt, "Tamaño del Paquete = %0d\n", pckg_sz);
+                        $fwrite(test_max_alt, "Identificador de Broadcast = %b\n", broadcast);
+                        $fwrite(test_max_alt, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
+                        $fclose(test_max_alt);
+                        inicio = 0;
+                    end
+
+                    else begin
+                        chkr_sb_mbx.get(transaccion_chkr);
+                        test_max_alt = $fopen(nombre_archivo, "a");
+                        $fwrite(test_max_alt, "%d; 0x%h; %b; %d; %d; %d; %d; %d; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino, transaccion_chkr.tiempo_push, transaccion_chkr.tiempo_pop, transaccion_chkr.latencia);
+                        $fclose(test_max_alt);
                         cont += 1;
                     end
 
