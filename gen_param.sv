@@ -20,8 +20,8 @@ module param_random;
                 $fatal("Could not open test_parameters.sv for writing.");
             end
             $fwrite(p_file, "parameter bits = 1;\n");
-            $fwrite(p_file, "parameter drvrs = %i;\n", drvrs);
-            $fwrite(p_file, "parameter pckg_sz = %i;\n", pckg_sz);
+            $fwrite(p_file, "parameter drvrs = %i;", drvrs, "\n");
+            $fwrite(p_file, "parameter pckg_sz = %i;", pckg_sz, "\n");
             $fwrite(p_file, "parameter broadcast = 255;\n");
             $fclose(p_file); // Don't forget to close the file
         endfunction
