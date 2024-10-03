@@ -1,31 +1,21 @@
 class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
-
-    //Plan actual
-    //TODO Que el checker no explote si llega un dato con direccion invalida
-    //TODO El checker aun no envia informacion al scoreboard
-    //TODO Caso reset
-    //TODO Que el checker rciba cant_trans del test por medio de un mailbox
-
-    //Mailbox entre checker y sb y entre sb y test
-
     //Definicion de los paquetes
-    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_drvr;  //Guarda los paquetes que vengan del driver 
-    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_mntr;  //Guarda los paquetes que vengan del monitor
-    sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) to_sb;              //Guarda los paquetes que van para el score board
+    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_drvr;  // Guarda los paquetes que vengan del driver 
+    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_mntr;  // Guarda los paquetes que vengan del monitor
+    sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) to_sb;              // Guarda los paquetes que van para el score board
 
-    //Define una queue por dispositivo
-    //bit [pckg_sz-1:0] emul_fifo[7:0][$];
+    // Define una queue por dispositivo
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) emul_fifo[7:0][$];
-    //Se guardan los paquetes que envia el driver en la queue del dispositivo
-    //al que este deberia de llegar para posteriormente cuando llegue un
-    //paquete del monitor revisar si ese paquete era el esperado.
+    // Se guardan los paquetes que envia el driver en la queue del dispositivo
+    // al que este deberia de llegar para posteriormente cuando llegue un
+    // paquete del monitor revisar si ese paquete era el esperado.
 
-    //Se crea un tipo de dato enum que se usara para definir si un paquete es
-    //valido o no.
+    // Se crea un tipo de dato enum que se usara para definir si un paquete es
+    // valido o no.
     typedef enum {CORRECTO, INCORRECTO} valid;
     valid result = INCORRECTO;
 
-    //TODO Explicar que es esto
+    // TODO Explicar que es esto
     int cant_trans;
     int cant_trans_total;
     int cant_trans_env;
@@ -36,16 +26,16 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
 
 
-    //Definicion de los mailboxes
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx; //Mailbox entre el driver y el checker
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx; //Mailbox entre el monitor y el checker
-    sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;    //Mailbox entre el checker y el scoreboard
+    // Definicion de los mailboxes
+    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx; // Mailbox entre el driver y el checker
+    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx; // Mailbox entre el monitor y el checker
+    sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;    // Mailbox entre el checker y el scoreboard
 
-    //Nuevo mailbox
+    // Nuevo mailbox
     trans_data agnt_chkr_mbx;
     trans_data chkr_sb_flag_mbx;
 
-    //Funcion constructora
+    // Funcion constructora
     function new();
         for (int i = 0; i < drvrs; i++) begin
             emul_fifo[i] = {};
@@ -56,12 +46,9 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         drvr_chkr_mbx       = new();
         mntr_chkr_mbx       = new();
         chkr_sb_mbx         = new();
-
-        //aver
-        agnt_chkr_mbx   = new();
-        chkr_sb_flag_mbx = new();
-        //
-        cant_trans          = 0; //TODO Cambiar a 0
+        agnt_chkr_mbx       = new();
+        chkr_sb_flag_mbx    = new();
+        cant_trans          = 0;
         cant_trans_total    = 0;
         cant_trans_env      = 0;
         cant_trans_rec      = 0;
@@ -86,7 +73,6 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             #1;
             drvr_chkr_mbx.get(transaccion_drvr);
             if (transaccion_drvr.direccion == broadcast) begin
-                //cant_trans_total = (cant_trans * (drvrs-1)); //Ver como arreglamos esto con mi pana de la vida Osbike
                 for (bit [drvrs-1:0] i = 8'b0; i < drvrs; i++) begin
                     if (i != transaccion_drvr.dispositivo) begin
                         emul_fifo[i].push_back(transaccion_drvr);
@@ -131,7 +117,6 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
             else begin
                 emul_fifo[transaccion_drvr.direccion].push_back(transaccion_drvr);
-                //transaccion_drvr.print("[CHECKER FIFO]");
             end
             cant_trans_env += 1;
             if (cant_trans_env == cant_trans) begin 
@@ -176,7 +161,6 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                     to_sb.completado    = 1;
                     to_sb.calc_latencia();
                     chkr_sb_mbx.put(to_sb);
-                    //transaccion_mntr.print("[CORRCTO]");
 
                     if (transaccion_mntr.dato[pckg_sz-1:pckg_sz-8] == broadcast) begin
                         brdcst_pckg[transaccion_mntr.dato] += 1;
@@ -184,7 +168,6 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
                         if (brdcst_pckg[transaccion_mntr.dato] == drvrs-1) begin
                             $display("[CHECKER] Broadcast Completado!");
-                            //cant_trans_rec += 1;
                             emul_fifo[transaccion_mntr.direccion].delete(i);
 
                         end
@@ -195,7 +178,6 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                         emul_fifo[transaccion_mntr.direccion].delete(i);
                     end
 
-                    //TODO Enviar paquete al scoreboard
                     break;
                 end
 
@@ -205,8 +187,6 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             if (result == INCORRECTO) begin
                 $display("[CHECKER] El paquete recibido no era esperado");
                 transaccion_mntr.print("[ERROR]");
-                //TODO Enviar paquete erroneo al scoreboard para que lo
-                //registre
             end
             
             $display("[CANTIDAD] Agnt = %i; Chkr = %i;", cant_trans_total, cant_trans_rec);
@@ -216,9 +196,6 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                 cant_trans_total = 0;
                 cant_trans_rec = 0;
                 cant_trans_env = 0;
-                //-> fin_test;
-                //TODO Usar una bandera para indicarle al scoreboard que puede
-                //iniciar
             end
         end
     endtask
