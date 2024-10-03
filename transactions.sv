@@ -16,7 +16,8 @@ typedef enum {
     retardos,
     especifico,
     dir_inex,
-    mismo_disp
+    mismo_disp,
+    max_alternancia
 } instruccion;
     
 
