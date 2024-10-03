@@ -7,8 +7,8 @@ module param_random;
         constraint const_params {
             drvrs inside {[4:16]};
             //pckg_sz inside {16,32,64};
-            broadcast > drvrs;
-            broadcast < 256;
+            //broadcast > drvrs;
+            //broadcast < 256;
         }
     endclass
 
