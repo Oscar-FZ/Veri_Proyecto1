@@ -148,7 +148,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             #1;
             stop = 0;
             result = INCORRECTO;
-            while (stop < 10000000) begin
+            while (stop < 1000) begin
                 #1;
                 if (mntr_chkr_mbx.num()>0) break;
                 else stop += 1;
