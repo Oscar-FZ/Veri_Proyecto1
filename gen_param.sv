@@ -14,7 +14,7 @@ module param_random;
 
         function void set_parameters();
             int p_file;
-            p_file = $fopen("test_parameters.sv", "w"); // Open file for writing
+            p_file = $fopen("parametros_test.sv", "w"); // Cambiarle el nombre
             if (p_file == 0) begin
                 $fatal("Could not open test_parameters.sv for writing.");
             end
