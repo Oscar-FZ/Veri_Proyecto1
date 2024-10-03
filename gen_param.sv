@@ -10,7 +10,7 @@ module param_random;
             drvrs <=8;
             pckg_sz inside {16,32,64};
             //broadcast > drvrs;
-            broadcast = 255;
+            broadcast == 255;
         }
 
         function void set_parameters();
@@ -22,7 +22,7 @@ module param_random;
             $fwrite(p_file, "parameter bits = 1;\n");
             $fwrite(p_file, "parameter drvrs = %d;",drvrs,"\n");
             $fwrite(p_file, "parameter pckg_sz = %d;",pckg_sz,"\n");
-            $fwrite(p_file, "parameter broadcast = %b;",broadcast,"\n");
+            $fwrite(p_file, "parameter broadcast = %d;",broadcast,"\n");
             $fclose(p_file); // Don't forget to close the file
         endfunction
 
