@@ -92,7 +92,7 @@ bit reset;                        // Si el paquete es un paquete de reinicio.
 int latencia;                     // La latencia del paquete.
 
 // Limpiar los atributos del paquete
-function clean();
+function new(); //*******************
   this.dato_enviado = 0;
   this.disp_origen = 0;
   this.disp_destino = 0;
@@ -147,7 +147,7 @@ function void print(input string tag = "");
 endfunction
 endclass
 
-//Define los atributos de la interface
+//Define la interface del DUT
 interface bus_if #(parameter bits = 1,parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}}) 
   (
       input clk
@@ -166,6 +166,6 @@ typedef mailbox #(bus_pckg #(.drvrs(4), .pckg_sz(16))) bus_pckg_mbx; // Definici
 typedef mailbox #(sb_pckg #(.drvrs(4), .pckg_sz(16))) sb_pckg_mbx;   // Definición de mailbox para comunicar las interfaces con tipo de dato sb_pckg
 typedef mailbox #(instruccion) instr_pckg_mbx;                       // Definición de mailbox para comunicar las interfaces con tipo de dato instruccion
 typedef mailbox #(int) trans_data;                                   // Definición de mailbox para comunicar las interfaces con tipo de dato entero
-typedef mailbox #(string) test_type;                                 // Referencia a Evangelion!
+typedef mailbox #(string) test_type;                                 // Definicion de mailbox para comunicar las interfaces con tipo de dato string // Referencia a Evangelion!
 
-event fin_test;
+event fin_test; //Define un evento para indicar el fin de un test //No se usa
