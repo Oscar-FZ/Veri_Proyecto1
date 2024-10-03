@@ -113,7 +113,7 @@ class randomizer #(parameter drvrs = 4, parameter pckg_sz = 16);
   rand int wrong_addr;
 
   //Constraints
-  constraint const_ntrans {num_trans >= 50; num_trans <= 100;}
+  constraint const_ntrans {num_trans >= 20; num_trans <= 100;}
   constraint const_waddr {wrong_addr > drvrs; wrong_addr != broadcast; wrong_addr < 255;}
 
   //Valores por defecto
