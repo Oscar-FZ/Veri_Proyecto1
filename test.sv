@@ -72,7 +72,16 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         sb_test_flag_mbx.get(flag);
         //-------------------------------------------------------------------------------------------
 
-        //Max alt
+        //-------------------------------------------------------------------------------------------
+        //Prueba de maxima alternancia
+        trans_agente = max_alt;
+        tipo_test = "Maxima Alternancia"
+        test_agent_mbx.put(trans_agente);
+        test_sb_mbx.put(tipo_test);
+        $display("[%g] Test: Enviada la instrucción de envío de paquetes con maxima alternancia", $time);
+        //sb_test_flag_mbx.get(flag);
+        $finish
+        //-------------------------------------------------------------------------------------------
 
         //-------------------------------------------------------------------------------------------
         //Prueba de envío de paquetes hacia dispositivos inexistentes
