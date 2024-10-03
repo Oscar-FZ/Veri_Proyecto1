@@ -59,7 +59,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                             $fwrite(test_aleatorio, "Bits = %0d\n", bits);
                             $fwrite(test_aleatorio, "Drivers = %0d\n", drvrs);
                             $fwrite(test_aleatorio, "Tamaño del Paquete = %0d\n", pckg_sz);
-                            $fwrite(test_aleatorio, "Identificador de Broadcast = %b\n", broadcast);
+                            $fwrite(test_aleatorio, "Identificador de Broadcast = %08b\n", broadcast);
                             $fwrite(test_aleatorio, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
                             $fclose(test_aleatorio);
                             inicio = 0;
@@ -88,7 +88,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                             $fwrite(test_broadcast, "Bits = %0d\n", bits);
                             $fwrite(test_broadcast, "Drivers = %0d\n", drvrs);
                             $fwrite(test_broadcast, "Tamaño del Paquete = %0d\n", pckg_sz);
-                            $fwrite(test_broadcast, "Identificador de Broadcast = %b\n", broadcast);
+                            $fwrite(test_broadcast, "Identificador de Broadcast = %08b\n", broadcast);
                             $fwrite(test_broadcast, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
                             $fclose(test_broadcast);
                             inicio = 0;
@@ -117,7 +117,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                         $fwrite(test_dir_inexistente, "Bits = %0d\n", bits);
                         $fwrite(test_dir_inexistente, "Drivers = %0d\n", drvrs);
                         $fwrite(test_dir_inexistente, "Tamaño del Paquete = %0d\n", pckg_sz);
-                        $fwrite(test_dir_inexistente, "Identificador de Broadcast = %b\n", broadcast);
+                        $fwrite(test_dir_inexistente, "Identificador de Broadcast = %08b\n", broadcast);
                         $fwrite(test_dir_inexistente, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; \n");
                         $fclose(test_dir_inexistente);
                         inicio = 0;
@@ -146,7 +146,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                         $fwrite(test_ret_0, "Bits = %0d\n", bits);
                         $fwrite(test_ret_0, "Drivers = %0d\n", drvrs);
                         $fwrite(test_ret_0, "Tamaño del Paquete = %0d\n", pckg_sz);
-                        $fwrite(test_ret_0, "Identificador de Broadcast = %b\n", broadcast);
+                        $fwrite(test_ret_0, "Identificador de Broadcast = %08b\n", broadcast);
                         $fwrite(test_ret_0, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
                         $fclose(test_ret_0);
                         inicio = 0;
@@ -175,7 +175,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                         $fwrite(test_mismo_disp, "Bits = %0d\n", bits);
                         $fwrite(test_mismo_disp, "Drivers = %0d\n", drvrs);
                         $fwrite(test_mismo_disp, "Tamaño del Paquete = %0d\n", pckg_sz);
-                        $fwrite(test_mismo_disp, "Identificador de Broadcast = %b\n", broadcast);
+                        $fwrite(test_mismo_disp, "Identificador de Broadcast = %08b\n", broadcast);
                         $fwrite(test_mismo_disp, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
                         $fclose(test_mismo_disp);
                         inicio = 0;
@@ -204,7 +204,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                         $fwrite(test_max_alt, "Bits = %0d\n", bits);
                         $fwrite(test_max_alt, "Drivers = %0d\n", drvrs);
                         $fwrite(test_max_alt, "Tamaño del Paquete = %0d\n", pckg_sz);
-                        $fwrite(test_max_alt, "Identificador de Broadcast = %b\n", broadcast);
+                        $fwrite(test_max_alt, "Identificador de Broadcast = %08b\n", broadcast);
                         $fwrite(test_max_alt, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
                         $fclose(test_max_alt);
                         inicio = 0;
