@@ -21,7 +21,7 @@ module param_random;
             end
             $fwrite(p_file, "parameter bits = 1;\n");
             $fwrite(p_file, "parameter drvrs = %i;\n", drvrs);
-            $fwrite(p_file, "parameter pckg_sz = %i;\n" pckg_sz);
+            $fwrite(p_file, "parameter pckg_sz = %i;\n", pckg_sz);
             $fwrite(p_file, "parameter broadcast = 255;\n");
             $fclose(p_file); // Don't forget to close the file
         endfunction
