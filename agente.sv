@@ -10,6 +10,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
     transaction tpo_spec;
     int dsp_spec;
     bit [7:0] dir_spec;
+    int tmax;
     randomizer #(.drvrs(drvrs), .pckg_sz(pckg_sz)) aleatorizacion;
 
     trans_data agnt_chkr_mbx;
@@ -140,7 +141,8 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                             aleatorizacion = new;
                             aleatorizacion.randomize();
                             cant_trans = aleatorizacion.num_trans;
-                            agnt_chkr_mbx.put((cant_trans*2));
+                            tmax = cant_trans*2;
+                            agnt_chkr_mbx.put((tmax));
 
                             for (int j = 0; j < cant_trans; j++) begin
                                 transaccion = new;
