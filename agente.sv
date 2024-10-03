@@ -140,7 +140,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                             aleatorizacion = new;
                             aleatorizacion.randomize();
                             cant_trans = aleatorizacion.num_trans;
-                            agnt_chkr_mbx.put((2*cant_trans));
+                            agnt_chkr_mbx.put((cant_trans*2));
 
                             for (int j = 0; j < cant_trans; j++) begin
                                 transaccion = new;
