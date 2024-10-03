@@ -33,7 +33,8 @@ class bus_pckg #(parameter drvrs = 4, parameter pckg_sz = 16);
   rand bit [pckg_sz-9:0] info;        //Información adicional sobre el paquete
 
   constraint const_retardo {retardo < max_retardo; retardo>0;}
-  constraint const_direccion {direccion < drvrs; direccion >=0; direccion != dispositivo;}
+  constraint const_direccion {direccion < drvrs; direccion >=0;}
+  constraint const_envio {direccion != dispositivo;}
   constraint const_dispositivo {dispositivo < drvrs; dispositivo >= 0;}
 
   //Se definen los valores por defecto de la clase

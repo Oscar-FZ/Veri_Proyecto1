@@ -126,7 +126,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                             agnt_chkr_mbx.put(cant_trans);
                             for (int j = 0; j < cant_trans; j++) begin
                                 transaccion = new;
-                                transaccion.const_direccion.constraint_mode(0);
+                                transaccion.const_envio.constraint_mode(0);
                                 transaccion.max_retardo = max_retardo;
                                 transaccion.randomize() with { dispositivo == i; direccion == i; };
                                 transaccion.dato = {transaccion.direccion, transaccion.info};
