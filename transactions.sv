@@ -70,7 +70,7 @@ class sb_pckg #(parameter drvrs = 4, parameter pckg_sz = 16);
   //Atributos
   bit [pckg_sz-1:0] dato_enviado;   // Los datos que se enviaron en el bus.
   bit [drvrs-1:0] disp_origen;
-  bit [drvrs-1:0] disp_destino;
+  bit [pckg_sz-9:0] disp_destino;
   int tiempo_push;                  // El tiempo en el que los datos se enviaron al bus.
   int tiempo_pop;                   // El tiempo en el que los datos se recibieron del bus.
   bit completado;                   // Si el paquete se ha completado.
