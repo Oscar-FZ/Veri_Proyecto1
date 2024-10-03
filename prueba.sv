@@ -10,13 +10,14 @@
 
 
 module DUT_TB();
+    `include "parametros_test.sv"
     bit CLK_100MHZ;
 	parameter WIDTH = 16;
 	parameter PERIOD = 2;
-	parameter bits = 1;
-	parameter drvrs = 4;
-	parameter pckg_sz = 16;
-	parameter broadcast = {8{1'b1}};
+	//parameter bits = 1;
+	//parameter drvrs = 4;
+	//parameter pckg_sz = 16;
+	//parameter broadcast = {8{1'b1}};
 
 
     test #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) t0;
