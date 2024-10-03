@@ -16,4 +16,4 @@ set xtics binwidth
 set boxwidth binwidth
 set yrange [0:*]
 
-plot filename every ::7 using (bin($8,binwidth)):(1.0) with boxes title "Frecuencia"
+plot filename every ::7 using (bin($8,binwidth)):(1.0) smooth frequency with boxes title "Frecuencia"
