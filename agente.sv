@@ -53,7 +53,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                             aleatorizacion = new;
                             aleatorizacion.randomize();
                             cant_trans = aleatorizacion.num_trans;
-                            agnt_chkr_mbx.put(cant_trans*(drvrs-1));
+                            agnt_chkr_mbx.put(cant_trans); //agnt_chkr_mbx.put(cant_trans*(drvrs-1));
                             for (int j = 0; j < cant_trans; j++) begin
                                 transaccion = new;
                                 transaccion.const_direccion.constraint_mode(0);
