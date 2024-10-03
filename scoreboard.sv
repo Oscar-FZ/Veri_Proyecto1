@@ -1,9 +1,4 @@
 class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
-    //Plan de ataque:
-    //Agarrar el mensaje del checker
-    //Calcular el retardo 
-    //Meterlo a un archivo csv (Tiempo de envio, terminal de origen, terminal de destino, tiempo de recibido, retraso en el envio)
-
     //Definicion de variables
     bit inicio;
     string tipo_test;
@@ -26,14 +21,14 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
     trans_data sb_test_flag_mbx;
 
     function new();
-        chkr_sb_mbx = new();
-        test_sb_mbx = new();
+        chkr_sb_mbx      = new();
+        test_sb_mbx      = new();
         transaccion_chkr = new();
         chkr_sb_flag_mbx = new();
         sb_test_flag_mbx = new();
-        inicio = 1;
-        cont = 1;
-        flag = 0;
+        inicio           = 1;
+        cont             = 1;
+        flag             = 0;
         nombre_archivo = "Aleatorio.csv";
         tipo_test = "Nada";
     endfunction
