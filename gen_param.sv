@@ -3,14 +3,14 @@ module param_random;
     class rand_param;
         rand int drvrs;
         rand int pckg_sz;
-        //rand int broadcast;
+        rand int broadcast;
 
         constraint const_params {
             drvrs >=4;
             drvrs <=16;
             pckg_sz inside {16,32,64};
-            //broadcast > drvrs;
-            //broadcast < 256;
+            broadcast > drvrs;
+            broadcast < 256;
         }
 
         function void set_parameters();
@@ -20,9 +20,9 @@ module param_random;
                 $fatal("Could not open test_parameters.sv for writing.");
             end
             $fwrite(p_file, "parameter bits = 1;\n");
-            $fwrite(p_file, "parameter drvrs = %d;", drvrs, "\n");
-            $fwrite(p_file, "parameter pckg_sz = %d;", pckg_sz, "\n");
-            $fwrite(p_file, "parameter broadcast = 255;\n");
+            $fwrite(p_file, "parameter drvrs = %d;",drvrs,"\n");
+            $fwrite(p_file, "parameter pckg_sz = %d;",pckg_sz,"\n");
+            $fwrite(p_file, "parameter broadcast = %d;",broadcast,"\n");
             $fclose(p_file); // Don't forget to close the file
         endfunction
 
