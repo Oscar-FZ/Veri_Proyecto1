@@ -6,9 +6,9 @@ module param_random;
         //rand int broadcast;
 
         constraint const_params {
-            drvrs >=5;
+            drvrs >=4;
             drvrs <=16;
-            //pckg_sz inside {16,32,64};
+            pckg_sz inside {16,32,64};
             //broadcast > drvrs;
             //broadcast < 256;
         }
@@ -20,8 +20,8 @@ module param_random;
                 $fatal("Could not open test_parameters.sv for writing.");
             end
             $fwrite(p_file, "parameter bits = 1;\n");
-            $fwrite(p_file, "parameter drvrs = %0d;\n", drvrs);
-            $fwrite(p_file, "parameter pckg_sz = 16;\n");
+            $fwrite(p_file, "parameter drvrs = %i;\n", drvrs);
+            $fwrite(p_file, "parameter pckg_sz = %i;\n" pckg_sz);
             $fwrite(p_file, "parameter broadcast = 255;\n");
             $fclose(p_file); // Don't forget to close the file
         endfunction
