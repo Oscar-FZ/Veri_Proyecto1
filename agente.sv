@@ -31,8 +31,8 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         for(int i = 0; i < drvrs; i++) begin //Para cada uno de los drivers
                             aleatorizacion = new;
                             aleatorizacion.randomize();
-                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatori de transacciones
-                            agnt_chkr_mbx.put(cant_trans);
+                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatoria de transacciones
+                            agnt_chkr_mbx.put(cant_trans); // Se envía el número de transacciones por realizar al checker
                             for (int j = 0; j < cant_trans; j++) begin // En cada una de las transacciones
                                 transaccion = new; // Se crea una nueva transaccion
                                 transaccion.max_retardo = max_retardo;
@@ -48,16 +48,16 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         for(int i = 0; i < drvrs; i++) begin //Para cada uno de los drivers
                             aleatorizacion = new;
                             aleatorizacion.randomize();
-                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatori de transacciones
-                            agnt_chkr_mbx.put(cant_trans);
+                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatoria de transacciones
+                            agnt_chkr_mbx.put(cant_trans); // Se envía el número de transacciones por realizar al checker
                             for (int j = 0; j < cant_trans; j++) begin // En cada una de las transacciones
                                 transaccion = new; // Se crea una nueva transaccion
-                                transaccion.const_direccion.constraint_mode(0);
-                                transaccion.const_envio.constraint_mode(0);
+                                transaccion.const_direccion.constraint_mode(0); // Se desactivan constraints que limitan la dirección del paquete
+                                transaccion.const_envio.constraint_mode(0); // Se desactivan constraints que limitan la dirección del paquete
                                 transaccion.max_retardo = max_retardo;
-                                transaccion.randomize();
-                                transaccion.direccion = broadcast;
-                                transaccion.dispositivo = i;
+                                transaccion.randomize(); // Se aleatoriza el contenido
+                                transaccion.direccion = broadcast; // Se asigna el indicador de broadcast a la transaccion
+                                transaccion.dispositivo = i; // Se asigna el dispositivo de la transacción
                                 transaccion.dato = {transaccion.direccion, transaccion.info}; // Se empaqueta el dato
                                 agnt_drvr_mbx[transaccion.dispositivo].put(transaccion); // Se envía la transacción por el mailbox
                             end
@@ -68,13 +68,13 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         for (int i = 0; i < drvrs; i++) begin //Para cada uno de los drivers
                             aleatorizacion = new; 
                             aleatorizacion.randomize();
-                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatori de transacciones
-                            agnt_chkr_mbx.put(cant_trans);
+                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatoria de transacciones
+                            agnt_chkr_mbx.put(cant_trans); // Se envía el número de transacciones por realizar al checker
                             for (int j = 0; j < cant_trans; j++) begin // En cada una de las transacciones
                                 transaccion = new; // Se crea una nueva transaccion
-                                transaccion.const_retardo.constraint_mode(0);
+                                transaccion.const_retardo.constraint_mode(0); // Se desactiva el constraint que limita el retardo para poder enviar transacciones con retardo 0
                                 transaccion.max_retardo = 0;
-                                transaccion.randomize() with { retardo == 0; };
+                                transaccion.randomize() with { retardo == 0; }; // Se aleatorizan los datos con el retardo específico
                                 transaccion.dato = {transaccion.direccion, transaccion.info}; // Se empaqueta el dato
                                 agnt_drvr_mbx[transaccion.dispositivo].put(transaccion); // Se envía la transacción por el mailbox
                             end
@@ -99,15 +99,15 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         for (int i = 0; i < drvrs; i++) begin //Para cada uno de los drivers
                             aleatorizacion = new;
                             aleatorizacion.randomize();
-                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatori de transacciones
-                            agnt_chkr_mbx.put(cant_trans);
+                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatoria de transacciones
+                            agnt_chkr_mbx.put(cant_trans); // Se envía el número de transacciones por realizar al checker
                             for (int j = 0; j < cant_trans; j++) begin // En cada una de las transacciones
                                 aleatorizacion = new;
-                                aleatorizacion.randomize();
+                                aleatorizacion.randomize(); // Se aleatoriza una nueva dirección inexistente
                                 transaccion = new; // Se crea una nueva transaccion
-                                transaccion.const_direccion.constraint_mode(0);
+                                transaccion.const_direccion.constraint_mode(0); // Se desactiva el constraint que limita las direcciones
                                 transaccion.max_retardo = max_retardo;
-                                transaccion.randomize() with { direccion == aleatorizacion.wrong_addr; };
+                                transaccion.randomize() with { direccion == aleatorizacion.wrong_addr; }; // Se aleatoriza la transacción conservando la dirección erronea
                                 transaccion.dato = {transaccion.direccion, transaccion.info}; // Se empaqueta el dato
                                 agnt_drvr_mbx[transaccion.dispositivo].put(transaccion); // Se envía la transacción por el mailbox
                             end
@@ -118,13 +118,13 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         for (int i = 0; i < drvrs; i++) begin //Para cada uno de los drivers
                             aleatorizacion = new;
                             aleatorizacion.randomize();
-                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatori de transacciones
-                            agnt_chkr_mbx.put(cant_trans);
+                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatoria de transacciones
+                            agnt_chkr_mbx.put(cant_trans); // Se envía el número de transacciones por realizar al checker
                             for (int j = 0; j < cant_trans; j++) begin // En cada una de las transacciones
                                 transaccion = new; // Se crea una nueva transaccion
-                                transaccion.const_envio.constraint_mode(0);
+                                transaccion.const_envio.constraint_mode(0); // Se desactiva el contraint que limita el envío al mismo dispositivo
                                 transaccion.max_retardo = max_retardo;
-                                transaccion.randomize() with { dispositivo == i; direccion == i; };
+                                transaccion.randomize() with { dispositivo == i; direccion == i; }; // Se aleatoriza la transacción con la dirección igual al dispositivo de salida
                                 transaccion.dato = {transaccion.direccion, transaccion.info}; // Se empaqueta el dato
                                 agnt_drvr_mbx[transaccion.dispositivo].put(transaccion); // Se envía la transacción por el mailbox
                             end
@@ -135,14 +135,13 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                         for (int i = 0; i < drvrs; i++) begin //Para cada uno de los drivers
                             aleatorizacion = new;
                             aleatorizacion.randomize();
-                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatori de transacciones
-                            tmax = cant_trans*2;
-                            agnt_chkr_mbx.put((cant_trans*2));
+                            cant_trans = aleatorizacion.num_trans; // Se genera una cantidad aleatoria de transacciones
+                            agnt_chkr_mbx.put((cant_trans*2)); // Se envía el número de transacciones por realizar al checker
 
                             for (int j = 0; j < cant_trans; j++) begin // En cada una de las transacciones
                                 transaccion = new; // Se crea una nueva transaccion
                                 transaccion.max_retardo = max_retardo;
-                                transaccion.randomize() with { info == {((pckg_sz-8)/2){2'b10}}; };
+                                transaccion.randomize() with { info == {((pckg_sz-8)/2){2'b10}}; }; // Se aleatoriza la transacción con un dato que consiste en 101010...
                                 transaccion.dato = {transaccion.direccion, transaccion.info}; // Se empaqueta el dato
                                 agnt_drvr_mbx[transaccion.dispositivo].put(transaccion); // Se envía la transacción por el mailbox
                             end
@@ -150,7 +149,7 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                             for (int k = 0; k < cant_trans; k++) begin // En cada una de las transacciones
                                 transaccion = new; // Se crea una nueva transaccion
                                 transaccion.max_retardo = max_retardo;
-                                transaccion.randomize() with { info == {((pckg_sz-8)/2){2'b01}}; };
+                                transaccion.randomize() with { info == {((pckg_sz-8)/2){2'b01}}; }; // Se aleatoriza la transacción con un dato que consiste en 010101...
                                 transaccion.dato = {transaccion.direccion, transaccion.info}; // Se empaqueta el dato
                                 agnt_drvr_mbx[transaccion.dispositivo].put(transaccion); // Se envía la transacción por el mailbox
                             end
