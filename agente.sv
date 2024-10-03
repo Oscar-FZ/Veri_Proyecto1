@@ -134,6 +134,31 @@ class agent #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, p
                             end
                         end
                     end
+                
+                    max_alternancia: begin
+                        for (int i = 0; i < drvrs; i++) begin
+                            aleatorizacion = new;
+                            aleatorizacion.randomize();
+                            cant_trans = aleatorizacion.num_trans;
+                            agnt_chkr_mbx.put(cant_trans);
+
+                            for (int j = 0; j < cant_trans; j++) begin
+                                transaccion = new;
+                                transaccion.max_retardo = max_retardo;
+                                transaccion.randomize() with { info == {((pckg_sz-8)/2){2'b10}}; };
+                                transaccion.dato = {transaccion.direccion, transaccion.info};
+                                agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
+                            end
+
+                            for (int k = 0; k < cant_trans; k++) begin
+                                transaccion = new;
+                                transaccion.max_retardo = max_retardo;
+                                transaccion.randomize() with { info == {((pckg_sz-8)/2){2'b01}}; };
+                                transaccion.dato = {transaccion.direccion, transaccion.info};
+                                agnt_drvr_mbx[transaccion.dispositivo].put(transaccion);
+                            end
+                        end
+                    end
                 endcase
             end
             
