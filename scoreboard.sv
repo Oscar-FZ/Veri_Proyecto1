@@ -196,7 +196,6 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                 end
 
                 "Maxima Alternancia": begin
-                    nombre_archivo = "Maxima_Alternancia.csv";
                     if (inicio) begin
                         test_max_alt = $fopen(nombre_archivo, "w");
                         $fwrite(test_max_alt, "Test: ", tipo_test, "\n");
