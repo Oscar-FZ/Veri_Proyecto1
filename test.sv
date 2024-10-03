@@ -80,7 +80,7 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         test_sb_mbx.put(tipo_test);
         $display("[%g] Test: Enviada la instrucción de envío de paquetes con maxima alternancia", $time);
         //sb_test_flag_mbx.get(flag);
-        $finish;
+        //$finish;
         //-------------------------------------------------------------------------------------------
 
         //-------------------------------------------------------------------------------------------
