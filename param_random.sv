@@ -26,7 +26,7 @@ module param_random;
         endfunction
 
         task randomize_parameters();
-            if (this.randomize() with {constraint const_params}) begin
+            if (this.randomize()) begin
                 set_parameters();
             end else begin
                 $warning("Randomization failed.");
