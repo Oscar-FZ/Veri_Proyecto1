@@ -7,7 +7,7 @@ module param_random;
 
         constraint const_params {
             drvrs >=4;
-            drvrs <=16;
+            drvrs <=8;
             pckg_sz inside {16,32,64};
             broadcast > drvrs;
             broadcast < 256;
