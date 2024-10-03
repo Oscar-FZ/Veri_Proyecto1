@@ -15,12 +15,12 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     typedef enum {CORRECTO, INCORRECTO} valid;
     valid result = INCORRECTO;
 
-    // TODO Explicar que es esto
-    int cant_trans;
-    int cant_trans_total;
-    int cant_trans_env;
-    int cant_trans_rec;
-    int stop;
+    //Se definen variables necesarias para el comportamiento adecuado del checker
+    int cant_trans;         //Variable en la que se guardan la cantidad de transacciones que hace cada dispositivo. Se recibe por medio de un mailbox entre el agente y el checker    
+    int cant_trans_total;   //Variable ene la que se guarda la suma de las transacciones de cada dispositivo para una prueba.   
+    int cant_trans_env;     //Variable en la que se guarda 
+    int cant_trans_rec;     //
+    int stop;               //
 
     int brdcst_pckg [bit [pckg_sz-1:0]];
 
@@ -30,10 +30,8 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx; // Mailbox entre el driver y el checker
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx; // Mailbox entre el monitor y el checker
     sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;    // Mailbox entre el checker y el scoreboard
-
-    // Nuevo mailbox
-    trans_data agnt_chkr_mbx;
-    trans_data chkr_sb_flag_mbx;
+    trans_data agnt_chkr_mbx;                                       // Mailbox entre el agente y el checker.
+    trans_data chkr_sb_flag_mbx;                                    // Mailbox entre el checker y el scoreboard. Este se usa para mandar señales de control.
 
     // Funcion constructora
     function new();
@@ -55,10 +53,10 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
         stop                = 0;
     endfunction
     
-    //El task update() esta constantemente revisando el mailbox del
-    //driver-checker y cuando recibe un paquete lo guarda en la queue del
-    //dispositivo al que ese paquete deberia de llegar.
-
+    
+    //El task update_cant_trans() esta constantemente revisando el mailbox entre el agente y el 
+    //checker para recibir la cantidad de transacciones por dispositivo, que despues se suman
+    //para obtener la cantidad de transacciones totales por test.
     task update_cant_trans();
         forever begin
             agnt_chkr_mbx.get(cant_trans);
@@ -66,6 +64,13 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             $display("[AQUI] Total = %i; x = %i", cant_trans_total, cant_trans);
         end
     endtask
+
+    //El task update() esta constantemente revisando el mailbox del
+    //driver-checker y cuando recibe un paquete lo guarda en la queue del
+    //dispositivo al que ese paquete deberia de llegar.
+    //Tambien identifica si los paquetes que esta mandando el driver son validos o no.
+    //En caso de no ser validos, manda los paquetes al scoreboard para que los registre.
+    
     task update();
         $display("[%g] El Checker se esta actualizando", $time);
 
@@ -128,6 +133,8 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
     //El task check() recibe paquetes del monitor y revisa la queue del
     //dispositivo correspondiente para ver si ese paquete es un paquete
     //esperado.
+    //Manda los paquetes, por medio de un mailbox, con todad la informacion adicional necesaria para que el scoreboard los pueda registrar.
+    //Este task tambien se encarga de mandar señales de control al scoreboard para indicarle cuando se ha terminado de verificar un test.
     task check();
         forever begin
             #1;
