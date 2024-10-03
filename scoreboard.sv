@@ -13,6 +13,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
     int test_dir_inexistente;
     int test_ret_0;
     int test_mismo_disp;
+    int test_max_alt;
     int cont;
     int flag;
 
@@ -222,7 +223,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                         sb_test_flag_mbx.put(1);
                     end
                 end
-                
+
                 "Nada": begin
                     tipo_test = tipo_test;
                 end
