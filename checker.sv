@@ -153,7 +153,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
                 else stop += 1;
             end
 
-            if (stop >= 100000000) begin
+            if (stop >= 100000) begin
                 $display("NO LLEGAN MAS PAQUETES");
                 //chkr_sb_flag_mbx.put(1);
                 break;
