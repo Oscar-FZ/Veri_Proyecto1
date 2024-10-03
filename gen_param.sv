@@ -2,7 +2,7 @@ module param_random;
 
     class rand_param;
         rand int drvrs;
-        //rand int pckg_sz;
+        rand int pckg_sz;
         //rand int broadcast;
 
         constraint const_params {
