@@ -3,7 +3,7 @@ module param_random;
     class rand_param;
         rand int drvrs;
         rand int pckg_sz;
-        rand int broadcast;
+        rand bit [7:0] broadcast;
 
         constraint const_params {
             drvrs >=4;
@@ -22,7 +22,7 @@ module param_random;
             $fwrite(p_file, "parameter bits = 1;\n");
             $fwrite(p_file, "parameter drvrs = %d;",drvrs,"\n");
             $fwrite(p_file, "parameter pckg_sz = %d;",pckg_sz,"\n");
-            $fwrite(p_file, "parameter broadcast = %d;",broadcast,"\n");
+            $fwrite(p_file, "parameter broadcast = %b;",broadcast,"\n");
             $fclose(p_file); // Don't forget to close the file
         endfunction
 
