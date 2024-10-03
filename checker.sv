@@ -86,7 +86,6 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             #1;
             drvr_chkr_mbx.get(transaccion_drvr);
             if (transaccion_drvr.direccion == broadcast) begin
-                cant_trans_total = (cant_trans * (drvrs-1)); //Ver como arreglamos esto con mi pana de la vida Osbike
                 for (bit [drvrs-1:0] i = 8'b0; i < drvrs; i++) begin
                     if (i != transaccion_drvr.dispositivo) begin
                         emul_fifo[i].push_back(transaccion_drvr);
@@ -156,7 +155,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
 
             if (stop >= 100000000) begin
                 $display("NO LLEGAN MAS PAQUETES");
-                chkr_sb_flag_mbx.put(1);
+                //chkr_sb_flag_mbx.put(1);
                 break;
             end
 
