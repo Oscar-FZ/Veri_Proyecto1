@@ -1,4 +1,4 @@
-module param_random
+module param_random;
     class rand_param;
         rand int drvrs;
         //rand int pckg_sz;
