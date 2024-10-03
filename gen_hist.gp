@@ -12,7 +12,7 @@ stats filename using 8 nooutput
 set tics out nomirror
 set style fill transparent solid 0.5 border lt -1
 set xrange [0:STATS_max+10]
-set xtics bandwidth
+set xtics binwidth
 set boxwidth binwidth
 set yrange [0:*]
 
