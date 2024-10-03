@@ -1,25 +1,26 @@
 class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
     //Definicion de variables
-    bit inicio;
-    string tipo_test;
-    string nombre_archivo;
-    int test_aleatorio;
-    int test_broadcast;
-    int test_dir_inexistente;
-    int test_ret_0;
-    int test_mismo_disp;
-    int test_max_alt;
-    int cont;
-    int flag;
+    bit inicio;                 // Variable que indica el inicio de una prueba
+    string tipo_test;           // Variable que almacena el tipo de prueba que se realiza
+    string nombre_archivo;      // Variable que almacena el nombre del archivo .csv donde se almacenan los datos
+    int test_aleatorio;         // Variable tipo entero para almacenar el "file descriptor" del archivo de la prueba aleatoria
+    int test_broadcast;         // Variable tipo entero para almacenar el "file descriptor" del archivo de la prueba broadcast
+    int test_dir_inexistente;   // Variable tipo entero para almacenar el "file descriptor" del archivo de la prueba direccion inexistente
+    int test_ret_0;             // Variable tipo entero para almacenar el "file descriptor" del archivo de la prueba retardo 0
+    int test_mismo_disp;        // Variable tipo entero para almacenar el "file descriptor" del archivo de la prueba mismo dispositivo
+    int test_max_alt;           // Variable tipo entero para almacenar el "file descriptor" del archivo de la prueba máxima alternancia
+    int cont;                   // Variable para almacenar un contador
+    int flag;                   // Bandera para indicar que una prueba terminó
 
-    sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_chkr;
+    sb_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_chkr; // Variable que almacena los datos provenientes del checker
   
     //Definicion de mailboxes
-    test_type test_sb_mbx;
-    sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;
-    trans_data chkr_sb_flag_mbx;
-    trans_data sb_test_flag_mbx;
+    test_type test_sb_mbx;                                          // Mailbox entre el test y el scoreboard
+    sb_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) chkr_sb_mbx;    // Mailbox entre el checker y el scoreboard
+    trans_data chkr_sb_flag_mbx;                                    // Mailbox de control entre checker y scoreboard
+    trans_data sb_test_flag_mbx;                                    // Mailbox de control entre scoreboard y test
 
+    // Función constructora del scoreboard
     function new();
         chkr_sb_mbx      = new();
         test_sb_mbx      = new();
@@ -33,6 +34,7 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
         tipo_test = "Nada";
     endfunction
     
+    // Task para leer el mailbox entre el test y el scoreboard constantemente
     task update();
         forever begin
             test_sb_mbx.get(tipo_test);
@@ -41,14 +43,15 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
         end
     endtask
 
+    // Task para correr el scoreboard
     task run();
         forever begin
             #1;
-            case (tipo_test)
-                
+            case (tipo_test) // Caso para escribir el archivo dependiendo del tipo de prueba
                 "Aleatorio": begin
                         if (inicio) begin
-                            test_aleatorio = $fopen(nombre_archivo, "w");
+                            test_aleatorio = $fopen(nombre_archivo, "w"); // Abre o crea el archivo csv si no existe
+                            // Se escribe el header del archivo con información general
                             $fwrite(test_aleatorio, "Test: ", tipo_test, "\n");
                             $fwrite(test_aleatorio, "Parametros del Ambiente\n");
                             $fwrite(test_aleatorio, "Bits = %0d\n", bits);
@@ -56,23 +59,25 @@ class scoreboard #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 
                             $fwrite(test_aleatorio, "Tamaño del Paquete = %0d\n", pckg_sz);
                             $fwrite(test_aleatorio, "Identificador de Broadcast = %08b\n", broadcast);
                             $fwrite(test_aleatorio, "Numero; Paquete; Estado; Dispositivo de Origen; Dispositivo Destino; Tiempo de Envio; Tiempo de Recibido; Latencia;\n");
-                            $fclose(test_aleatorio);
+                            $fclose(test_aleatorio); // Se cierra el archivo para evitar corrupción de los datos
                             inicio = 0;
                         end
     
                         else begin
-                            chkr_sb_mbx.get(transaccion_chkr);
-                            test_aleatorio = $fopen(nombre_archivo, "a");
+                            chkr_sb_mbx.get(transaccion_chkr); // Se toma el dato del checker del mmailbox
+                            test_aleatorio = $fopen(nombre_archivo, "a"); // Se abre el archivo creado previamente
+                            // Se escriben los datos obtenidos del mailbox
                             $fwrite(test_aleatorio, "%d; 0x%h; %b; %d; %d; %d; %d; %d; \n", cont, transaccion_chkr.dato_enviado, transaccion_chkr.completado, transaccion_chkr.disp_origen, transaccion_chkr.disp_destino, transaccion_chkr.tiempo_push, transaccion_chkr.tiempo_pop, transaccion_chkr.latencia);
-                            $fclose(test_aleatorio);
+                            $fclose(test_aleatorio); // Cierra el archivo csv
                             cont += 1;
                         end
     
-                        if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin
-                            chkr_sb_flag_mbx.get(flag);
-                            sb_test_flag_mbx.put(1);
+                        if ((chkr_sb_mbx.num() == 0) && (chkr_sb_flag_mbx.num()>0)) begin // Si el checker no envía más paquetes y hay algo en el mailbox de control
+                            chkr_sb_flag_mbx.get(flag); // Obtener la bandera de control desde el checker
+                            sb_test_flag_mbx.put(1);    // Indicarle al test que puede continuar con la siguiente prueba
                         end
                 end
+                ////////////////////////////////////// Esta lógica se repite en el resto de casos //////////////////////////////////////
 
                 "Broadcast": begin
                         nombre_archivo = "Broadcast.csv";
