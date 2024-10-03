@@ -1,23 +1,25 @@
 class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
 
-    bit pop;                            //Señal de pop de la FIFO
-    bit push;                           //Señal de push de la FIFO
-    bit pndng_bus;                      //Señal de pending del bus
-    bit pndng_mntr;                     //Señal de pending del monitor
-    bit [pckg_sz-1:0] data_bus_in;      //
-    bit [pckg_sz-1:0] data_bus_out;     //
-    bit [pckg_sz-1:0] queue_in [$];     //
-    bit [pckg_sz-1:0] queue_out [$];    //
-    int id;                             //
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
-    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
+    bit pop;                            // Señal de pop de la FIFO
+    bit push;                           // Señal de push de la FIFO
+    bit pndng_bus;                      // Señal de pending del bus
+    bit pndng_mntr;                     // Señal de pending del monitor
+    bit [pckg_sz-1:0] data_bus_in;      // Señal de datos que se reciben en el dispositivo
+    bit [pckg_sz-1:0] data_bus_out;     // Señal de datos que se envían desde el dispositivo
+    bit [pckg_sz-1:0] queue_in [$];     // Cola de tamaño indefinifo para almacenar los datos que entran al dispositivo
+    bit [pckg_sz-1:0] queue_out [$];    // Cola de tamaño indefinifo para almacenar los datos que salen del dispositivo
+    int id;                             // Entero para identificar los distintos dispositivos conectados al bus
 
-    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;
-    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_mntr;
+    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx; // Mailbox para comunicar el driver y el checker
+    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;       // Transacción recibida por el mailbox
+
+    bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx; // Mailbox para comunicar el monitor y el checker
+    bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_mntr;  // Transacción recibida por el mailbox
 
   
-    virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) vif;
-  
+    virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) vif; // Interfaz virtual con el DUT
+
+    // Función constructora de los mailboxes y transacciones utilizadas por cada uno de los dispositivos conectados al bus
     function new (input int identificador);
         drvr_chkr_mbx = new();
         mntr_chkr_mbx = new();
@@ -39,7 +41,6 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
     //Tambien conecta la señal de pending de la FIFO del driver con la señal
     //de pendign del bus.
     task update_drvr(); 
-        
 	    forever begin
 	        @(negedge vif.clk);
 	        pop = vif.pop[0][id];
@@ -67,7 +68,7 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
 	    forever begin
             
 	        @(posedge vif.clk);
-	        vif.D_pop[0][id] = queue_in[0]; //Probably check this as well
+	        vif.D_pop[0][id] = queue_in[0];
 	        if (pop) begin
     	        transaccion.dato = queue_in.pop_front();
                 transaccion.tiempo = $time;
@@ -112,7 +113,6 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
 	        end
                 else
                     pndng_mntr = 0;
-
 	    end
     endtask     
 
@@ -133,31 +133,25 @@ class drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 1
         $display("queue_out=%p", this.queue_out);
         $display("id=%d", this.id);
         $display("---------------------------");
-    endfunction
-    
+    endfunction  
 endclass
 
     
 class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
     drvr_mntr #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) dm_hijo;
-    //virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) vif_hijo;
 
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion;
     bus_pckg #(.drvrs(drvrs), .pckg_sz(pckg_sz)) transaccion_mntr;
 
-
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) agnt_drvr_mbx[drvrs];
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) drvr_chkr_mbx;
     bus_pckg_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) mntr_chkr_mbx;
-
-
 
     int espera;
     int id;
     
     function new (input int identification);
       	dm_hijo = new(identification);
-      	//dm_hijo.vif = vif_hijo;
         id = identification;
 	    transaccion = new();
 	    transaccion_mntr = new(.tpo(lectura));
@@ -168,7 +162,6 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 
 	    drvr_chkr_mbx = new();
 	    mntr_chkr_mbx = new();
-        //dm_hijo.drvr_chkr_mbx = drvr_chkr_mbx;
     endfunction
 
 
@@ -181,10 +174,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
 	        dm_hijo.send_data_bus();
 	    join_none
 
-        @(posedge dm_hijo.vif.clk);
-        //if (dm_hijo.vif.pop[0][id]) begin
-        //    drvr_chkr_mbx.put(dm_hijo.queue_in[$]);
-        //end        
+        @(posedge dm_hijo.vif.clk);        
         forever begin
             
             dm_hijo.vif.reset = 0;
@@ -198,11 +188,7 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
                 
             if (transaccion.tipo == escritura) begin
                 $display("[ESCRITURA]");
-		        //transaccion.tiempo = $time;
-                dm_hijo.queue_in.push_back(transaccion.dato); //Esto no debería ser transaccion.info? Se está guardando todo en la fifo
-		        //transaccion.print("[DEBUG] Dato enviado");
-		        //drvr_chkr_mbx.put(transaccion);
-                //transaccion.print("[DRIVER]");
+                dm_hijo.queue_in.push_back(transaccion.dato);
             end
         end
     endtask
@@ -215,31 +201,6 @@ class drvr_mntr_hijo #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
             dm_hijo.update_mntr();
 	        dm_hijo.receive_data_bus();
 	    join_none
-        
-	    /*forever begin
-            
-            dm_hijo.vif.reset = 0;
-            @(posedge dm_hijo.vif.clk);    
-	        if (dm_hijo.pndng_mntr) begin
-	    	    $display("[LECTURA]");
-		        transaccion_mntr.tiempo = $time;
-		        transaccion_mntr.dato = dm_hijo.queue_out.pop_front();
-                transaccion_mntr.dispositivo = id[drvrs-1:0];
-                transaccion_mntr.info = transaccion_mntr.dato[pckg_sz-9:0];
-                if (transaccion_mntr.dato[pckg_sz-1:pckg_sz-8] == broadcast) begin
-                    $display("BROADCAST IDENTIFICADO");
-                    transaccion_mntr.direccion = id[7:0];
-                end
-                else begin
-                    transaccion_mntr.direccion = transaccion_mntr.dato[pckg_sz-1:pckg_sz-8];
-                end
-		        mntr_chkr_mbx.put(transaccion_mntr);
-                //transaccion_mntr.print("[MONITOR]");
-		        //transaccion.print("[DRVER] Dato recibido");
-                //$display("Dato leido del fifo:");
-                //$display("%h", transaccion_mntr.dato);
-	        end
-        end*/
     endtask
 endclass
 
@@ -273,7 +234,4 @@ class strt_drvr_mntr #(parameter bits = 1, parameter drvrs = 4, parameter pckg_s
             join_none
         end
     endtask
-
 endclass
-
-
