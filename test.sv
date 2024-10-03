@@ -1,9 +1,8 @@
 class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, parameter broadcast = {8{1'b1}});
-    instr_pckg_mbx test_agent_mbx;
-
-    //Mailbox para pasarle el tipo de prueba al scoreboard
-    test_type test_sb_mbx;
-    trans_data sb_test_flag_mbx;
+    // Definición de los mailboxes
+    instr_pckg_mbx test_agent_mbx; // Mailbox para indicarle al agente la instrucción a ejecutar
+    test_type test_sb_mbx;         // Mailbox para pasarle el tipo de prueba al scoreboard
+    trans_data sb_test_flag_mbx;   // Mailbox para que el scoreboard inidque que terminó de escribir el csv
 
     //Definición del ambiente de la prueba
     ambiente #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz), .broadcast(broadcast)) ambiente_inst;
@@ -11,39 +10,25 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
     //Definición de la interfaz para conectar el DUT
     virtual bus_if #(.bits(bits), .drvrs(drvrs), .pckg_sz(pckg_sz)) _if;
 
-    instruccion trans_agente;
-    string tipo_test;
-
-    int flag;
+    instruccion trans_agente; // Variable para almacenar el tipo de transacción que el agente va a ejecutar
+    string tipo_test;         // Variable para decirle al scoreboard el tipo de prueba que se está ejecutando
+    int flag;                 // Variable para indicar que se puede avanzar a la prueba siguiente
 
     //Definición de las condiciones iniciales del test.
     function new();
         flag = 0;
         //Instanciación de los mailboxes
-        test_agent_mbx = new();
-        
-        //Instancia del mailbox de test_sb para pasarle el tipo de test
-        test_sb_mbx = new();
+        test_agent_mbx   = new();
+        test_sb_mbx      = new();
         sb_test_flag_mbx = new();
 
-        //Definición y conexión del driver
+        //Definición y conexión de los mailboxes
         ambiente_inst = new();
         ambiente_inst._if = _if;
         ambiente_inst.test_agent_mbx = test_agent_mbx;
         ambiente_inst.agent_inst.test_agent_mbx = test_agent_mbx;
-
-        //You already know
-        //ambiente_inst.checker_inst.test_checker_mbx = test_checker_mbx;
         ambiente_inst.scoreboard_inst.test_sb_mbx = test_sb_mbx;
         ambiente_inst.scoreboard_inst.sb_test_flag_mbx = sb_test_flag_mbx;
-
-        //Valores que usa el agente
-        //ambiente_inst.agent_inst.ret_spec = //TODO
-        //ambiente_inst.agent_inst.info_spec = //TODO
-        //ambiente_inst.agent_inst.tpo_spec = //TODO
-        //ambiente_inst.agent_inst.dsp_spec = //TODO
-        //ambiente_inst.agent_inst.dir_spec = //TODO
-        //Tal vez agregar max retardo
     endfunction
 
     task run;
@@ -106,7 +91,6 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
 
         //-------------------------------------------------------------------------------------------
         //Prueba de envío de paquetes broadcast
-        //ambiente_inst.agent_inst.cant_trans = 2;
         trans_agente = broadcast;
         tipo_test = "Broadcast";
         test_agent_mbx.put(trans_agente);
@@ -114,18 +98,10 @@ class test #(parameter bits = 1, parameter drvrs = 4, parameter pckg_sz = 16, pa
         $display("[%g] Test: Enviada la instrucción de transacción broadcast", $time);
         sb_test_flag_mbx.get(flag);
         //-------------------------------------------------------------------------------------------
-        
-        
-        $finish;
 
-        
         #100000;
         $display("[%g] Test: Se alcanzó el tiempo límite de la prueba", $time);
         #20;
         $finish;
-    //TODO
-    //Envio de paquetes aleatorios, envio de paquetes broadcast, envio de reset, 
-    //paquetes aleatorios desde diferentes disp. al mismo tiempo,
-    //maxima alternancia, hacia dispositivo inexistente, desde y hacia el mismo disp.
     endtask
 endclass
