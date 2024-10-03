@@ -21,4 +21,6 @@ set ylabel "Número de paquetes"
 
 set title "Tiempos de retardo de los paquetes recibidos"
 
+set grid
+
 plot filename every ::7 using (bin($8,binwidth)):(1.0) smooth frequency with boxes title "Frecuencia"
