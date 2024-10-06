@@ -194,6 +194,7 @@ class my_checker #(parameter drvrs = 4, parameter pckg_sz = 16, parameter broadc
             if (result == INCORRECTO) begin
                 $display("[CHECKER] El paquete recibido no era esperado");
                 transaccion_mntr.print("[ERROR]");
+                $finish;
             end
             
             $display("[CANTIDAD] Agnt = %i; Chkr = %i;", cant_trans_total, cant_trans_rec);
