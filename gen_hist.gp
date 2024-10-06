@@ -14,7 +14,10 @@ set style fill transparent solid 0.5 border lt -1
 set xrange [0:STATS_max+10]
 set xtics binwidth
 set boxwidth binwidth
+set xlabel "Tiempo de retardo"
+
 set yrange [0:*]
+set ylabel "Frecuencia"
 
 set title "Tiempos de retardo de los paquetes recibidos"
 
